@@ -1,0 +1,211 @@
+\documentclass[lang=cn,10pt,scheme=chinese,color=blue,usesamecnt]{asymptoticbook}
+
+\title{渐近统计笔记}
+% \subtitle{概率极限定理、统计估计与 Bootstrap}
+
+\author{\href{https://www.zhihu.com/people/he-eeeeeeeee}{金鱼马}}
+\date{2026年9月}
+\institute{浙江大学}
+\bioinfo{License}{\href{https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en}{CC BY-NC-SA 4.0}}
+
+% ElegantBook 没有内置教师字段；在主文件中扩展封面信息，避免修改模板类文件。
+\makeatletter
+\newcommand{\teacher}[1]{\gdef\@teacher{#1}}
+\newcommand{\teachername}{\citshape 授课教师：}
+\patchcmd{\maketitle}
+  {\ifcsname @institute\endcsname \institutename \cnormal\@institute\\ \fi}
+  {\ifcsname @institute\endcsname \institutename \cnormal\@institute\\ \fi
+   \ifcsname @teacher\endcsname \teachername \cnormal\@teacher\\ \fi}
+  {}
+  {\PackageWarning{asymptotic-statistics}{Failed to add the teacher field to the title page}}
+\makeatother
+\teacher{\href{https://jia-gu.github.io/}{顾嘉}}
+
+\cover{figures/cover2.jpg}
+
+\usepackage{bm}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs}
+\usepackage{mathrsfs}
+\usepackage{dsfont}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{microtype}
+\usepackage{csquotes}
+\definecolor{DarkRed}{HTML}{8B1E2D}
+\renewcommand{\examplename}{例}
+\renewcommand{\assumptionname}{条件}
+
+\addbibresource[location=local]{references.bib}
+\setcounter{tocdepth}{1}
+\numberwithin{equation}{chapter}
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}%
+}
+\newcommand{\chapterreferences}{%
+  \printbibliography[heading=subbibliography,title={本章参考文献}]%
+}
+\makeatletter
+\newcommand{\extensionchapter}[3]{%
+  \chapter*{#1}%
+  \phantomsection
+  \addcontentsline{toc}{chapter}{#1}%
+  \label{#2}%
+  \setcounter{equation}{0}%
+  \renewcommand{\theequation}{#3.\arabic{equation}}%
+  \renewcommand{\theHequation}{#3.\arabic{equation}}%
+  \setcounter{ELEGANT@samecnt}{0}%
+  \renewcommand{\theELEGANT@samecnt}{#3.\arabic{ELEGANT@samecnt}}%
+  \renewcommand{\theHELEGANT@samecnt}{#3.\arabic{ELEGANT@samecnt}}%
+  \setcounter{exam}{0}%
+  \renewcommand{\theexam}{#3.\arabic{exam}}%
+  \renewcommand{\theHexam}{#3.\arabic{exam}}%
+  \setcounter{section}{0}%
+  \setcounter{subsection}{0}%
+  \setcounter{subsubsection}{0}%
+  \renewcommand{\thesection}{#3.\arabic{section}}%
+  \renewcommand{\theHsection}{#3.\arabic{section}}%
+  \renewcommand{\thesubsection}{#3.\arabic{section}.\arabic{subsection}}%
+  \renewcommand{\theHsubsection}{#3.\arabic{section}.\arabic{subsection}}%
+  \renewcommand{\thesubsubsection}{#3.\arabic{section}.\arabic{subsection}.\arabic{subsubsection}}%
+  \renewcommand{\theHsubsubsection}{#3.\arabic{section}.\arabic{subsection}.\arabic{subsubsection}}%
+}
+\makeatother
+
+% 让各定理类 tcolorbox 的标题编号实时跟随 \theELEGANT@samecnt（默认它在框体创建时被固化一次）。
+\makeatletter
+\newcommand{\extensiontheoremtitle}{%
+  \expandafter\def\csname thetcb@cnt@theorem\endcsname{\theELEGANT@samecnt}%
+  \expandafter\def\csname thetcb@cnt@definition\endcsname{\theELEGANT@samecnt}%
+  \expandafter\def\csname thetcb@cnt@proposition\endcsname{\theELEGANT@samecnt}%
+  \expandafter\def\csname thetcb@cnt@lemma\endcsname{\theELEGANT@samecnt}%
+  \expandafter\def\csname thetcb@cnt@corollary\endcsname{\theELEGANT@samecnt}%
+  \expandafter\def\csname thetcb@cnt@axiom\endcsname{\theELEGANT@samecnt}%
+  \expandafter\def\csname thetcb@cnt@postulate\endcsname{\theELEGANT@samecnt}%
+}
+\extensiontheoremtitle
+\makeatother
+
+\renewcommand{\thesection}{\arabic{chapter}.\arabic{section}} % 例如 1.1
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}} % 例如 1.2.1
+\renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}} % 例如 1.2.1.1
+
+\begin{document}
+
+\maketitle
+\frontmatter
+\tableofcontents
+\mainmatter
+
+\begin{refsection}
+\chapter{随机收敛}\label{ch:random-convergence}
+\input{chapters/01-random-convergence}
+\nocite{vandervaart1998,serfling1980,durrett2019,ferguson1996,vandervaartwellner1996}
+\chapterreferences
+\end{refsection}
+
+\begin{refsection}
+\chapter{特征函数}\label{ch:characteristic-functions}
+\input{chapters/02-characteristic-functions}
+\nocite{vandervaart1998,durrett2019}
+\chapterreferences
+\end{refsection}
+
+\begin{refsection}
+\chapter{中心极限定理}\label{ch:central-limit-theorems}
+\input{chapters/03-central-limit-theorems}
+\nocite{durrett2019,serfling1980}
+\chapterreferences
+\end{refsection}
+
+\begin{refsection}
+\chapter{弱相依数据}\label{ch:weak-dependence}
+\input{chapters/04-weak-dependence}
+\chapterreferences
+\end{refsection}
+
+\begin{refsection}
+\extensionchapter{稳定分布与无限方差中心极限定理}{ext:stable-distributions}{E1}
+\input{chapters/04a-stable-distributions}
+\nocite{embrechts1997,gnedenko1954,ibragimov1971}
+\chapterreferences
+\end{refsection}
+
+\begin{refsection}
+\extensionchapter{泛函中心极限定理}{ext:functional-clt}{E2}
+\input{chapters/04b-functional-clt}
+\nocite{embrechts1997,billingsley1999}
+\chapterreferences
+\end{refsection}
+
+\renewcommand{\theequation}{\thechapter.\arabic{equation}}
+\renewcommand{\theHequation}{\thechapter.\arabic{equation}}
+\makeatletter
+\setcounter{ELEGANT@samecnt}{0}%
+\renewcommand{\theELEGANT@samecnt}{\thechapter.\arabic{ELEGANT@samecnt}}%
+\renewcommand{\theHELEGANT@samecnt}{\thechapter.\arabic{ELEGANT@samecnt}}%
+\setcounter{exam}{0}%
+\renewcommand{\theexam}{\thechapter.\arabic{exam}}%
+\renewcommand{\theHexam}{\thechapter.\arabic{exam}}%
+\makeatother
+\renewcommand{\thesection}{\arabic{chapter}.\arabic{section}}
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
+\makeatletter
+\renewcommand{\theHsection}{\thechapter.\arabic{section}}
+\renewcommand{\theHsubsection}{\thechapter.\arabic{section}.\arabic{subsection}}
+\renewcommand{\theHsubsubsection}{\thechapter.\arabic{section}.\arabic{subsection}.\arabic{subsubsection}}
+\makeatother
+
+\begin{refsection}
+\chapter{Delta 方法}\label{ch:delta-method}
+\input{chapters/05-delta-method}
+\nocite{vandervaart1998}
+\chapterreferences
+\end{refsection}
+
+\begin{refsection}
+\chapter{矩估计}\label{ch:method-of-moments}
+\input{chapters/06-method-of-moments}
+\nocite{hansen1982,neweymcfadden1994}
+\chapterreferences
+\end{refsection}
+
+\begin{refsection}
+\chapter{极大似然估计}\label{ch:maximum-likelihood}
+\input{chapters/07-maximum-likelihood}
+\nocite{vandervaart1998,serfling1980,shao2003}
+\chapterreferences
+\end{refsection}
+
+\begin{refsection}
+\chapter{经验似然}\label{ch:empirical-likelihood}
+\input{chapters/08-empirical-likelihood}
+\nocite{owen2001,neweysmith2004}
+\chapterreferences
+\end{refsection}
+
+\begin{refsection}
+\chapter{M-估计和 Z-估计}\label{ch:m-and-z-estimation}
+\input{chapters/09-m-and-z-estimation}
+\nocite{vandervaart1998,vandervaartwellner1996}
+\chapterreferences
+\end{refsection}
+
+\begin{refsection}
+\chapter{U-统计量}\label{ch:u-statistics}
+\input{chapters/10a-u-statistics}
+\input{chapters/10b-u-statistics}
+\nocite{hoeffding1948,serfling1980,lee1990}
+\chapterreferences
+\end{refsection}
+
+\begin{refsection}
+\chapter{Bootstrap}\label{ch:bootstrap}
+\input{chapters/11a-bootstrap}
+\input{chapters/11b-bootstrap}
+\nocite{efron1979,efrontibshirani1993,hall1992}
+\chapterreferences
+\end{refsection}
+
+\end{document}

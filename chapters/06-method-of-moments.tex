@@ -1,0 +1,542 @@
+% Generated from: Zhihu/专栏：概率与统计/渐近统计 (6)：矩估计_金鱼马_2026-04-28.md
+\section{矩估计}
+
+\subsection{基本概念}
+
+``矩 (moment)'' 是一个来自于物理学的概念：一阶矩代表质心，二阶代表转动惯量。统计学中借用了这一概念年，用其指代随机变量幂次的期望。
+
+% \href{https://www.zhihu.com/question/19915565}{统计学中「矩」这个概念是怎么引入的？它为什么被称为矩？它与物理意义上的矩有什么相同与不同？}
+
+对 $\mathbb R$ 上的参数族 $P_\theta$ ，其中 $\theta=(\theta_1,\theta_2,\dots,\theta_k)^\top\in\mathbb R^k$ 是我们感兴趣的参数，我们记 $r$ 阶原点矩为 $\alpha_r:=\mathbb{E}_\theta[X^r]=\int x^r\mathrm{d}P_\theta(x)$ ，并设其有限； $X_1,\dots,X_n\sim P_\theta$是 i.i.d. 样本，记样本 $r$ 阶原点矩为 $a_{r,n}:=\frac1n\sum_{j=1}^nX_{j}^r$ 。
+
+矩方法 (Method of Moments, MOM) 是一种经典的参数估计方法。简单来说，这种方法将总体矩表示为目标参数的函数，设目标参数是
+\[ \begin{cases} \alpha_1&=\alpha_1(\theta_1,\theta_2,\dots,\theta_k)\\ \vdots\\ \alpha_r&=\alpha_r(\theta_1,\theta_2,\dots,\theta_k) \end{cases} \]
+
+然后用``插入原则 (plug-in principle)''的思想，用样本矩替代总体矩，得到矩方程
+\[\begin{cases} a_{1,n}&=\alpha_1\big(\widehat\theta_{1,n},\widehat\theta_{2,n},\dots,\widehat\theta_{k,n}\big)\\ \vdots\\ a_{r,n}&=\alpha_r\big(\widehat\theta_{1,n},\widehat\theta_{2,n},\dots,\widehat\theta_{k,n}\big) \end{cases}\]
+求解方程得到的 $\widehat\theta_1,\dots,\widehat\theta_k$ 便是矩估计。一言以蔽之：列出矩与参数的方程，用样本矩代替总体矩，从而解出参数便是矩估计。
+
+\begin{example}[均匀分布的矩估计]
+设 $-\infty<a<b<\infty$ ， $U\sim \mathcal U([a,b])$ 是区间 $[a,b]$ 上均匀分布的随机变量，我们计算一、二阶矩\[ \begin{cases} \alpha_1&=\mathbb{E}[U]=\dfrac{a+b}{2}\\ \alpha_2&=\mathbb{E}[U^2]=\dfrac{a^2+ab+b^2}{3} \end{cases} \]
+
+对于 i.i.d. $U_1,\dots,U_n$样本，计算出样本 1、2 阶矩 $a_{1,n}$ 、 $a_{2,n}$ ，求解矩方程即可得到
+\[\begin{aligned} \widehat{a}_n&=a_{1,n}-\sqrt{3(a_{2,n}-a_{1,n}^2)}\\ \widehat{b}_n&=a_{1,n}+\sqrt{3(a_{2,n}-a_{1,n}^2)}\\  \end{aligned}\]
+\end{example}
+
+
+一般来说，从不同的矩出发估计某个参数，会得到不同的估计，例如，Poisson 分布 $\mathrm{Poisson}(\lambda)$ 中的参数 $\lambda$ 既是均值又是方差，按矩估计法，既可以用样本均值，也可以用样本方差来估计之，因此，矩估计法应视为一个 ad-hoc 的原则，而并没有一个一般的准则（这也是它的一个局限性）。一般来说，在经典矩估计中，应优先考虑使用阶数较低的矩。
+
+当然，好奇的读者一定会问：为什么一定要选择``矩''？或者说，为什么一定要找`` $X$ 幂次的期望''？可不可以更自由一些呢？答案也是肯定的，我们给出如下定义
+
+\begin{definition*}[矩估计]
+设 $X_1,\ldots,X_n\sim P_\theta$ i.i.d.，$\theta_0\in\Theta$ 是真实参数，参数空间 $\Theta\subset\mathbb R^k$。选取 $k$ 个已知函数 $f_1,\ldots,f_k$，并记向量 $f:=(f_1,\ldots,f_k)^\top$。定义总体矩为
+
+$$\alpha_f(\theta):=\mathbb{E}_\theta[f(X)] = \int f(x)\,\mathrm{d}P_\theta(x)$$
+
+样本矩为 $a_{f,n}:=\frac1n\sum_{j=1}^nf(X_j)$
+
+那么， 通过解方程 $\alpha_f(\widehat\theta_n)=a_{f,n}$，也就是， 
+
+$$\mathbb{E}_{\widehat \theta_n}[f_r(X)]=\frac{1}{n}\sum_{j=1}^n f_r(X_j),\quad r=1,\dots,k$$
+
+所得到的 $\widehat\theta$ 便是 $\theta_0$ 的\textbf{\emph{矩估计 }} (moment estimator, ME)。
+\end{definition*}
+这种方法是现代统计学的奠基人之一 K. Pearson 在 20 世纪初研究曲线拟合时提出的, 至今仍不失为一 种重要而常用的方法。当取 $f_r(x)=x^r$ 时，就是经典的矩估计。
+
+\subsection{矩估计的渐近正态性}
+
+直觉上，当样本量很大时，样本矩 $a_{f,n}$ 会以 $\sqrt{n}$ 的速度收敛到正态分布。当 $\alpha_f:\mathbb R^k\to\mathbb R^k$ 是单射时， $\widehat\theta_n=\alpha_f^{-1}(a_{f,n})$ ；如果 $\alpha_f^{-1}$ 是可微的，并且 $\mathbb{E}_{\theta_0}[f(X)f(X)^\top]<\infty$ ，那么根据 Delta 方法，矩估计 $\hat{\theta}_n$ 也应该有正态极限。关键在于保证反函数的存在性和可微性。
+
+\begin{theorem*}[逆映射定理]：设 $A$ 是 $\mathbb R^k$ 中的开子集， $g:A\mapsto \mathbb R^k$ 在 $a\in A$ 处连续可微，并且在 $a$ 的一个邻域内可微，若 Jacobian 矩阵 $g'(a)\in\mathbb R^{k\times k}$ 是非奇异的，那么
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  存在 $a$ 的一个开邻域 $U$ 和 $\mathbb R^k$ 的开子集 $V$ ，使得 $g$ 一对一（单射）地将 $U$ 映射到 $V$ ，
+\item
+  逆映射 $g^{-1}:V\to U$ 存在，使得 $g^{-1}(g(x))=x$ ，并且 $g^{-1}$ 连续可微。
+\end{enumerate}
+
+这个结论在很多分析学教材中都会介绍，例如可参考 \cite{munkres1997} 的 Theorem 8.3。
+
+\end{theorem*}
+
+利用反函数定理，我们可以严格叙述和证明矩估计的渐近正态性，
+
+
+\begin{theorem}[矩估计的相合性和渐近正态性]\label{thm:ch6:mom-asymptotic-normality}
+
+若 $\alpha_f(\theta) = \mathbb{E}_\theta [f(X)]$ 在开集 $\Theta \subset \mathbb{R}^k$ 上是单射，且在真实参数 $\theta_0\in\Theta$ 处连续可微，且 Jacobian 矩阵 $\alpha_f'(\theta_0)$ 非奇异， $\mathbb{E}_{\theta_0}[f(X)f(X)^\top] < \infty$，那么以概率 1 当 $n$ 充分大时，矩估计方程存在唯一解 $\widehat\theta_n$ ，并且
+\[\sqrt n\big(\widehat\theta_n-\theta_0\big)\overset{\rm d}\to \mathcal N_k\left(\bm 0,(\alpha_f'(\theta_0))^{-1}\Sigma_f\left((\alpha_f'(\theta_0))^{-1}\right)^\top\right)\]
+其中 $\Sigma_f:=\mathbb{E}_{\theta_0}[f(X)f(X)^\top]-(\mathbb{E}_{\theta_0}[f(X)])(\mathbb{E}_{\theta_0}[f(X)])^\top$ 。
+
+\end{theorem}
+
+\begin{proof}
+
+由逆映射定理，存在 $\theta_0$ 的开邻域 $U$ 和 $\alpha_f(\theta_0)$ 的开邻域 $V$ ，使得 $\alpha_f$ 将 $U$ 一对一地映射到 $V$ ，因而存在逆映射 $\alpha_f^{-1}:V\to U$ 。由强大数律，在 $P_{\theta_0}$ 下，
+\[
+a_{f,n}=\frac1n\sum_{j=1}^nf(X_j)\overset{\text{a.s.}}\to \alpha_f(\theta_0)\in V,\quad \text{ 当 }n\to\infty.
+\]
+
+所以以概率 1 当 $n$ 充分大时， $a_{f,n}\in V$ ，这时 $\widehat\theta_n=\alpha_f^{-1}(a_{f,n})$ 存在，并且根据连续映射定理，这是一个强相合估计：
+\[
+\widehat\theta_n=\alpha_f^{-1}(a_{f,n})\overset{\text{a.s.}}\to \alpha_f^{-1}(\alpha_f(\theta_0))=\theta_0,\quad\text{ 当 }n\to\infty.
+\]
+
+由于 $\mathbb{E}_{\theta_0}[f(X)f(X)^\top] < \infty$ ，中心极限定理告诉我们
+\[
+\sqrt n\big(a_{f,n}-\alpha_f(\theta_0)\big)\overset{\rm d}\to\mathcal N(0,\Sigma_f).
+\]
+
+再对 $\alpha_f^{-1}$ 使用第~\ref{ch:delta-method}~章的 Delta 方法定理~\ref{thm:ch5:first-order-delta}，便得到结论。注意这里 $\left(\alpha_f^{-1}\right)'=\left(\alpha_f'\right)^{-1}$。
+
+\end{proof}
+
+\begin{remark}
+
+\begin{itemize}
+\tightlist
+\item
+  这个证明亦可参考 \cite{zhaolincheng2016} 一书的 定理 5.5。
+\item
+  ``以概率 1 当 $n$ 充分大时某某事件发生''的说法在大样本估计中经常见到，从无穷乘积空间中理解最好：记样本概率空间为 $(X,\mathscr B_X,P_{\theta_0})$ ，其无穷乘积空间为 $(X^\infty,\mathscr B^\infty,P_{\theta_0}^\infty)$ ，存在 $A\subset X^\infty$ 使得 $P_{\theta_0}^\infty(A)=1$ ，使得点 $(X_1,X_2,\dots)\in A$ 时存在 (与此点相关的) 正整数 $N$ ，当 $n>N$ 时，对 $(X_1,\dots,X_n)$ 有``某某事件发生''。在本证明中， 我们指的是：对 $n>N$ ， $(X_1,\dots,X_n)$的样本矩 $a_{f,n}\in V$ ，从而矩方程有唯一解 $\widehat\theta_n=\widehat\theta_n(X_1,\dots,X_n)$ 。这个叙述来自 \cite{chenxiru2009} 一书的 p.150。
+\end{itemize}
+
+\begin{example}[Beta 分布的矩估计]
+考虑来自 Beta 分布 $\mathrm{Beta}(\alpha,\beta)$ 的 i.i.d. $X_1,\dots,X_n$，其密度为
+
+\[
+p(x;\alpha,\beta)=\frac1{\mathrm{B}(\alpha,\beta)}
+x^{\alpha-1}(1-x)^{\beta-1},\qquad 0<x<1,
+\]
+其中 $\alpha>0,\beta>0$ 是我们感兴趣的未知参数， $\mathrm{B}(\alpha,\beta)$ 代表 Beta 函数。很容易算出总体原点矩
+\[\begin{aligned}\alpha_k=\mathbb{E}[X^k]&=\frac1{\mathrm{B}(\alpha,\beta)}\int_{\mathbb R} x^{\alpha+k-1}(1-x)^{\beta-1}\mathrm{d}x\\ &=\frac{\mathrm{B}(\alpha+k,\beta)}{\mathrm{B}(\alpha,\beta)}\\ &=\frac{\Gamma(\alpha+k)}{\Gamma(\alpha)}\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha+\beta+k)}\\ &=\prod_{r=0}^{k-1}\frac{\alpha+r}{\alpha+\beta+r} \end{aligned}\]
+特别地， $\mathbb{E}[X]=\frac{\alpha}{\alpha+\beta}$ 、 $\mathbb{E}[X^2]=\frac{\alpha(\alpha+1)}{(\alpha+\beta)(\alpha+\beta+1)}$ 。记样本 1、2 阶原点矩为 $a_{1,n}$ 、 $a_{2,n}$ ，构造矩估计方程，可以解出参数 $\alpha,\beta$ 的矩估计，
+\[\left\{\begin{aligned} \widehat\alpha_n&=a_{1,n}\left(\frac{a_{1,n}(1-a_{1,n})}{a_{2,n}-a_{1,n}^2}-1\right)\\ \widehat\beta_n&=(1-a_{1,n})\left(\frac{a_{1,n}(1-a_{1,n})}{a_{2,n}-a_{1,n}^2}-1\right) \end{aligned} \right.\]
+记 $\theta=(\alpha,\beta)^\top$ 、 $f(x)=(x,x^2)^\top$ ，那么
+\[
+\alpha_f(\theta)=(\mathbb{E}_\theta[X],\mathbb{E}_\theta[X^2])^\top=\left(\frac\alpha{\alpha+\beta},\frac{\alpha(\alpha+1)}{(\alpha+\beta)(\alpha+\beta+1)}\right)^\top.
+\]
+
+容易验证 $\alpha_f^{-1}\in C^\infty(\mathbb R_+^2)$ ，则根据定理~\ref{thm:ch6:mom-asymptotic-normality}， $\widehat\theta_n=(\widehat\alpha_n,\widehat\beta_n)^\top=\alpha_f^{-1}(\theta)$ 是相合估计，满足渐近正态性。由\[\alpha'_f(\theta)=\begin{pmatrix} \dfrac{\beta}{(\alpha+\beta)^2} & -\dfrac{\alpha}{(\alpha+\beta)^2} \\ -\dfrac{\beta(\alpha+1)(\alpha+\beta+1) + \alpha\beta (\alpha+\beta)}{(\alpha+\beta)^2(\alpha+\beta+1)^2} & -\dfrac{\alpha(\alpha+1)(2(\alpha+\beta)+1)}{(\alpha+\beta)^2(\alpha+\beta+1)^2} \end{pmatrix}\]和\[\Sigma_f = \begin{pmatrix} \mathrm{Var}[X] & \mathrm{Cov}[X, X^2] \\ \mathrm{Cov}[X, X^2] & \mathrm{Var}[X^2] \end{pmatrix}= \begin{pmatrix} \alpha_2 - \alpha_1^2 & \alpha_3 - \alpha_1\alpha_2 \\ \alpha_3 - \alpha_1\alpha_2 & \alpha_4 - \alpha_2^2 \end{pmatrix}\]
+可以算出渐近协方差（过于繁琐，不再显式展开）。
+
+
+\end{example}
+
+\subsection{与极大似然估计的联系}
+
+在某些特殊情况下，极大似然估计居然也可以视作是特殊的矩估计！这里的``特殊情况''是，总体分布族要属于\textbf{\emph{\href{https://en.wikipedia.org/wiki/Exponential_family}{指数型分布族}}} (Exponential family)。简单来说，指数型分布族是一大类密度函数形如
+\[
+p(x;\theta)=c(\theta)h(x)\exp\{\theta^\top T(x)\}
+\]
+的分布族，其中 $c(\theta),h(x),T(x)$ 是给定的函数。这涵盖了很多的常见分布（如正态、Gamma、Beta、Bernoulli、Poisson、指数、χ² 等），并且有良好的统计性质。%关于指数型分布族的更详细内容，读者可以参考
+
+% \href{https://zhuanlan.zhihu.com/p/27452245086}{数理统计 (1) 基本概念}
+
+% \href{https://zhuanlan.zhihu.com/p/596078459}{【高等统计学】1. 指数族}
+
+我们主要利用它的 MLE 性质。首先有似然函数 
+
+$$L_x(\theta)=\log p(x;\theta)=\log c(\theta)+\log h(x)+\theta^\top T(x)$$
+
+从而得分函数 (score function) 为 \[ L'_x(\theta)=\frac{c'(\theta)}{c(\theta)}+T(x)=T(x)-\mathbb{E}_\theta[T(X)] \]这里的第二个等号是因为 $\mathbb{E}_\theta[L'_X(\theta)]=0$ 可以推出 $\frac{c'(\theta)}{c(\theta)}=-\mathbb{E}_\theta[T(X)]$ 。极大似然估计是求解对数似然方程 \[ \frac{1}{n}\sum_{i=1}^n L'_{X_i}(\theta) = 0 \]的根作为估计；若记
+\[\begin{aligned} a_{T,n}&=\frac1n\sum_{j=1}^nT(x_j)\\ \alpha_T(\theta)&=\mathbb{E}_\theta[T(x)] \end{aligned}\]
+那么似然方程正好是 $\alpha_{T}(\theta)=a_{T,n}$ ！所以此时 MLE 和函数 $T$ 对应的矩估计是相同的。
+
+指数型分布族的良好解析性质保证 $c(\theta)$ 任意阶导数存在，以及 $T(X)$ 各阶矩存在，进一步，这些矩可以通过对 $\ln c(\theta)$ 求导获得：
+\[\begin{aligned} \mathbb{E}_\theta[T(X)]&=(\ln c(\theta))'=\frac{c'(\theta)}{c(\theta)}=\alpha_T(\theta)\\ \mathrm{Var}_\theta[T(X)]&=(\ln c(\theta))''=\alpha_T'(\theta) \end{aligned}\]
+% （见 \href{https://zhuanlan.zhihu.com/p/27452245086}{数理统计 (1) 基本概念} 的定理 1.1。）
+这里 $\mathrm{Var}_\theta[T(X)]$ 代表 $T(X)$ 的协方差矩阵，我们设其满秩。
+
+注意到 Fisher 信息矩阵是
+\[
+\mathcal I_\theta=\mathrm{Var}_\theta[L'_X(\theta)]=\mathrm{Var}_\theta\big[T(x)-\mathbb{E}_\theta[T(X)]\big]=\mathrm{Var}_\theta[T(x)].
+\]
+
+我们得到了重要的关系：
+\[
+\mathcal I_\theta=\mathrm{Var}_\theta[T(x)]=\alpha_T'(\theta).
+\]
+
+于是根据定理~\ref{thm:ch6:mom-asymptotic-normality}， \[ \sqrt n\big(\widehat\theta_n-\theta_0\big)\overset{\rm d}\to \mathcal N\Big(0,(\alpha_T'(\theta_0))^{-1}\mathrm{Var}_\theta[T(X)]((\alpha_T'(\theta_0))^{-1})^\top\Big)=\mathcal N(0,\mathcal I^{-1}_{\theta_0}) \]说明 $\widehat\theta_n$ 是渐近有效的，或者说，它是最佳渐近正态 (BAN) 估计。
+
+% 也可以参考 \href{https://zhuanlan.zhihu.com/p/1909962170453726655}{数理统计 (16) : 极大似然估计 - 下 - MLE 的渐近正态性} 的定理 16.2。
+
+在参数估计中，如果密度函数是已知的，那么相比于矩估计，其实大家还是更爱用极大似然估计 (MLE)，因为矩估计往往不如 MLE 更有效。下面一个例子表明，从渐近方差的角度看，矩估计可以任意糟糕。
+
+\begin{example}[矩估计可能无定义]
+考虑 $X_1,\dots,X_n\sim\mathcal N(\theta,1)$ i.i.d.， $\theta>0$ 是未知参数。总体的二阶矩是 $\theta^2+1$ ，矩估计方程如下：
+\[
+\widehat\theta_n^2+1=\frac1n\sum_{j=1}^nX_j^2\enspace\implies\enspace \widehat\theta_n=\left(\frac1n\sum_{j=1}^nX_j^2-1\right)^{1/2}.
+\]
+
+由 $\mathrm{Var}[X^2]=2+4\theta^2$ 有
+\[
+\frac1{\sqrt n}\sum_{j=1}^n\big(X_j^2-(1+\theta^2)\big)\overset{\rm d}\to \mathcal N(0,2+4\theta^2).
+\]
+从而，对 $\sqrt{x}$ 用 Delta 方法，我们得到
+\[
+\sqrt n\big(\widehat\theta_n-\theta\big)\overset{\rm d}\to \mathcal N\left(0,\left(\frac1{2\theta}\right)^2(2+4\theta^2)\right)=\mathcal N\left(0,\frac{1}{2\theta^2}+1\right).
+\]
+
+当 $\theta\to 0^+$ 时这里的渐近方差可以任意大。
+\end{example}
+
+那么，相比于 MLE，矩估计就一无是处了吗？也不是，MLE 一般要求我们知道完整的密度函数 $p(x;\theta)$ ------在回归问题中可以是条件密度 $p(y|x;\theta)$ ，在面板数据模型 (panel data) 中可以是 $p(y_t|x_t;\theta)$ ------但总之需要知道密度。这实际上对数据的生成作出了很强的限制。而矩估计只需要我们知道总体矩 $\alpha_r$ 的形式，这个限制是更宽松的。
+
+最简单的例子是最小二乘法，对线性模型 $y_i=\beta^\top x_i+\varepsilon_i$ ，MLE 的做法需要假设 $\varepsilon_i$ 独立同分布于正态总体： $\varepsilon_i \sim \mathcal{N}(0,\sigma^2)$；矩估计则可以不假设任何分布性质，只需要一个矩条件 $\mathbb{E}[x_i\epsilon_i]=\mathbb{E}[x_i(y_i-x_i^\top\beta)]=0$ 成立，此时的矩估计正是最小二乘估计。%可见：
+
+% \href{https://www.zhihu.com/question/55084299/answer/1685871552}{最小二乘法只有在因变量服从正态分布时才能用吗？}
+
+下面是一个稍微复杂点的 
+
+\begin{example}[Yule--Walker 估计]
+考虑一个零均值、平稳的 $\mathrm{AR}(p)$ 过程 $\{X_t\}_{t\in\mathbb Z}$ ：
+\[X_t = \phi_1 X_{t-1} + \phi_2 X_{t-2} + \dots + \phi_p X_{t-p} + \varepsilon_t\]
+其中 $\varepsilon_t\sim WN(0,\sigma^2)$ 是白噪声序列，独立于所有过去值 $X_{t-k}$ 。我们想要估计自回归系数 $\phi_1, \dots, \phi_p$ 和白噪声方差 $\sigma^2$ 。对模型两边同乘 $X_{t-k}$ （$k=1,\dots,p$）并取期望，利用 $\mathbb{E}[\varepsilon_t X_{t-k}] = 0$，立即可得 \textbf{\emph{Yule--Walker 方程}} ：
+\[ \gamma_k = \phi_1 \gamma_{k-1} + \phi_2 \gamma_{k-2} + \dots + \phi_p \gamma_{k-p}, \quad k=1,\dots,p \]其中 $\gamma_k:=\mathbb{E}[X_iX_{i-k}]$ 。上述方程写成矩阵形式为
+\[\begin{pmatrix} \gamma_1 \\ \gamma_2 \\ \vdots \\ \gamma_p \end{pmatrix} = \begin{pmatrix} \gamma_0 & \gamma_1 & \dots & \gamma_{p-1} \\ \gamma_1 & \gamma_0 & \dots & \gamma_{p-2} \\ \vdots & \vdots & \ddots & \vdots \\ \gamma_{p-1} & \gamma_{p-2} & \dots & \gamma_0 \end{pmatrix} \begin{pmatrix} \phi_1 \\ \phi_2 \\ \vdots \\ \phi_p \end{pmatrix}\]
+用样本自协方差 $\widehat{\gamma}_k = \frac{1}{n}\sum_{t=k+1}^n (X_t - \bar{X})(X_{t-k} - \bar{X})$ 代替总体 $\gamma_k$， 然后解出 $\widehat{\phi}_1,\dots,\widehat{\phi}_p$；同时，根据
+\[\gamma_0=\phi_1\gamma_1+\phi_2\gamma_2+\cdots+\phi_p\gamma_p+\sigma^2\]
+可知白噪声方差的估计由 $\widehat\sigma^2=\widehat\gamma_0-\sum_{t=1}^p\widehat\phi_t\widehat \gamma_t$ 给出。上面的这种方法称作 \textbf{\emph{Yule--Walker 估计}} ，本质上还是一种矩估计。
+
+注意到，这里我们并不需要 $\varepsilon_t\sim WN(0,\sigma^2)$ 是正态分布或者独立同分布，仅仅只需要它是与过去值 $X_{t-k}$ 无关的零均值序列，有方差 $\sigma^2$ 。这也是``矩估计对数据的限制更少''的一例。
+
+
+\end{example}
+
+\section{广义矩估计}
+
+上一节我们提到，相比于 MLE，矩估计对数据的限制更少。而本节介绍的``广义矩估计 (Generalized method of moments, GMM)''则更加自由，它甚至不再受限于参数估计问题，而是来到了更广阔的领域：半参数模型 (semiparametric models)，其中，我们感兴趣的参数是有限维的，而数据分布的完整形状可能未知，往往不能用有限个参数描述。
+
+GMM 方法来自于 \cite{hansen1982}。其思想是仅依靠一组矩条件进行估计与推断。
+它的另一个好处是：在实际问题当中，我们可以由数据的生成过程导出超出参数维度的估计方程。由于方程个数大于需要求解的参数个数，不太可能找到一个解使得所有方程都成立；然而，多出来的方程提供了更多的信息，弃之可惜；而 GMM 则在诸矩方程中寻求最优折中，很好地解决了这个问题。
+
+\subsection{基本概念和例子}
+
+设 $\{w_i\}_{i=1}^n$ 为 $\mathbb{R}^m$ 上的 i.i.d. 随机变量，$\theta \in \Theta \subset \mathbb{R}^p$，且已知的 $r$ 维函数 $g(w_i;\theta)\in\mathbb R^r$ 满足如下\textbf{\emph{矩条件}} moment conditions
+\[\text{ 存在唯一的 }\enspace\theta_0\in\Theta\enspace\text{ 使得}\enspace\mathbb{E}[g(w_i;\theta_0)] = 0\]
+\begin{itemize}
+\tightlist
+\item
+  当 $r = p$ ，或者说，矩条件个数 = 参数个数时，称模型\textbf{\emph{恰好识别}} (just-identified)，由于参数和方程数量相同，我们可以直接求解方程 $\frac{1}{n}\sum_{i=1}^n g(w_i;\theta)=0$；
+\item
+  当 $r > p$ 时，矩条件个数 \textgreater{} 参数个数，称模型\textbf{过识别 } (over-identified)。GMM 将问题转换为求解一个二次型最小化问题，
+\end{itemize}
+
+\begin{definition*}[广义矩估计]
+在上述符号下，定义广义矩估计量为 $\hat{\theta}_n = \operatorname*{\arg\min}_{{\theta \in \Theta}} \left( \frac1n\sum_{i=1}^n g(w_i;\theta) \right)^\top \widehat{W}_n \left( \frac{1}{n}\sum_{i=1}^n g(w_i;\theta) \right)$，
+
+其中 $\widehat{W}_n$ 是某个与 $\theta$ 无关的 $r \times r$ 半正定矩阵。
+\end{definition*}
+
+在这个定义里，我们需要一些识别条件 (Identification) 成立，如下：
+
+\begin{assumption}[识别性]\label{ass:ch6:identifiability}
+\begin{itemize}
+\item
+  $r\ge p$，否则模型不可识别，参数是解不出来的；
+\item
+  在矩条件不低于参数个数 $p$ 的时候，这些条件至少应当有 $p$ 个是线性无关的，否则本质上条件还是不够，模型不可识别；
+\item
+  对每个 $\theta\in\Theta$ 都应有 $\mathbb{E}[g(w_i;\theta)]<\infty$；并且满足 $\mathbb{E}[g(w_i;\theta_0)]=0$ 的 $\theta_0$ 必须是唯一的。
+\end{itemize}
+\end{assumption}
+
+\begin{remark}
+很多文献不要求 $w_i$ 满足 i.i.d. 这一较强条件，但这超出了本文范围；这里只考虑最简单的情形。
+\end{remark}
+
+同时，定义里的 $\widehat W_n$ 可以视作是为不同矩条件赋予的权重，我们设它满足如下渐近条件
+
+\begin{assumption}[权重矩阵]\label{ass:ch6:weight-matrix}
+
+$\widehat W_n\overset P\to W_0$ ，其中 $W_0\succ 0$ 是一个确定的（可能依赖于 $\theta_0$ 的）正定矩阵。
+
+\end{assumption}
+
+由于 $W_0\succ 0$ ，显见 $\theta_0$ 也是唯一最小化 $\mathbb{E}[g(w_i,\theta)]^\top W_0\mathbb{E}[g(w_i,\theta)]$ 的点。
+
+\begin{remark}
+在极限情形下，GMM 可以视作渐近等价于
+\[
+\widehat\theta_n^{(M)}
+=\operatorname*{\arg\min}_{\theta\in\Theta}
+\left(\frac1n\sum_{i=1}^n g(w_i;\theta)\right)^\top
+W_0
+\left(\frac1n\sum_{i=1}^n g(w_i;\theta)\right).
+\]
+这是一种 \emph{M-估计量} (M-estimator)。
+\end{remark}
+
+我们举几个 GMM 的简单的例子，
+
+\begin{example}[极大似然估计作为 GMM]
+取 $g(w_i,\theta)=\frac{\partial p(w_i;\theta)}{\partial\theta}$ 为得分函数，那么求解 $\frac{1}{n}\sum_{i=1}^n g(w_i,\widehat\theta_n)=0$ 正好就是 MLE。此时模型恰好识别。
+\end{example}
+
+
+\begin{example}[最小二乘法]
+考虑一组独立观测 $\{ w_i=(y_i, x_i)\}_{i=1}^n$，其中 $y_i \in \mathbb{R}$ 为响应变量，$x_i$ 为协变量。回归模型的设定是 \[ y_i = m(x_i, \theta) + \varepsilon_i,\quad \mathbb{E}[\varepsilon_i | x_i] = 0,\quad \mathrm{Var}[\varepsilon_i | x]= \sigma^2 < \infty \]其中 $m(\cdot,\theta)$ 代表某个形式确定但依赖参数 $\theta\in\mathbb R^k$ 的回归函数（如线性函数 $\theta^\top x_i$ ）， $\varepsilon_i$ 代表随机误差。在很多时候，为了使用 MLE，我们往往需要假设 $\varepsilon_i$ i.i.d. 同分布于某个确定的分布，如 $\mathcal N(0,\sigma^2)$ ，而矩估计则完全不需要。
+
+在普通最小二乘 (OLS) 框架下，我们构造如下函数作为矩条件： 
+
+$$g(w_i, \theta) = \frac{\partial m(x_i, \theta)}{\partial \theta} \bigl(y_i - m(x_i, \theta)\bigr)$$
+
+如果 $\sigma^2=\sigma^2(x_i)$ 是依赖于 $x_i$ 的，则可使用加权最小二乘（WLS），相应的矩条件为 \[ g(w_i, \theta) = \frac{\partial m(x_i, \theta)}{\partial \theta} \cdot \frac{y_i - m(x_i, \theta)}{\sigma(x_i)} \]在这两种方法中，参数的数量和方程的数量都是相同的，我们可以直接由 $\frac1n\sum_{i=1}^ng(w_i,\theta)=0$ 求解出 $\widehat\theta_n$ 。
+
+
+当然，我们对过识别的情形更感兴趣，
+
+\end{example}
+
+\begin{example}[Poisson 回归]
+考虑 $\{ w_i=(y_i, x_i)\}_{i=1}^n$ ，其中 $y_i$ 为计数数据， $x_i$ 是协变量，且如下等离散 (equal-dispersion) 假设成立
+\[ \mathbb{E}[y_i|x_i] = \mu(x_i,\theta),\quad \mathrm{Var}[y_i|x_i] = \mu(x_i,\theta) \]其中 $\mu(\cdot,\theta)$ 也是一个形式确定但依赖于 $\theta\in\mathbb R^p$ 的函数，例如可设 $\mu(x_i,\theta) = \exp\{x_i^\top\theta\}$。此时由均值信息可构造
+\[g_1(w_i,\theta) = \frac{\partial \mu(x_i,\theta)}{\partial\theta} (y_i - \mu(x_i,\theta))\]
+这里是 $p$ 个方程；还可以利用方差信息构造
+\[g_2(w_i,\theta) = a(x_i,\theta)\bigl( (y_i - \mu(x_i,\theta))^2 - \mu(x_i,\theta) \bigr)\]
+这里又是一个方程；于是 $g = (g_1, g_2)^\top$ 提供了 $r=p+1$ 个矩条件，模型过识别。我们可以自由选择 $a(x_i,\theta)$ 和加权矩阵，但在合适选择下可以让解得的 $\widehat\theta_n$ 效率最高。
+
+
+% 一些其它例子还可以参考
+
+% \href{https://www.zhihu.com/question/41312883}{如何用简单的例子解释什么是 Generalized Method of Moments (GMM)？}
+
+\end{example}
+
+
+我们在后文的~\ref{sec:ch6:more-moments-efficiency} 节表明，矩条件是多多益善的，多出来的维度可以提供更好的估计量，削减其渐近方差。
+
+\subsection{GMM 的渐近正态性}
+
+我们仍然记总体矩为 $\alpha_g(\theta):=\mathbb{E}_\theta[g(w_i,\theta)]$ 、样本矩为 $a_{g,n}(\theta):=\frac1n\sum_{j=1}^ng(w_j,\theta)$ ；注意这两个都是 $\Theta\to \mathbb R^r$ 的函数。设
+
+\begin{assumption}[一致收敛]\label{ass:ch6:uniform-convergence}
+
+$a_{g,n}(\theta)\overset{P}\to \alpha_g(\theta)$ 对每个 $\theta\in\Theta$ 一致成立，即， $\sup\limits_{\theta\in\Theta}|a_{g,n}(\theta)-\alpha_g(\theta)|\to 0$ 。
+
+\end{assumption}
+
+\begin{theorem}[GMM 的相合性]
+\label{thm:ch6:gmm-consistency}
+
+设前述条件~\ref{ass:ch6:identifiability}--\ref{ass:ch6:uniform-convergence} 成立，那么 GMM 估计量 $\widehat\theta_n$ 是相合的，即， $\widehat\theta_n\overset P\to\theta_0$ 。
+
+\end{theorem}
+
+\begin{proof}[证明概要]
+记
+\[\begin{aligned} \widehat Q_n(\theta)&:=\left( \frac1n\sum_{i=1}^n g(w_i;\theta) \right)^\top \widehat{W}_n \left( \frac{1}{n}\sum_{i=1}^n g(w_i;\theta) \right)=a_{g,n}(\theta)^\top \widehat W_na_{g,n}(\theta)\\ Q(\theta)&:=\mathbb{E}[g(w_i,\theta)^\top]W_0\mathbb{E}[g(w_i,\theta)]=\alpha_g(\theta)^\top W_0\alpha_g(\theta) \end{aligned}\]
+注意 $\widehat Q_n(\theta)$ 是随机的，依赖于样本； $Q(\theta)$ 是一个确定的 $\Theta\to \mathbb R$ 的函数。
+
+\begin{itemize}
+\tightlist
+\item
+  条件~\ref{ass:ch6:weight-matrix}、\ref{ass:ch6:uniform-convergence} 保证了 $\widehat Q_n(\theta)\overset{P}\to Q(\theta)$ 对 $\theta\in\Theta$ 一致成立；
+\item
+  条件~\ref{ass:ch6:identifiability} 保证了 $Q(\theta)=0$ 当且仅当 $\theta=\theta_0$ ；其余情况下 $Q(\theta)>0$ （因为 $W_0$ 正定）；换言之， $\theta_0=\operatorname*{\arg\min}\limits_{\theta\in\Theta}Q(\theta)$ 。
+\item
+  由于 $\widehat\theta_n$ 最小化 $\widehat Q_n(\theta)$ 、 $\theta_0$ 最小化 $Q(\theta)$ ，并且 $\widehat Q_n(\theta)\overset{P}\to Q(\theta)$ 对 $\theta\in\Theta$ 一致成立，推出 $\widehat\theta_n\overset{P}\to\theta$ 。
+\end{itemize}
+
+\end{proof}
+
+接下来考察 GMM 的渐近正态性，
+
+\begin{assumption}[光滑性]\label{ass:ch6:smoothness}
+
+对 $\theta\in\mathrm{int}(\Theta)$ ， $g(w,\cdot):\Theta\to \mathbb R^r$ 总是连续可微的。
+
+\end{assumption}
+
+\begin{assumption}[满秩]\label{ass:ch6:g-rank}
+
+$$G_0:=\mathbb{E}\left[\frac{\partial g(w,\theta_0)}{\partial \theta}\right]\in\mathbb R^{r\times p}$$ 存在且满秩（有秩 $p$ ）；同时有大数律 $$\frac1n\sum_{i=1}^n\frac{\partial g(w_i,\theta_0)}{\partial \theta}\overset{P}\to G_0$$ 成立。
+
+\end{assumption}
+
+\begin{theorem}[GMM 的渐近正态性]
+\label{thm:ch6:gmm-asymptotic-normality}
+
+设条件~\ref{ass:ch6:identifiability}--\ref{ass:ch6:uniform-convergence} 成立，使得 $\widehat\theta_n\overset P\to\theta_0$，再加上条件~\ref{ass:ch6:smoothness}、\ref{ass:ch6:g-rank} 成立，那么 
+
+$$\sqrt{n}(\hat{\theta}_n - \theta_0) \overset{\rm d}\to \mathcal{N}_p\!\Big(0,\; (G_0^\top W_0 G_0)^{-1} G_0^\top W_0 \Lambda_0 W_0 G_0 (G_0^\top W_0 G_0)^{-1} \Big)$$
+
+其中 $\Lambda_0 := \mathrm{Var}[g(w_i;\theta_0)]$ 是 $r\times r$ 的协方差矩阵，设其正定对称。
+
+\end{theorem}
+
+\begin{proof}[证明概要]
+由于 $\widehat{\theta}_n$ 最小化 $\widehat Q_n(\theta)$，我们通过求导可知
+
+\begin{equation}
+\label{eq:ch6:tag-1}
+\frac{1}{n}\sum_{i=1}^n \left(\frac{\partial g(w_i,\widehat{\theta}_n)}{\partial\theta} \right)^\top\widehat{W}_n \left( \frac{1}{n}\sum_{i=1}^n g(w_i,\hat{\theta}_n) \right) = 0
+\end{equation}
+
+将 $a_{g,n}(\hat{\theta}_n)$ 在 $\theta_0$ 处一阶 Taylor 展开：
+\[a_{g,n}(\hat{\theta}_n) = a_{g,n}(\theta_0) + \frac{1}{n}\sum_{i=1}^n \frac{\partial g(w_i,\theta_n^*)}{\partial \theta} (\hat{\theta}_n - \theta_0)\]
+其中 $\theta_n^*$ 位于 $\hat{\theta}_n$ 与 $\theta_0$ 之间。代入式~\eqref{eq:ch6:tag-1} 得
+
+\begin{equation}
+\label{eq:ch6:tag-2}
+\frac{1}{n}\sum_{i=1}^n\left( \frac{\partial g(w_i,\hat{\theta}_n)}{\partial\theta}\right)^\top \widehat{W}_n \left( a_{g,n}(\theta_0) + \frac{1}{n}\sum_{i=1}^n \frac{\partial g(w_i,\theta_n^*)}{\partial \theta} (\hat{\theta}_n - \theta_0) \right) = 0
+\end{equation}
+
+由相合性，$\hat{\theta}_n \overset{P}{\to} \theta_0$，故夹在它俩中间的 $\theta_n^*$ 也有 $\theta_n^* \overset{P}{\to} \theta_0$。条件~\ref{ass:ch6:g-rank} 表明
+\[\frac{1}{n}\sum_{i=1}^n \frac{\partial g(w_i,\hat{\theta}_n)}{\partial\theta} \overset{P}{\to} G_0,\quad \frac{1}{n}\sum_{i=1}^n \frac{\partial g(w_i,\theta_n^*)}{\partial\theta} \overset{P}{\to} G_0\]
+再加上条件~\ref{ass:ch6:weight-matrix}： $\widehat{W}_n \overset{P}{\to} W_0$。将这些收敛代入式~\eqref{eq:ch6:tag-2}，经过整理可以得到
+\[G_0^\top W_0G_0 (\widehat{\theta}_n - \theta_0) =-G_0^\top W_0a_{g,n}(\theta_0)(1+o_P(1))\]
+解出 $\hat{\theta}_n - \theta_0$：
+
+\begin{equation}
+\label{eq:ch6:tag-3}
+\sqrt n(\hat{\theta}_n - \theta_0) = - (G_0^\top W_0 G_0)^{-1} G_0^\top W_0 \color{DarkRed}{\frac1{\sqrt n}\sum_{i=1}^ng(w_i,\theta_0) }+ o_P(1)
+\end{equation}
+
+利用中心极限定理 $\sqrt{n} \bar{g}_n(\theta_0) \overset{\rm d}\to \mathcal{N}(0,\Lambda_0)$，由 Slutsky 定理即得所需的渐近正态分布。
+
+\end{proof}
+
+\begin{remark}
+
+\begin{itemize}
+\tightlist
+\item
+  这里的证明更偏向启发式的，严格的证明中，对非线性项的展开 $o_P(1)$ 项的处理可能会比较麻烦。我们只要抓住基本的思想就行，不必太纠结于细节。
+\item
+  定理~\ref{thm:ch6:gmm-asymptotic-normality} 结论中的渐近方差看起来超级麻烦，但是，后面我们会标明，在比较好的权重下，渐近方差可以得到极大简化。
+\item
+  请读者把目光放在式~\eqref{eq:ch6:tag-3} 中的红色部分，可见正态的贡献仅来自于 $\frac1{\sqrt n}\sum_{i=1}^ng(w_i,\theta_0)$；再算上前面的系数的话，$-(G_0^\top W_0 G_0)^{-1}G_0^\top W_0g(w_i,\theta_0)$ 决定了每个 $w_i$ 对渐近正态的``影响''。在统计学中，这被称作\textbf{\emph{影响函数}} (influence function)。
+\item
+  定理~\ref{thm:ch6:gmm-asymptotic-normality} 依赖于 Jacobian 矩阵 $G_0$ 满秩。如果 $G_0$ 接近于 0，即矩条件对参数的变化非常不敏感，在计量经济学中常被称为``弱工具变量 (Weak Instruments)''，此时渐近方差爆炸，我们的估计结果非常不可信。%亦可见 \url{https://www.zhihu.com/question/23928958}。
+\end{itemize}
+\end{remark}
+\end{remark}
+
+记 $A_0:=G_0^\top W_0 G_0$、$B_0=G_0^\top W_0\Lambda_0 W_0G_0$，那么定理~\ref{thm:ch6:gmm-asymptotic-normality} 中的渐近方差可以写作 $\mathrm{Avar}(\widehat\theta_n)=\tfrac1n A_0^{-1}B_0A_0^{-1}$。我们可以用下式估计之： \[\widehat{\operatorname{Avar}}(\hat{\theta}_n) = \frac{1}{n} \widehat{A}_0^{-1} \widehat{B}_0 \widehat{A}_0^{-1}\]
+其中\[\begin{aligned}
+\widehat{A}_0 &= \widehat{G}^\top\widehat{W}_n \widehat{G},
+&\widehat{B}_0 &= \widehat{G}^\top \widehat{W}_n \widehat{\Lambda}\widehat{W}_n \widehat{G},\\
+\widehat{G} &= \frac{1}{n}\sum_{i=1}^n \frac{\partial g(w_i,\widehat{\theta})}{\partial\theta},
+&\widehat{\Lambda} &= \frac{1}{n}\sum_{i=1}^n g(w_i,\widehat{\theta}_n) g(w_i,\widehat{\theta}_n)^\top.
+\end{aligned}\]
+\subsection{最优加权矩阵与两步 GMM}
+
+渐近方差的表达式依赖于 $W_0$。很自然要问：选择哪个 $W_0$ 能使方差最小？直观上，矩条件 $g$ 的不同分量可能有不同的精度，方差大的分量包含的信息少，应该给予较小的权重。答案也确实如此，Hansen 证明了：最优权重正是协方差矩阵的逆。
+
+\begin{theorem}[GMM 的最优加权矩阵]
+\label{thm:ch6:gmm-optimal-weight}
+
+对任意正定矩阵 $W_0$，
+\[(G_0^\top W_0 G_0)^{-1} G_0^T W_0 \Lambda_0 W_0 G_0 (G_0^\top W_0 G_0)^{-1} \;\succeq\; (G_0^\top \Lambda_0^{-1} G_0)^{-1}\]
+且等式在 $W_0 = \Lambda_0^{-1}$ 时成立。
+
+\end{theorem}
+
+\begin{proof}
+
+令 $P = \Lambda_0^{-1/2} G_0$、 $X = \Lambda_0^{1/2} W_0 G_0 (G_0^\top W_0 G_0)^{-1}$，则定理结论即 $X^\top X\succeq (P^\top P)^{-1}$ 。
+
+注意到：
+\[X^\top P = (G_0^\top W_0 G_0)^{-1} G_0^\top W_0 \Lambda_0^{1/2} \cdot \Lambda_0^{-1/2} G_0 = I_p\]
+令 $Y = P(P^\top P)^{-1}$，则 $Y^\top Y = (P^\top P)^{-1}$，且
+\[X^\top Y = X^\top P (P^\top P)^{-1} = (P^\top P)^{-1},\qquad Y^\top X = (P^\top P)^{-1}.\]
+于是：
+\[\begin{aligned} (X - Y)^\top (X - Y) &= X^\top X - X^\top Y - Y^\top X + Y^\top Y \\ &= X^\top X - 2(P^\top P)^{-1} + (P^\top P)^{-1} \\ &= X^\top X - (P^\top P)^{-1} \end{aligned}\]
+由 $(X - Y)^\top (X - Y) \succeq 0$ 知 $X^\top X \succeq (P^\top P)^{-1}$。
+
+\end{proof}
+
+因此，选择 $\Lambda_0^{-1}$ 为权重矩阵是效率最优的，达到最优渐近方差的 GMM 的估计称作\textbf{\emph{有效 GMM 估计}} (efficient GMM estimator)。然而 $\Lambda_0$ 是未知的！怎么办呢？
+
+Hansen 提出：实际操作可以分两步
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  用一个初始权重矩阵，如 $\widehat W_n=I_r$ ，得到一个相合估计 $\tilde{\theta}_n$；
+\item
+  构造 $\widehat{\Lambda} = \frac{1}{n}\sum_{i=1}^n g(w_i;\tilde{\theta}_n) g(w_i;\tilde{\theta}_n)^\top$，然后取最优权重 $\widehat{W}_n^* = \widehat{\Lambda}^{-1}$，再次最小化目标函数得到最终 $\hat{\theta}_n$。
+\end{enumerate}
+
+最终估计量满足
+\[\sqrt{n}(\widehat{\theta}_n- \theta_0) \overset{\rm d}\to \mathcal{N}\bigl(0, (G_0^\top \Lambda_0^{-1} G_0)^{-1}\bigr)\quad \text{ 当 }n\to\infty\]
+既然可以做两步，自然也可以做多步：我们可以将解出的 $\hat{\theta}_n$ 重新代入计算新的权重 $\widehat W_n^*$ 并再次求解，直到参数收敛，这叫\textbf{\emph{迭代 GMM}} 。另一种更直接的做法是将权重矩阵直接视为 $\theta$ 的函数 $\widehat{\Lambda}(\theta)^{-1}$，并在目标函数中直接最小化 $\theta$，这称为\textbf{\emph{连续更新估计量 }} (Continuously Updating Estimator, CUE)。在大样本下，这两种方法与两步 GMM 是渐近等价的，但在小样本下，更推荐使用迭代 GMM 或者 CUE 方法。
+
+\subsection{过识别模型的假设检验}
+
+在 GMM 中， 矩条件的成立是十分重要的。当一个模型过识别（$r > p$）时，我们利用有效 GMM 估计，可以反过来检验 GMM 中矩条件是否成立，即
+\[
+H_0:\mathbb{E}[g(w_i,\theta_0)]=0
+\qquad\text{对}\qquad
+H_1:\mathbb{E}[g(w_i,\theta_0)]\ne 0.
+\]
+设有一个有效 GMM 估计量 $\widehat \theta_n$ ，\textbf{\emph{Sargan-Hansen 检验 }}采用如下检验统计量：
+\[T_n := \left( \frac{1}{\sqrt{n}}\sum_{i=1}^n g(w_i,\widehat{\theta}_n) \right)^\top \widehat{\Lambda}^{-1} \left( \frac{1}{\sqrt{n}}\sum_{i=1}^n g(w_i,\widehat{\theta}_n) \right)\]
+\begin{theorem}[Sargan--Hansen 检验]
+\label{thm:ch6:sargan-hansen}
+
+设定理~\ref{thm:ch6:gmm-asymptotic-normality} 所需条件成立。那么在 $H_0$ 成立且 $r-p\ge 1$ 时，有 $T_n\overset{\rm d}\to \chi^2_{r-p}$ 。
+
+\end{theorem}
+
+\begin{proof}[证明概要]
+要证明一个统计量的渐近分布是 $\chi^2_{r-p}$，只需表明它渐近等价于标准正态分布的二次型 $Z_n^\top QZ_n$，而二次型中间的 $Q$ 是秩为 $r-p$ 的幂等矩阵。这个套路我们很熟悉了。
+
+用前文式~\eqref{eq:ch6:tag-3}，
+\[
+\sqrt{n}(\hat{\theta}_n-\theta_0) = - (G_0^\top \Lambda_0^{-1} G_0)^{-1} G_0^\top \Lambda_0^{-1} \sqrt{n}\,a_{g,n}(\theta_0) + o_p(1).
+\]
+
+利用 Taylor 展开 \[ \sqrt{n}\bar a_{g,n}(\hat\theta_n)=\sqrt{n}\bar a_{g,n}(\theta_0)+G_0\sqrt{n}\big(\hat\theta_n-\theta_0\big)+o_p(1) \]并忽略高阶项，得到
+\[\begin{aligned} \sqrt{n}\, a_{g,n}(\hat\theta_n)&=\bigl(\underbrace{ I_r -G_0(G_0^\top\Lambda_0^{-1}G_0)^{-1}G_0^\top\Lambda_0^{-1}}_{=:M}\bigr)\sqrt{n} a_{g,n}(\theta_0)+o_p(1)\\ &=M\sqrt na_{g,n}(\theta_0)+o_P(1) \end{aligned}\]
+由 CLT： $\sqrt{n} a_{g,n}(\theta_0)\overset{\rm d}\to Z \sim \mathcal{N}(0,\Lambda_0)$。令 $Z_n=\Lambda_0^{-1/2}\sqrt{n} a_{g,n}(\theta_0)\overset{\rm d}\to\mathcal{N}(0,I_r)$。那么\[\begin{aligned}
+T_n &= (\sqrt{n} a_{g,n}(\widehat\theta_n))^\top \widehat\Lambda^{-1} (\sqrt{n} a_{g,n}(\widehat\theta_n)) \\
+&= (\sqrt{n} a_{g,n}(\widehat\theta_n))^\top \Lambda_0^{-1} (\sqrt{n} a_{g,n}(\widehat\theta_n)) + o_P(1) \\
+&=Z_n^\top\Lambda_0^{1/2} M^\top \Lambda_0^{-1} M \Lambda_0^{1/2}Z_n+o_P(1).
+\end{aligned}\]不难验证 $\Lambda_0^{-1/2} M \Lambda_0^{1/2}=I_r-\Lambda_0^{-1/2}G_0\bigl(G_0^\top\Lambda_0^{-1}G_0\bigr)^{-1}G_0^\top\Lambda_0^{-1/2}$ 对称幂等，有秩 $r-p$ 。
+
+\end{proof}
+
+因此，可以比较 $T_n$ 与 $\chi^2_{r-p}$ 的上 $\alpha$ 分位数来得到一个渐近水平为 $\alpha$ 的检验。
+
+更一般地，如果原假设 $H_0: c(\theta) = 0$ 可以由某个 $q$ 维的约束表示： $c(\theta)\in \mathbb R^q$ （相当于原假设限制 $\theta$ 落在 $\Theta$ 的一个 $p-q$ 维子流形上。），我们有两类大样本检验：
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\emph{Wald 检验}} ：直接基于无约束估计量的距离，在 $H_0$ 下： \[W_n = c(\hat{\theta})^\top \bigl( \widehat{\operatorname{Var}}(c(\hat{\theta})) \bigr)^{-1} c(\hat{\theta}) \overset{\rm d}\to \chi^2_q\]\item
+  \textbf{\emph{距离检验}} （Distance discrepancy Test）：比较施加约束前的目标函数最小值与施加约束后目标函数最小值之差，在 $H_0$ 下： \[\widetilde{T}_n = \frac{1}{n}\left[ \left(\sum_{i=1}^n g(w_i;\tilde{\theta}_n)\right)^\top \widehat{W}_n^* \left(\sum_{i=1}^n g(w_i;\tilde{\theta}_n)\right) - \left(\sum_{i=1}^n g(w_i;\hat{\theta}_n)\right)^\top \widehat{W}_n^* \left(\sum_{i=1}^n g(w_i;\hat{\theta}_n)\right) \right] \overset{\rm d}\to \chi^2_q
+\end{equation*} 其中 $\widetilde\theta_n=\operatorname*{\arg\min}\limits_{\theta\in\Theta,c(\theta)=0}\left(\sum_{i=1}^ng(w_i,\theta)\right)^\top\widehat W_n^*\left(\sum_{i=1}^ng(w_i,\theta)\right)$ 而 $\widehat W_n^*$ 是 GMM 最优加权矩阵。 为什么这里极限分布的自由度是 $q$ 呢？实际它来自 $r-(p-q)-(r-p) = q$ ：无约束模型用 $p$ 个参数去拟合 $r$ 个矩条件，多余的信息维度（自由度）是 $r-p$；而施加原假设 $H_0$ 的约束后，实际自由变化的参数变成了 $p-q$ 个，此时模型拟合 $r$ 个矩条件的自由度为 $r-(p-q)$。两者的目标函数差值，恰好抵消了 $r$，反映了因为这 $q$ 个约束带来的额外代价，因此渐近服从自由度为 $q$ 的 χ² 分布。
+\end{itemize}
+
+\subsection{更多矩条件是否提高效率？}
+\label{sec:ch6:more-moments-efficiency}
+
+最后要讨论的问题是：矩条件越多（$r$ 越大）是否总是带来更高的效率？直观想象，每增加一个有效的矩条件，相当于多了一个有益的限制，应当不会使估计变差。理论推导确实能够支持这一直觉。大概的证明如下，
+
+设模型的全部矩条件为 $g(w,\theta) \in \mathbb{R}^r$，且真实参数 $\theta_0$ 满足 $\mathbb{E}[g(w,\theta_0)] = 0$。将 $g$ 分块为
+\[g(w,\theta) = \begin{pmatrix} g_{(r-1)}(w,\theta) \\ g_r(w,\theta) \end{pmatrix},\]
+其中 $g_{(r-1)} \in \mathbb{R}^{r-1}$ 为前 $r-1$ 个矩条件，$g_r \in \mathbb{R}$ 为第 $r$ 个矩条件。在最优加权矩阵 $W_0 = \Lambda_0^{-1} = \bigl(\mathbb{E}[g g^\top ]\bigr)^{-1}$ 下，基于全部 $r$ 个矩条件的有效 GMM 估计量 $\hat{\theta}_{(r)}$，其渐近方差矩阵由定理~\ref{thm:ch6:gmm-optimal-weight} 给出：
+\[V_r := \left(\mathbb{E}\!\left[\frac{\partial g}{\partial\theta}\right]^\top \bigl(\mathbb{E}[g g^\top]\bigr)^{-1} \mathbb{E}\!\left[\frac{\partial g}{\partial\theta}\right]\right)^{-1}\]
+而仅使用前 $r-1$ 个矩条件 $g_{(r-1)}$ 时，渐近方差矩阵为
+\[V_{r-1} :=\left( \mathbb{E}\!\left[\frac{\partial g_{(r-1)}}{\partial\theta}\right]^\top \bigl(\mathbb{E}[g_{(r-1)} g_{(r-1)}^\top]\bigr)^{-1} \mathbb{E}\!\left[\frac{\partial g_{(r-1)}}{\partial\theta}\right]\right)^{-1}\]
+下面通过分块矩阵运算来比较 $V_r^{-1}$ 与 $V_{r-1}^{-1}$ 的大小。在 $\theta=\theta_0$ 处记
+\[\mathbb{E}[g g^\top] = \begin{pmatrix} A & B \\ B^\top & C \end{pmatrix}\]
+其中 $A = \mathbb{E}[g_{(r-1)} g_{(r-1)}^\top] \in \mathbb{R}^{(r-1)\times(r-1)}$，$B = \mathbb{E}[g_{(r-1)} g_r] \in \mathbb{R}^{(r-1)\times 1}$，$C = \mathbb{E}[g_r^2] \in \mathbb{R}$。求逆得到，
+\[\bigl(\mathbb{E}[g g^\top]\bigr)^{-1} =\begin{pmatrix} A^{-1} & 0 \\ 0 & 0 \end{pmatrix} +  \begin{pmatrix} A^{-1}B \\ -I \end{pmatrix} D^{-1} \begin{pmatrix} B^\top A^{-1} & -I \end{pmatrix}\]
+其中 $D = C - B^\top A^{-1} B$ 为 Schur 补，满足 $D \succ 0$。简而言之，我们有
+\[\bigl(\mathbb{E}[g g^\top]\bigr)^{-1} =\begin{pmatrix}\mathbb{E}\big[g_{(r-1)}g_{(r-1)}^\top\big]^{-1}&0\\0&0\end{pmatrix}+H\]
+其中 $H\succeq 0$ 。代入 $V_{r}^{-1}$ 的表达式：
+\[\begin{aligned} V_{r}^{-1} &= \begin{pmatrix} \mathbb{E}\!\left[\frac{\partial g_{(r-1)}}{\partial\theta}\right]^{\top} & \mathbb{E}\!\left[\frac{\partial g_{r}}{\partial\theta}\right] \end{pmatrix} \left(\begin{pmatrix}\mathbb{E}\big[g_{(r-1)}g_{(r-1)}^\top\big]^{-1}&0\\0&0\end{pmatrix}+H\right) \begin{pmatrix} \mathbb{E}\!\left[\frac{\partial g_{(r-1)}}{\partial\theta}\right] \\ \mathbb{E}\!\left[\frac{\partial g_{r}}{\partial\theta}\right] \end{pmatrix} \\ &= \mathbb{E}\!\left[\frac{\partial g_{(r-1)}}{\partial\theta}\right]^{\top} \mathbb{E}\big[g_{(r-1)}g_{(r-1)}^\top\big]^{-1}\mathbb{E}\!\left[\frac{\partial g_{(r-1)}}{\partial\theta}\right] \;+\; \widetilde H\\ &=V_{r-1}^{-1}+\widetilde H \end{aligned}\]
+其中 $\widetilde H\succeq 0$ ，说明 $V_r^{-1}\succeq V_{r-1}^{-1}$ ，即 $V_r\preceq V_{r-1}$ 。说明增加矩条件不会降低效率。
+
+同时，从上述推导可知，若
+\[\mathbb{E}\!\left[\frac{\partial g}{\partial\theta}\right]^{\top} H \, \mathbb{E}\!\left[\frac{\partial g}{\partial\theta}\right] \neq 0,\]
+那么在参数的某些方向上，渐近方差会严格减小。只要 $r$ 是有限的，通过引入更多的矩条件让其尽可能大，理论上我们可以持续改善估计精度。当然，保证矩条件的正确性也是重要的。

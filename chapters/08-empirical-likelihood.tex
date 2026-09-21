@@ -1,0 +1,517 @@
+% Generated from: Zhihu/专栏：概率与统计/渐近统计 (8)：经验似然_金鱼马_2026-06-07.md
+\section{经验似然的基本概念}
+
+设 $\mathbb{R}^k$ 上的随机变量 $X_1, \dots, X_n$ 是来自某未知分布 $P$ 的独立同分布 (i.i.d.) 样本，记 $F$ 是其分布函数，我们很自然地定义\textbf{\emph{非参数似然函数 }} (nonparametric likelihood) 为
+\[L(F) := \prod_{i=1}^n P(X = X_i) = \prod_{i=1}^n \bigl(F(X_i) - F(X_i -)\bigr)\]
+这里 $X_i-$ 表示逐分量的左极限。这个定义直接对应``观测到当前样本的概率''。显然，若 $F$ 是一个连续分布，则 $L(F)=0$；只有那些``在每个观测值上都赋予正概率''的离散分布，才可能具有正的非参数似然。
+
+我们想知道，在所有可能的分布中，哪个会使这个似然达到最大。这个问题的答案其实也是简单的，
+
+\begin{theorem}[Kiefer--Wolfowitz]\label{thm:ch8:empirical-likelihood}
+
+设 $X_1, \dots, X_n \sim F_0$i.i.d.，记 $F_n$ 为其经验分布函数 (ECDF) ：
+\[F_n(t):=\frac1n\sum_{i=1}^n\mathbb I(X_i< t)\]
+而 $F$ 为任意累积分布函数。若 $F \neq F_n$，则 $L(F) < L(F_n)$。
+
+\end{theorem}
+
+\begin{proof}
+
+记 $p_i = F(X_i) - F(X_i -)$ 代表 $F$ 在样本 $X_i$ 上的概率质量，显然若有某个 $p_i = 0$ 则 $L(F) = 0$，命题已然成立。否则，由 AM-GM 不等式，\[
+\frac{L(F)}{L(F_n)} = \frac{\prod_{i=1}^np_i}{\prod_{i=1}^n(1/n)}=\prod_{i=1}^nnp_i\le \left(\sum_{i=1}^np_i\right)^n\le 1\]
+因此 $L(F) < L(F_n)$。
+
+\end{proof}
+
+这表明经验分布函数 $F_n$ 最大化非参数似然，也就是\textbf{\emph{非参数极大似然估计}} (NPMLE)。在定理~\ref{thm:ch8:empirical-likelihood} 的证明中，\[
+R(F) := \frac{L(F)}{L(F_n)}=\prod_{i=1}^nnp_i\]
+称作\textbf{\emph{经验似然比}} (empirical likelihood ratio)，则 $R(F)\le 1$ 恒成立。这个量用于衡量：相比于无约束的最优解 $F_n$ ，我们选择的 $F$ 能有多好。不像参数似然比，非参数似然比里不包含任何未知参数。
+
+定理~\ref{thm:ch8:empirical-likelihood} 还可以从另一个角度证明：考虑满足 $L(F) > 0$ 的那些 $F$，令 $c \in (0, 1]$，\[
+\mathcal{F}(c) := \left\{F\text{ 是分布函数} : p_i = F(X_i)-F(X_i-) > 0,\; i=1,\dots,n,\; \sum_{i=1}^n p_j = c \right\}\]
+利用 Lagrange 乘子法求 $\log L(F)$ 在 $F \in \mathcal{F}(c)$ 上的最大化问题。令\[
+H(p_1, \dots, p_m, \lambda) := \sum_{i=1}^n \log p_i + \lambda \left( \sum_{i=1}^n p_i - c \right)\]
+其中 $\lambda$ 是 Lagrange 乘子，求偏导得\[
+\frac{\partial H}{\partial \lambda} = \sum_{i=1}^n p_j - c = 0, \quad \frac{\partial H}{\partial p_i} = \frac{1}{p_i} + \lambda = 0,\; i = 1, \dots, n\]
+解得 $\widehat p_i =-1/\lambda= c/n$，$i = 1, \dots, n$；容易验证此时 $H$ 确实达到最大。因此
+\[\max_{F \in \mathcal{F}(c)} L(F) = (c/n)^n\]
+上式当 $c=1$ 时达到最大，对应的最大值点为 $\widehat p_i = 1/n$ ，此时自然对应经验分布。
+
+使用 Lagrange 乘子法的好处在于，它可以灵活地增加对分布的约束。假设我们感兴趣的参数 $\theta$ 是分布 $F$ 的一个泛函 $T(F)$（例如均值 $\mu = \int x\, dF(x)$、方差、分位数等），Owen 定义了如下 \textbf{\emph{剖面经验似然比}} (profile empirical likelihood ratio) 统计量：\[
+\begin{aligned}\mathcal{R}(\theta) &:= \sup_F \left\{ R(F)=\frac{L(F)}{L(F_n)}:T(F)=\theta,F\ll F_n \right\} \\ &=\sup_F\left\{\prod_{i=1}^nnp_i:T(F)=\theta,p_i\ge 0,\sum_{i=1}^np_i=1\right\} \end{aligned}\]
+这个定义要求 $F$ 在满足约束 $T(F)=\theta$ 下使得经验似然比达到最大，这是可以利用 Lagrange 乘子法来求解的。定义里只考虑所有质量都集中在样本上的分布 $F$ ，即 $F\ll F_n$ ，是因为只有这样的 $F$ 才有可能让经验似然比达到极大。
+
+基于 (剖面) 经验似然比，作 $T(F)$ 的区间估计、假设检验或其它统计推断问题，是经验似然方法的基本思想。例如，对于要检验的参数 $\theta_0$ 和某临界值 $r_0$ ，如果 $\mathcal R(\theta_0)<r_0$ 就拒绝 $H_0:\theta=\theta_0$ 的假设；而经验似然置信域为 $\{\theta:\mathcal R(\theta)\ge r_0\}$随之而来的一个问题是如何确定临界值 $r_0$ ，这一问题归结为求 $\mathcal R(\theta)$ 的渐近分布。大家知道参数似然比一个重要的特性是似然比的对数是渐近服从 χ² 分布的，即所谓 Wilks 定理 ， 幸运的是，经验似然比也有相同的特性，这一特性形成了经验似然统计推断的基础。对此，我们将在下一节介绍简单而且最重要的总体均值推断。
+
+\section{均值的经验似然}
+
+\subsection{Lagrange 乘子法求解}
+
+考虑最简单的情形：对 $\mathbb R^k$ 上的随机变量 $X$，我们想对其均值 $\mu = \mathbb{E}[X]$ 进行统计推断。抽取 i.i.d. 样本 $X_1,\dots,X_n$ ，那么在上述框架下，我们需要求解：\[
+\begin{aligned} \max_{p_1,\dots,p_n} &\quad \prod_{i=1}^n n p_i, \\ \text{s.t.} &\quad p_i \ge 0,\; \sum_{i=1}^n p_i = 1,\; \sum_{i=1}^n p_i X_i = \mu \end{aligned}\]
+利用 Lagrange 乘子法，记\[
+H(p_1,\dots,p_n, \lambda_n, \gamma_n) = \sum_{i=1}^n \log(n p_i) - n\lambda_n^\top \sum_{i=1}^n p_i (X_i - \mu) + \gamma_n\left(\sum_{i=1}^n p_i - 1\right)\]
+（这里第二项的乘子写作 $n\lambda_n$ ，纯粹是为了后面计算上的方便。）
+
+对 $p_i$ 求偏导并置零：\[
+\frac{\partial H}{\partial p_i} = \frac{1}{p_i} - n\lambda_n^\top (X_i - \mu) + \gamma_n = 0\]
+即， $1-n\lambda_n^\top p_i(X_i - \mu)+\gamma_n p_i=0$ 对每个 $i$ 成立，求和得到 $n-n\lambda_n^\top\underbrace{\sum_{i=1}^n p_i(X_i - \mu)}_{=0}+\gamma_n\underbrace{\sum_{i=1}^np_i}_{=1}=0\enspace \implies \enspace \gamma_n=-n$ 于是\[
+p_i = \frac{1}{n}\frac{1}{1 + \lambda_n^\top (X_i - \mu)}\]
+其中的 Lagrange 乘子 $\lambda_n=\lambda_n(\mu)$ 由约束 $\sum_{i=1}^n p_i (X_i - \mu) = 0$ 所隐式决定，即：\[
+\label{eq:ch8:tag-1}
+\frac{1}{n}\sum_{i=1}^n \frac{X_i - \mu}{1 + \lambda_n^\top (X_i - \mu)} = 0\]
+可见，最优权重恰为平均权重 $1/n$ 乘以一个与 $\lambda_n$ 有关的因子。
+
+\begin{remark}
+如果方程~\eqref{eq:ch8:tag-1} 无解，则经验似然无定义。后文中我们会讨论方程是否有解的问题。
+\end{remark}
+
+如果方程~\eqref{eq:ch8:tag-1} 能解出 $\lambda_n$ ，那么有剖面经验对数似然比\[ \log \mathcal R(\mu)=\sum_{i=1}^n\log np_i=-\sum_{i=1}^n\log(1+\lambda_n^\top (X_i-\mu)) \]
+
+最大化上述 $\log\mathcal R(\mu)$ ，等价于找 \[ \widehat\mu_{\text{MELE}}=\operatorname*{\arg\min}_\mu \sum_{i=1}^n\log(1+\lambda_n^\top(X_i-\mu)) \]这被称作\textbf{\emph{极大经验似然统计量 }} (maximum empirical likelihood estimator, MELE)。在这里，显然让 $\lambda_n=0$ 、 $\mu=\bar{X}$ 可以满足方程~\eqref{eq:ch8:tag-1} ，且让 $\mathcal R(\mu)$ 达到最大值 1，说明没有任何其它条件时， $\bar{X}$ 就是 MELE。
+
+\subsection{经验对数似然比的渐近分布}
+
+我们还可以建立如下的\textbf{\emph{经验对数似然比统计量}} (empirical log-likelihood ratio statistic)：
+\[
+-2\log \mathcal R(\mu)=2\sum_{i=1}^n\log(1+\lambda_n^\top(X_i-\mu)).
+\]
+
+为了分析其渐近分布，我们首先准备两个引理，
+
+\begin{lemma}[样本极大值的阶]\label{lem:ch8:sample-maximum}
+
+设 $X_1,\dots,X_n$ 是 $\mathbb R$ 上的 i.i.d. 随机变量， $\mathbb E[X_1^2]<\infty$ ，记 $M_n:=\max\limits_{1\le i\le n}|X_i|$ ，那么 $M_n=o(n^{1/2})\quad \text{a.s.}$
+
+\end{lemma}
+
+\begin{proof}
+
+由于对每个 $i$ ， $\mathbb E[X_i^2]<\infty$ ，我们有 $\sum_{n=1}^\infty P(X_i^2>n)<\infty$根据 Borel-Cantelli 引理，以概率 1，事件 $\{|X_i|>n^{1/2}\}$ 只对有限多个 $n$ 成立。使用相同的论证可以表明，对任意 $A>0$ ，以概率 1，事件 $\{|X_i|>An^{1/2}\}$ 只对有限多个 $n$ 成立。这意味着 $\limsup_{n\to\infty} \frac{M_n}{n^{1/2}} \le A \quad \text{a.s.}$ 取 $A\downarrow 0$ ， 即得 $\frac{M_n}{n^{1/2}}\to 0\enspace \text{ a.s.}$ 。
+
+\end{proof}
+
+\begin{lemma}[三阶样本矩的阶]\label{lem:ch8:third-sample-moment}
+
+设 $X_1,\dots,X_n$ 是 $\mathbb R$ 上的 i.i.d. 随机变量， $\mathbb E[X_1^2]<\infty$ ，那么
+\[
+\frac1n\sum_{i=1}^n|X_i|^3=o(n^{1/2})\quad \text{a.s.}
+\]
+
+\end{lemma}
+
+\begin{proof}
+
+注意到
+\[
+\frac1n\sum_{i=1}^n|X_i|^3\le \frac{M_n}{n}\sum_{i=1}^nX_i^2.
+\]
+
+由引理~\ref{lem:ch8:sample-maximum}， $M_n=o(n^{1/2})$ a.s.，再由强大数律知 $\frac1n\sum_{i=1}^nX_i^2=O(1)$ a.s.，即证。
+
+\end{proof}
+
+再来解决方程~\eqref{eq:ch8:tag-1} 有解的问题：
+
+\begin{lemma}[经验似然乘子的存在性]\label{lem:ch8:multiplier-existence}
+
+设 $k$ 维随机向量 $X_1,\dots,X_n\sim F_0$ i.i.d. 具有有限均值 $\mu=\mu_0$ 和正定的协方差矩阵 $\Sigma_0$，则以趋于 1 的概率，存在 $\lambda_n$ 满足方程~\eqref{eq:ch8:tag-1} ，且 $\|\lambda_n\|=O_P(n^{-1/2})$
+
+\end{lemma}
+
+\begin{proof}
+
+把样本中心化，记 $Z_i=X_i-\mu_0$ ，其均值为 0、协方差矩阵为 $\Sigma_0=\mathbb{E}[Z_iZ_i^\top]\succ 0$ 。 Lagrange 乘子 $\lambda_n$ 的方程~\eqref{eq:ch8:tag-1} 可以写作
+
+\begin{equation}
+\label{eq:ch8:tag-2}
+\frac1n\sum_{i=1}^n\frac{Z_i}{1+\lambda_n Z_i}=0
+\end{equation}
+
+考虑函数 \[ l(\lambda):=\frac1n\sum_{i=1}^n\log(1+\lambda^\top Z_i) \]那么其一阶和二阶导数分别为
+\[\begin{aligned}l'(\lambda) &= \frac{1}{n}\sum_{i=1}^n \frac{Z_i}{1 + \lambda^\top Z_i}\\ l''(\lambda) &= -\frac{1}{n}\sum_{i=1}^n \frac{Z_iZ_i^\top}{(1 + \lambda^\top Z_i)^2} \end{aligned}\]
+从而方程~\eqref{eq:ch8:tag-2} 等价于 $l'(\lambda_n)=0$ 。
+
+值得指出的是，如果某个 $\lambda^*$ 满足 $\|\lambda^*\|=O_P(n^{-1/2})$ ，由引理~\ref{lem:ch8:sample-maximum} 有 $\max\limits_{1\le i\le n}\|Z_i\|=o_P(n^{1/2})$ ，所以 ${\lambda^*}^\top Z_i\le \|\lambda^*\|\|Z_i\|=o_P(1)$ ；这说明以趋于 1 的概率，上述导数的分母都趋于 1；特别地，有 $l''(\lambda^*) \overset{P}\to -\Sigma_0$ 。
+
+考虑取 $\lambda = M \Sigma_0^{-1/2} a n^{-1/2}$，其中 $\|a\| = 1$，$M>0$ 为常数。将 $n l(\lambda) - n l(0)$ 展开：
+\[\begin{aligned} n l(\lambda) - n l(0)  &= M\sqrt{n}l'(0)^\top \Sigma_0^{-1/2} a + \frac{M^2}{2} a^\top \Sigma_0^{-1/2} l''(\lambda^*) \Sigma_0^{-1/2} a \\ &= M\sqrt{n}l'(0) \Sigma_0^{-1/2} a - \frac{M^2}{2} a^\top a + o_P(1) \\ &\overset{\rm d}\to M a^\top \mathcal{N}_s(0, \mathbf I_s) - \frac{M^2}{2} \end{aligned}\]
+其中
+
+\begin{itemize}
+\tightlist
+\item
+  第一行的 $\lambda^*$ 介于 $0$ 和 $\lambda$ 中间 (Lagrange 型余项)；、
+\item
+  第二行是因为 $l''(\lambda^*) \overset{P}\to -\Sigma_0$ ，从而 $\Sigma_0^{-1/2} l''(\lambda^*) \Sigma_0^{-1/2} \overset{P}\to -\mathbf I_s$ ；
+\item
+  第三行对 $\textstyle \sqrt nl'(0)=\frac1{\sqrt n}\sum_{i=1}^nZ_i$ 用多元中心极限定理。
+\end{itemize}
+
+注意到上式的收敛关于 $\|a\|=1$ 是一致的，设 $W\sim \mathcal{N}_k(0,\mathbf I_k)$ ，由 $a^\top W\le \|a\|\|W\|=\|W\|$ 知
+\[\sup_{\|a\|=1} \bigl( n l(M \Sigma_0^{-1/2} a n^{-1/2}) - n l(0) \bigr) \overset{\rm d}\to M \bigl( \|W\| - \tfrac{M}{2} \bigr)\]
+由于 $\|W\|$ 是一个有限的随机变量，我们总可以让 $M$ 足够大使得上式以高概率为负值。从而，对于任意 $\epsilon > 0$，当 $M$ 和 $n$ 足够大时，有
+\[P\left( \sup_{\|a\|=1} \bigl( n l(M \Sigma_0^{-1/2} a n^{-1/2}) - n l(0) \bigr) < 0 \right) \ge 1 - \epsilon\]
+如果 $l(M \Sigma_0^{-1/2} a n^{-1/2}) \le l(0)$ 对任意 $a$ 成立，这等同于说，球面 $\{\lambda = M \Sigma_0^{-1/2} a n^{-1/2} : \|a\| =1\}$ 上的点取值全都不超过球心的点，所以一定在 $l(\lambda)$ 一定在球的内部某点取得局部极大值，该极大值点 $\lambda_n$ 即为方程~\eqref{eq:ch8:tag-1} 的解，且满足 $\|\lambda_n\| = O_p(n^{-1/2})$。
+
+\end{proof}
+
+\begin{remark}
+
+\begin{itemize}
+\tightlist
+\item
+  这里有一个隐含条件：必须保证 $1+\lambda_n^\top Z_i> 0$ 对每个 $i$ 成立，因为 $\textstyle p_i = \frac{1}{n}\frac{1}{1 + \lambda_n^\top Z_i}$ 一定是一个非负数。不过我们在证明过程中看到 $\lambda_n^\top Z_i=o_P(1)$ ，因此对 $n\to\infty$ ，这一隐含条件总是能以趋于 1 的概率满足的。
+\item
+  如果 $X_1,\dots,X_n$ 是线性无关的，即，样本协方差矩阵 $\frac1n\sum_{i=1}^nZ_iZ_i^\top$ 正定，那么 $l''(\lambda)$ 负定， $l(\lambda)$ 是一个严格凹函数，极大值点 $\lambda_n$ 是唯一的。
+\end{itemize}
+\end{remark}
+
+\begin{corollary*}
+求解方程~\eqref{eq:ch8:tag-1} 等价于如下约束优化问题：
+\[\begin{aligned} \operatorname*{\arg\max}_\lambda \enspace &l(\lambda):=\frac1n\sum_{i=1}^n\log(1+\lambda^\top (X_i-\mu))\\ \text{s.t. }&1+\lambda^\top(X_i-\mu)> 0,\enspace i=1,\dots,n \end{aligned}\]\end{corollary*}
+
+由于目标函数是凹函数，该问题可以用 Newton 法高效求解。为了防止算法越出可行域导致 log 无定义，可以用如下``伪 log''函数替代 log： \[ \log_\star(z) := \begin{cases} \log(z), & z \ge 1/n\\ \log(1/n) - 1.5 + 2 n z - \frac{n^2 z^2}{2}, & z \le 1/n \end{cases} \]将约束优化问题改为无约束优化问题。见 Owen \emph{Empirical likelihood} 的 3.14 节。
+
+
+下面的重要定理表明：尽管我们从非参数的前提出发，但可以得到与参数似然比检验统计量完全相同的渐近分布 。此时，$-2\log\mathcal{R}(\mu_0)$ 充当了一个\emph{非参数枢轴量}(non‑parametric pivot)：要构造 $\mu_0$ 的置信区间，我们只需用到 χ² 分布的分位数。
+
+\begin{theorem}[经验似然的 Wilks 定理]\label{thm:ch8:mean-wilks}
+
+设 $X_1,\dots,X_n\sim F_0$ i.i.d. 具有有限均值 $\mu_0$ 和正定的协方差矩阵 $\Sigma_0$，则当 $n\to\infty$ 时，
+\[-2\log\mathcal{R}(\mu_0) \overset{\rm d}\to \chi^2_k\]
+\end{theorem}
+
+\begin{proof}
+
+用引理~\ref{lem:ch8:multiplier-existence}，找一个式~\eqref{eq:ch8:tag-2} 的解 $\lambda_n=O_P(n^{-1/2})$ 。利用恒等式 $\textstyle\frac1{1+x}=1-x+\frac{x^2}{1+x}$ ，那么式~\eqref{eq:ch8:tag-2} 还有
+
+\begin{equation}
+\label{eq:ch8:tag-3}
+\begin{aligned} 0&=\frac{1}{n}\sum_{i=1}^{n}Z_{i}\!\left(1-\lambda_n^\top Z_{i}+\frac{(\lambda_n^\top Z_i)^{2}}{1+\lambda_n^\top Z_{i}}\right)\\[2mm] &=\bar{Z}-\widehat\Sigma_n\lambda_n+\frac{1}{n}\sum_{i=1}^{n}\frac{(\lambda_n^\top Z_i)^2Z_i}{1+\lambda_n^\top Z_i}  \end{aligned}
+\end{equation}
+
+其中 $\bar{Z}:=\frac1n\sum_{i=1}^nZ_i$ 、 $\widehat\Sigma_n:=\frac1n\sum_{i=1}^nZ_iZ_i^\top$ 。由大数律， $\widehat\Sigma_n\to \Sigma_0$ a.s.，因此以趋于 1 的概率，样本协方差矩阵 $\widehat\Sigma_n$ 也是正定的（这来自于矩阵特征值的连续性）。
+
+由引理~\ref{lem:ch8:sample-maximum} 和引理~\ref{lem:ch8:third-sample-moment}，可知这里的余项 
+$$\frac{1}{n}\sum_{i=1}^{n}\frac{(\lambda_n^\top Z_i)^2Z_i}{1+\lambda_n^\top Z_i} \lesssim \|\lambda_n\|^2\frac1n\sum_{i=1}^n\|Z_i\|^3=O_P(n^{-1})o_P(n^{1/2})=o_P(n^{-1/2})$$
+
+从而，式~\eqref{eq:ch8:tag-3} 给出 $\lambda$ 有如下渐近表示：
+\begin{equation}
+\label{eq:ch8:tag-4}
+\lambda_n = \widehat\Sigma_n^{-1}\bar{Z}+o_P(n^{-1/2})
+\end{equation}
+（这里 $o_P(n^{-1/2})$ 实际上表达的是``范数为 $o_P(n^{-1/2})$ 的余项''，后文同理。）
+
+另一方面，我们对 $\log(1+\lambda_n^\top Z_i)$ 进行 Taylor 展开：
+\begin{equation}
+\label{eq:ch8:tag-5}
+\begin{aligned} -2\log \mathcal R(\mu_0)&=2\sum_{i=1}^n\log(1+\lambda_n^\top Z_i)\\ &=2\sum_{i=1}^n\left(\lambda_n^\top Z_i-\frac12(\lambda_n^\top Z_i)^2+\eta_i\right) \end{aligned}
+\end{equation}
+其中余项是 \[ 2\sum_{i=1}^n\|\eta_i\|\lesssim \|\lambda_n\|^3\sum_{i=1}^n\|Z_i\|^3=O_P(n^{-3/2})\cdot no_P(n^{1/2})=o_P(1) \]从而式~\eqref{eq:ch8:tag-5} 给出
+
+\[
+-2\log \mathcal R(\mu_0)
+=2n\lambda_n^\top\bar{Z}
+-n\lambda_n^\top \widehat\Sigma_n\lambda_n+o_P(1).
+\]
+将式~\eqref{eq:ch8:tag-4} 代入：
+\[\begin{aligned} -2\log \mathcal R(\mu_0)&=2n\bar{Z}^\top\big(\widehat\Sigma_n^{-1}\bar{Z}\big)-n \big(\widehat\Sigma_n^{-1}\bar{Z}\big)^\top \widehat\Sigma_n\big(\widehat\Sigma_n^{-1}\bar{Z}\big)+ o_P(1)  \\ &=n\bar{Z}^\top\widehat\Sigma_n^{-1}\bar{Z}+ o_P(1)   \end{aligned}\]
+这个 $\bar{Z}^\top\widehat\Sigma_n^{-1}\bar{Z}$ 是什么东西呢？其实在一维情况下，这玩意就是 t-统计量，高维情况下称作 \href{https://en.wikipedia.org/wiki/Hotelling\%27s_T-squared_distribution\#Hotelling_t-squared_statistic}{Hotelling t²}。我们利用
+\[
+\sqrt n\widehat\Sigma_n^{-1/2}\bar{Z}\overset{\rm d}\to \mathcal N(0,\mathbf I_k),
+\]
+立即得知
+\[
+n\bar{Z}^\top\widehat\Sigma_n^{-1}\bar{Z}\overset{\rm d}\to \chi_k^2.
+\]
+由 Slutsky 定理忽略 $o_P(1)$ 余项，就得到了
+\[
+-2\log\mathcal R(\mu_0)\overset{\rm d}\to \chi_k^2.
+\]
+
+\end{proof}
+
+这一结果可用于 $\mu$ 的假设检验问题，当 $-2\log\mathcal R(\mu_0)>\chi^2(1-\alpha)$ 时拒绝 $H_0:\mu=\mu_0$ 的假设，这就是一个渐近水平为 $\alpha$ 的检验。同时，可以构造渐近 $1-\alpha$ 的置信域为
+\[
+\{\mu_0 :-2\log \mathcal{R}(\mu_0) \le \chi^2_k(1-\alpha)\}.
+\]
+
+利用经验对数似然比统计量为枢轴量有这样几个好处：
+
+\begin{itemize}
+\tightlist
+\item
+  ``让数据自己说话''：经验似然置信域完全由数据本身决定，因此它能够自然地反映出数据中的偏态、重尾等特征。例如，当样本呈现明显的右偏时，置信区间会向左侧更窄、向右侧更宽。
+\item
+  经验似然在构造过程中隐式地完成了方差尺度的调整（这被称作 studentization），我们不需要像传统方法那样额外插入一个协方差阵 $\Sigma_0$ 的估计量。
+\item
+  经验似然置信域在光滑的参数重参数化下是不变的。如果我们对参数 $\theta$ 构造了一个置信域，那么在光滑的一一变换 $\phi = g(\theta)$ 下，只需直接映射原区域即可得到 $\phi$ 的置信域；这继承了参数似然的优良性质。
+\end{itemize}
+
+最后，还有一个重要的优点是：经验似然区间永远被严格限制在样本点的凸包（convex hull）之内。这意味着估计值绝不会违背逻辑上的自然边界------比如概率不会被估计为负数，方差不会出现负值。例如，设临界值为 $r_0$ ，则均值的经验似然置信域可以写作 
+
+$$\mathtt{CL}_{r_0,n}=\left\{\sum_{i=1}^np_iX_i:\prod_{i=1}^n(np_i)\ge r_0,\ p_i\ge 0,\ \sum_{i=1}^np_i=1\right\}$$
+
+显见，这个置信域完全包含在样本点构成的凸包中。
+
+当处理高维向量（ $\theta$ 的维度远大于样本容量 $n$ ）时，使用经验似然方法推断总体均值通常会遇到困难，原因有二：一是观测值的凸包太小，无法完全覆盖真实均值；二是样本协方差矩阵奇异。这会导致可能不存在以样本点为支撑的离散分布能满足方程~\eqref{eq:ch8:tag-1} 。关于这类高维经验似然的工作，读者可以去参考 Jinyuan Chang（常晋源）的工作。
+
+\subsection{均值作为一种辅助信息}
+
+经验似然方法 的另一重要特性是它能利用辅助信息改进推断。Owen 表明：当抽样分布的某泛函己知时，通过约束经验似然利用这一信息获得改进的推断，可以得到比单纯的经验分布 $F_n$ 更好的效果。例如，假设 $k$ 维随机向量$X_1,\dots,X_n\sim F$ i.i.d.，分布函数 $F$ 未知，但我们已知其有均值 $\mu_0=\mathbb{E}_F[X]$ ，则根据式~\eqref{eq:ch8:tag-1} ，经验似然估计为 
+$$\widehat p_i= \frac{1}{n}\frac{1}{1 + \lambda_n^\top (X_i - \mu_0)},\quad \frac{1}{n}\sum_{i=1}^n \frac{X_i - \mu_0}{1 + \lambda_n^\top (X_i - \mu_0)} = 0$$
+
+从 $\widehat p_i$ 的表达式可以看出，在经验分布的基础上，根据 $\mu_0$ 的信息，经验似然估计对样本点重新进行了赋权。其本质是，在满足均值约束 $\sum_{i=1}^np_i(X_i-\mu_0)=0$ 的前提下，寻找一种与均匀权重 $1/n$ ``距离最近''的赋权方式，这里的``距离''指的是 KL-散度： 
+$$\mathrm{D}_{\text{KL}}(F_n\|F)=\sum_{i=1}^n(1/n)\log\frac{1/n}{p_i}=-\frac1n\sum_{i=1}^n\log(np_i)$$
+我们自然将 
+$$\widehat F(t):=\sum_{i=1}^n\widehat p_i\mathbb I(X_i\le t)$$
+作为对真实分布 $F$ 的近似。
+
+\begin{theorem}[辅助均值信息下的经验分布]\label{thm:ch8:auxiliary-mean-expansion}
+
+在上述记号下，设协方差矩阵 $\Sigma_0=\mathrm{Var}_F[X]$ 正定，则
+\[
+\widehat{F}(t) - F(t) = \frac{1}{n}\sum_{i=1}^n \Big(\mathbb I(X_i \le t) - F(t) - (X_i-\mu_0)^\top \Sigma_0^{-1} W(t) \Big) + o_P(n^{-1/2}).
+\]
+
+其中 $W(t) := \mathbb{E}[(X-\mu_0) \mathbb I(X \le t)]$。
+
+\end{theorem}
+
+\begin{proof}
+
+记经验分布函数为 $F_n$ ，考察
+
+\begin{equation}
+\label{eq:ch8:tag-6}
+\begin{aligned} \widehat{F}(t)-F_n(t) &= \frac1n\sum_{i=1}^n \mathbb I(X_i\le t)(n\hat{p}_i-1)\\ &= \frac1n\sum_{i=1}^n \mathbb I(X_i\le t)\left(\frac1{1+\lambda_n^\top(X_i-\mu_0)}-1\right)\\ &= -\frac1n\sum_{i=1}^n \mathbb I(X_i\le t)\,\lambda_n^\top (X_i-\mu_0) + \frac1n\sum_{i=1}^n\mathbb I(X_i\le t)\,\frac{(\lambda_n^\top (X_i-\mu_0))^2}{1+\lambda_n^\top (X_i-\mu_0)} \end{aligned}
+\end{equation}
+第三行我们再次利用了恒等式 $\textstyle\frac1{1+x}=1-x+\frac{x^2}{1+x}$ 。注意到，这里式~\eqref{eq:ch8:tag-6} 的第二项模长 
+$$\|\lambda_n\|^2 \frac1n\sum_{i=1}^n \frac{\|X_i-\mu_0\|^2}{1+\lambda_n^\top (X_i-\mu_0)} = O_P(\|\lambda_n\|^2) = O_P(n^{-1})$$
+从而是可以忽略的（并入后面的 $o_P(n^{-1/2})$ 余项）。至于式~\eqref{eq:ch8:tag-6} 的第一项，由大数律，
+\[
+\widehat W(t)=\frac1n\sum_{i=1}^n\mathbb I(X_i\le t)(X_i-\mu_0)
+\overset P\longrightarrow W(t).
+\]
+因此，式~\eqref{eq:ch8:tag-6} 立即推出
+\[
+\widehat F(t)-F_n(t)=-\lambda_n^\top W(t)+o_P(n^{-1/2}).
+\]
+利用前文式~\eqref{eq:ch8:tag-4}，有
+\[
+\lambda_n=\Sigma_0(\bar X-\mu_0)+o_P(n^{-1/2}),
+\]
+故
+\[\begin{aligned} \widehat{F}(t)-F_n(t) &= -(\Sigma_0^{-1}(\bar X-\mu_0) + o_P(n^{-1/2}))^\top W(t) + o_P(n^{-1/2})\\ &= -(\bar X-\mu_0)^\top \Sigma_0^{-1} W(t) + o_P(n^{-1/2})\\ &=-\frac1n\sum_{i=1}^n(X_i-\mu_0)^\top\Sigma_0^{-1}W(t) \end{aligned}\]
+将上式与 \[ F_n(t)-F(t) = \frac1n\sum_{i=1}^n \bigl(\mathbb I(X_i\le t) - F(t) \bigr) \]相加，立即得证。
+
+\end{proof}
+
+对不同的 $t_1,\dots,t_m\in\mathbb R^k$ ， 对 $m$ 维随机向量 $(\mathbb I(X< t_1),\dots,\mathbb I(X< t_m))^\top$ 用多维中心极限定理，有结论： \[ \sqrt n\Big(F_n(t_1)-F(t_1),\dots, F_n(t_m)-F(t_m)\Big)\overset{\rm d}\to \mathcal N_m(0,\Sigma) \]其中 $\Sigma$ 是 $m\times m$ 矩阵，第 $i,j$ 元为 $F(t_i\wedge t_j)-F(t_i)F(t_j)$ ；那么，根据定理~\ref{thm:ch8:auxiliary-mean-expansion} 立即有
+
+\begin{corollary*}
+对不同的 $t_1,\dots,t_m\in\mathbb R^k$，$\sqrt n\Big(\widehat F(t_1)-F(t_1),\dots,\widehat F(t_m)-F(t_m)\Big)\overset{\rm d}\to \mathcal N_m(0,\Sigma_u)$，其中 $\Sigma_u:=\Sigma-W^\top\Sigma_0^{-1} W$，$W:=(W(t_1),W(t_2),\dots,W(t_m))$。
+\end{corollary*}
+
+可以看出，比于单纯的经验分布 $F_n$ ，在增加了 $\mu=\mu_0$ 这一信息后，我们的估计 $\widehat F$ 成功将渐近方差减小了 $W^\top\Sigma_0 W$ 。
+
+这一例子来自 \cite{shao2003} 一书的 Theorem 5.4。
+
+\section{估计方程}
+
+注意到总体均值 $\mu$ 由下述估计方程确定： $\int(x-\mu)\mathrm dF(x)=0$
+
+一般地 ， 对 $\theta\in\Theta\subset \mathbb R^p$ 、 $X\in\mathbb R^k$ ，设 $g(X,\theta)\in\mathbb R^{r}$ ，其中 $r\ge p$ ，那么由\textbf{\emph{估计方程}} (Estimating equation) $\int g(x,\theta)\mathrm dF(x)=0$
+
+确定的参数 $\theta$ 也定义类似关于 $\theta$ 的经验似然吗？回答是肯定的 ，我们只需要将上一节的 $X_i-\mu$ 替换为 $g(X_i,\theta)$ 即可。例如， $\theta$ 的经验似然为
+
+$\mathcal R(\theta)=\sup\left\{\prod_{i=1}^n(np_i):\sum_{i=1}^np_i g(X_i,\theta)=0,p_i\ge 0,\sum_{i=1}^np_i=1\right\}$Lagrange 乘子法解得 $p_i$ 和 $\lambda_n\in\mathbb R^q$ 满足：
+
+\begin{equation}
+\label{eq:ch8:tag-7}
+p_i = \frac{1}{n}\frac{1}{1 + \lambda_n^\top g(X_i,\theta)},\quad \frac{1}{n}\sum_{i=1}^n \frac{g(X_i,\theta)}{1 + \lambda_n^\top g(X_i,\theta)} = 0
+\end{equation}
+
+类似于引理~\ref{lem:ch8:multiplier-existence}，我们可以将关于 $\lambda_n$ 的方程转换为求解
+
+\begin{equation}
+\label{eq:ch8:tag-8}
+\begin{aligned} \operatorname*{\arg\max}_{\lambda}&\sum_{i=1}^n\log(1+\lambda^\top g(X_i,\theta))\\ \text{s.t. }& 1+\lambda^\top g(X_i,\theta)>0,\quad i=1,\dots,n \end{aligned}
+\end{equation}
+
+最后，解出 $\lambda_n=\lambda_n(\theta)$ 后，参数 $\theta$ 的 MELE 如下：
+\[\begin{aligned} \widehat{\theta\ }_{\text{MELE}}&=\operatorname*{\arg\max}\mathcal R(\theta)\\ &=\operatorname*{\arg\min}_\theta\sum_{i=1}^n\log\big(1+\lambda_n(\theta)^\top g(X_i,\theta)\big) \end{aligned}\]
+经验对数似然比统计量就是 
+$$-2\log\mathcal R(\theta)=2\sum_{i=1}^n\log(1+\lambda_n(\theta)^\top g(X_i,\theta))$$
+
+\begin{theorem}[MELE 的渐近正态性]\label{thm:ch8:mele-asymptotic-normality}
+
+在上述设定下，设 $\mathbb{E}_F[g(X_i,\theta)]=0$ 可以唯一确定 $\theta_0\in\Theta\subset\mathbb R^p$ ，并设如下正则条件满足：
+
+\begin{itemize}
+\tightlist
+\item
+  $\mathbb{E}\left[\frac{\partial g(X,\theta_0)}{\partial \theta}\right]$ 有秩 $d$ ；
+\item
+  $\mathbb{E}[g(X,\theta_0)g(X,\theta_0)^\top]$ 正定；
+\item
+  $\frac{\partial g(X,\theta)}{\partial \theta}$ 和 $\frac{\partial^2 g(X,\theta)}{\partial \theta\partial \theta^\top}$ 对每个 $\theta\in\Theta$ 连续；
+\item
+  存在 $M(x)$ ， $\mathbb{E}[M(X)]<\infty$ ，使得对每个 $\theta\in\Theta$ ，
+  \[
+  \|g(x,\theta)\|^3\le M(x),\quad \left\|\frac{\partial g(x,\theta)}{\partial\theta}\right\|\le M(x),\quad \left\|\frac{\partial^2 g(x,\theta)}{\partial\theta\partial\theta^\top}\right\|\le M(x).
+  \]
+\end{itemize}
+
+那么，
+\[\begin{aligned} \sqrt n\big(\widehat{\theta\ }_{\text{MELE}}-\theta_0)&\overset{\rm d}\to \mathcal N(0,\Sigma_{\text{MELE}}),\quad \text{ 当 }n\to\infty \end{aligned}\]
+其中
+\[\Sigma_{\text{MELE}}:=\lim_{n\to\infty}n\mathrm{Var}[\widehat\theta_{\text{MELE}}]=\left(\mathbb{E}\!\left[\frac{\partial g(X,\theta)}{\partial\theta}\right]^\top\mathbb{E}[g(X,\theta_0)g(X,\theta_0)^\top] ^{-1}\mathbb{E}\!\left[\frac{\partial g(X,\theta)}{\partial\theta}\right]\right)^{-1}\]
+\end{theorem}
+
+上述结论参见 \cite{qinlawless1994}。
+
+\begin{theorem}[估计方程的经验似然比]\label{thm:ch8:estimating-equation-wilks}
+
+在上述设定和定理~\ref{thm:ch8:mele-asymptotic-normality} 的正则条件下，当 $n\to\infty$ 时，经验似然比统计量有渐近分布，
+\[\begin{aligned} -2\log\frac{\mathcal R(\theta_0)}{\mathcal R(\widehat\theta_{\text{MELE}})}&\overset{\rm d}\to \chi^2_p\\ -2\log\mathcal R(\widehat\theta_{\text{MELE}})&\overset{\rm d}\to \chi^2_{r-p} \end{aligned}\]
+这些结论来自 \cite{qinlawless1994} 一文的 Theorem 1、2。
+
+\end{theorem}
+
+下面是两个简单的例子，
+
+\begin{example}[线性回归]
+考虑线性模型
+\[
+Y_i=X_i^\top\beta+\epsilon_i,\quad i=1,\dots,n.
+\]
+其中 $X_i$ 是 $k$ 维协变量， $Y_i$ 是响应变量， $\epsilon_i$ 是 i.i.d. 零均值误差。于是参数 $\beta$ 满足下述估计方程：
+\[
+\mathbb{E}[X_i(Y_i-X_i^\top\beta)]=0,\quad i=1,\dots,n.
+\]
+
+于是 $$\mathcal R(\theta)=\sup\left\{\prod_{i=1}^nnp_i:\sum_{i=1}^np_iX_i(Y_i-X_i^\top\beta)=0,p_i\ge 0,\sum_{i=1}^np_i=1\right\}$$ 
+关于线性回归经验似然的一些收敛特性，\href{https://www.stat.tsinghua.edu.cn/info/1023/2408.htm}{陈松蹊}院士曾经作过很多研究。
+
+
+\end{example}
+
+\begin{example}[分位数]
+设 $\mathbb R$ 上的随机变量 $X_1,\dots,X_n\sim F$ i.i.d.，设 $q$ 分位数 $\theta=F^{-1}(q)$ 是唯一定义的，那么估计方程为 $\mathbb{E}[\phi(X-\theta)]=0$
+
+其中\[ \phi(z):=\begin{cases} -1,&\text{ 若 }z\le 0\\ \frac q{1-q}&\text{ 若 }z>0 \end{cases} \]
+
+这是因为
+\[\begin{aligned} &0=\int_{x \le \theta} (-1) \mathrm{d}F(x) + \int_{x > \theta} \frac{q}{1-q} \mathrm{d}F(x) =-F(\theta) + \frac{q}{1-q} (1 - F(\theta))\\ \implies & F(\theta)=q \end{aligned}\]
+于是
+\[
+\mathcal R(\theta)=\sup_{p_1,\dots,p_n}\left\{\prod_{i=1}^nnp_i:\sum_{i=1}^np_i\phi(X_i-\theta)=0,p_i\ge 0,\sum_{i=1}^np_i=1\right\}.
+\]
+
+由 Lagrange 乘子法可解得 
+$$p_i = \frac{1}{n}\frac{1}{1 + \lambda \phi (X_i-\theta)},\quad \frac1n\sum_{i=1}^n\frac{\phi(X_i-\theta)}{1+\lambda \phi(X_i-\theta)}=0$$
+与其它情况不同 ， 在这里满足上面方程的 $\lambda$ 有显式解 $\lambda=\frac{q-F_n(\theta)}{q}$ 从而
+\[\begin{aligned} -2\log \mathcal R(\theta)&=-2\sum_{i=1}^n\log np_i\\ &=2\sum_{i=1}^n\log (1+\lambda\phi(X_i-\theta))\\ &=2\left(\sum_{i:X_i\le\theta}\log\left(1-\frac{q-F(\theta)}{q}\right)+\sum_{i:X_i\le\theta}\log\left(1+\frac{q}{1-q}\frac{q-F(\theta)}{q}\right)\right)\\ &=2n\left( F_n(\theta)\log\frac{F_n(\theta)}{q} + \bigl(1-F_n(\theta)\bigr)\log\frac{1-F_n(\theta)}{1-q} \right) \end{aligned}\]
+这个统计量的渐近分布也很容易验算：记 $\hat p=F_n(\theta)$，由中心极限定理，
+\[
+\sqrt n(\hat p-q)\overset{\rm d}\to \mathcal N(0,q(1-q)).
+\]
+
+于是，对
+\[
+f(\hat p):=2n\left(
+\hat p\log\frac{\hat p}{q}
++(1-\hat p)\log\frac{1-\hat p}{1-q}
+\right)
+\]
+在 $q$ 处作二阶 Taylor 展开，得到
+\[\begin{aligned} f(\hat p) = \frac{n}{q(1-q)} (\hat p - q)^2 + o_P(1)\overset{\rm d}\to\chi_1^2 \end{aligned}\]
+该结论来自 \cite{adimari1998}。
+
+
+\end{example}
+
+\section{例子：删失数据与 Kaplan-Meier 估计}
+
+设生存时间 $T_1, \ldots, T_n$ 为非负 i.i.d. 随机变量，服从分布 $P$ ，分布函数记作 $F$ 。同时，存在独立于 $T_i$ 的删失时间 $C_1, \ldots, C_n$，它们也是 i.i.d. 的。在实际中我们只能观测到两者中的较小者，以及 $T_i$ 是否不大于 $C_i$，即
+\[X_i =  T_i\wedge C_i,\qquad \delta_i = \mathbb I(T_i\le C_i),\qquad i=1,\ldots,n.\]
+这被称作``右删失''，设有样本观测值 $x_1,\ldots,x_n$, $\delta_1,\ldots,\delta_n$：
+
+\begin{itemize}
+\tightlist
+\item
+  当 $\delta_i = 1$ 时，观测到的事件是 $T_i = x_i$，概率为 $P(T=x_i)$；
+\item
+  当 $\delta_i = 0$ 时，观测到的事件是 $T_i > x_i$，概率为 $P(T>x_i)$。
+\end{itemize}
+
+因此非参数似然函数为
+\[\begin{aligned} L(F) = \prod_{i=1}^{n} \bigl( P(T=x_1) \bigr)^{\delta_i} \bigl( P(T>x_i) \bigr)^{1-\delta_i}\\  \end{aligned}\]
+将 $x_1, \ldots, x_n$ 排列成次序统计量 $x_{(1)} \le \cdots \le x_{(n)}$，$x_{(i)}$ 对应的 $\delta$ 记为 $\delta_{(i)}$。令
+\[p_i = P(T=x_{(i)}),\quad i=1,\ldots,n,\qquad p_{n+1} = P(T > x_{(n)}) = 1 - F(x_{(n)})\]
+那么
+\[\begin{aligned} L(F) = \prod_{i=1}^{n} \left( p_i^{\delta_{(i)}} \left( \sum_{j=i+1}^{n+1} p_j \right)^{1-\delta_{(i)}} \right) \end{aligned}\]
+这里特别定义 $0^0=1$ 。
+
+我们要在约束 $\sum_{i=1}^{n+1} p_i = 1$ 、 $p_i\ge 0,i=1,\dots,n+1$ 下最大化 $L(F)$ 。用 Lagrange 乘子法当然是可以的，但稍微有些麻烦，我们这里用更方便的方法，继续对 $L(F)$ 变形：记 $S_i := \sum_{j=i}^{n+1} p_j$ 、 $y_{i} = \frac{S_{i+1}}{S_i}$ ，那么 $S_i=\prod_{j=1}^{i-1}y_j$ ，有
+\[\begin{aligned}   L(F)&=\prod_{i=1}^{n} \left( (S_{i} - S_{i+1})^{\delta_{(i)}} S_{i+1}^{1-\delta_{(i)}} \right)\\   &=   \prod_{i=1}^{n} y_i^{n-i+1-\delta_{(i)}} (1-y_i)^{\delta_{(i)}}\\    \end{aligned}\]
+对每项分别用如下不等式： $y^a (1-y)^b \le \left( \frac{a}{a+b} \right)^a \left( \frac{b}{a+b} \right)^b$，可知 
+$$\max L(F)= \prod_{i=1}^{n} \left( 1-\frac{\delta_{(i)}}{n-i+1} \right)^{n-i+1-\delta_{(i)}} \left( \frac{\delta_{(i)}}{n-i+1} \right)^{\delta_{(i)}}$$
+
+当取得此最大值时， $y_i=\frac{n-i+1-\delta_{(i)}}{n-i+1}=1-\frac{\delta_{(i)}}{n-i+1}$ ，故
+\[\begin{aligned} \widehat p_i&=S_{i}-S_{i+1}\\ &=(1-y_i)\prod_{j=1}^{i-1}y_j\\ &= \frac{\delta_{(i)}}{n-i+1} \prod_{j=1}^{i-1} \Bigl( 1 - \frac{\delta_{(j)}}{n-j+1} \Bigr),\quad i = 1,\ldots,n \end{aligned}\]
+并且 $\widehat p_{n+1}=1-\sum_{i=1}^n\widehat p_i$ 。
+
+我们用如下 $\widehat F$ 来估计 $F$ ：
+\[\begin{aligned} \widehat{F}(t) &= \sum_{i=1}^{n} \widehat{p}_i \mathbb I(X_{(i)} \le t)\\ &=\sum_{i:X_{(i)}\le t}(S_{i}-S_{i+1})\\ &=S_1-S_{\max\{i:X_{(i)}\le t\}+1}\\ &=1 - \prod_{i: X_{(i)}\le t} \left(1-\frac{\delta_{(i)}}{n-i+1}\right) \end{aligned}\]
+这正是著名的 Kaplan--Meier 估计。我们的分析表明：KM 估计其实就是右删失情况下的 NPMLE。
+
+关于删失数据经验似然的渐近分析，可以参考 \cite{wangjing2001}。
+
+\section{广义经验似然}
+
+最后不得不提的一个主题是\textbf{\emph{广义经验似然 }} (Generalized empirical likelihood, GEL)。首先回顾一下 MELE （式~\eqref{eq:ch8:tag-8} ）：
+\[\begin{aligned} \widehat{\theta\ }_{\text{MELE}}=\operatorname*{\arg\min}_\theta\sup_{\lambda\in\Lambda_n(\theta)}\sum_{i=1}^n\log\big(1+\lambda^\top g(X_i,\theta)\big) \end{aligned}\]
+其中
+\[
+\Lambda_n(\theta):=\{\lambda:\lambda^\top g(X_i,\theta)\in\mathcal{V},\, i=1,\dots,n\}.
+\]
+
+GEL 的出发点是：用其它合适的凹函数替换 $\log(1+v)$，从而得到一族具有类似优良性质的估计量。以下主要参考 \cite{neweysmith2004}。
+
+设 $\rho(v):\mathcal V\to \mathbb {R}$ 是定义在含零开区间 $\mathcal{V}$ 上的严格凹函数，在 0 附近二次可微，满足 $\rho'(0)=\rho''(0)=-1$GEL 估计量定义为下述优化问题的解：
+\[\widehat{\theta}_{\mathrm{GEL}} = \operatorname*{\arg\min}_{\theta\in\Theta}\;\sup_{\lambda\in\Lambda_n(\theta)}\; \sum_{i=1}^n \rho\bigl(\lambda^\top g(X_i,\theta)\bigr)\]
+这个定义是式~\eqref{eq:ch8:tag-8} 的直接推广：内部最大化 $\lambda$ 给出 Lagrange 乘子，外部最小化问题给出 $\theta$ 的估计。
+
+显见，经验似然是 GEL 取 $\rho(v)=\ln(1-v)$ 的特例（与我们前文的式子相差一个负号，不过这无关紧要）。除此之外，选取不同的 $\rho$ 还可以得到其它估计量：
+
+\begin{itemize}
+\tightlist
+\item
+  取 $\rho(v)=-e^v$ ，可以得到\emph{指数倾斜} (exponential tilting, EL) 估计；
+\item
+  取 $\rho(v)=-(1+v)^2/2$ ，可以得到\emph{连续更新估计} (continuous updating estimator, CUE)。见 \cite{neweysmith2004} 的 Theorem 2.1。
+\item
+  取 $\rho(v)=-\frac1{\gamma+1}(1+\gamma v)^{\frac{\gamma+1}{\gamma}}$ ，这个式子来自于一类最小化散度的问题 （\cite{neweysmith2004} 的 Theorem 2.2），则
+
+\begin{itemize}
+  \tightlist
+  \item
+    当 $\gamma=1$ 时可以得到 CUE；
+  \item
+    当 $\gamma\to 0$ 时， $\rho(v)\to -e^{v}$ ，可以得到指数倾斜估计；
+  \item
+    当 $\gamma\to -1$ 时，我们为 $\rho(v)$ 加上一个常数项 $\frac{1}{\gamma+1}$ 避免发散，可以得到 $\frac{1-(1+\gamma v)^{\frac{\gamma+1}{\gamma}}}{\gamma+1}\to \ln(1-v)$ ，这正是经验似然。
+  \end{itemize}
+\end{itemize}
+
+在经验似然里，概率 $p_i$ 来自方程~\eqref{eq:ch8:tag-7} ，我们将其改写作
+\[\begin{aligned} p_i =\frac{p_i}{\sum_{j=1}^np_i}=\frac{(1 + \lambda_n^\top g(X_i,\theta))^{-1}}{\sum_{j=1}^n(1 + \lambda_n^\top g(X_j,\theta))^{-1}} \end{aligned}\]
+因而，在 GEL 里，当解出 $\lambda$ 和 $\theta$ 时，对应``隐含的概率''就应该是
+\[
+p_i=\frac{\rho'( \lambda g(X_i,\theta))}{\sum_{j=1}^n\rho'(\lambda g(X_j,\theta))}.
+\]
+
+在合适的正则条件下，类似于定理~\ref{thm:ch8:mele-asymptotic-normality} 和定理~\ref{thm:ch8:estimating-equation-wilks}，可以证明 $\widehat\theta_{\text{GEL}}$ 也拥有渐近正态性 \[ \sqrt n(\widehat\theta_{\text{GEL}}-\theta_0)\overset{\rm d}\to\mathcal N(0,\Sigma_{\text{GEL}}) \]以及取 $\rho(0)=0$ 时，有``似然比''的渐近分布： \[ 2\sum_{i=1}^n\rho(\lambda(\widehat\theta_{\text{GEL}})^\top g(X_i,\widehat\theta_{\text{GEL}}))\overset{\rm d}\to \chi^2_{r-p} \]来自 \cite{neweysmith2004} 的 Theorem 3.2。

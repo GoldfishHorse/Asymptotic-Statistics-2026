@@ -1,0 +1,905 @@
+% Generated from: Zhihu/专栏：概率与统计/渐近统计 (10)：U-统计量 (下)_金鱼马_2026-06-06.md
+\section{U-统计量的渐近正态性}
+
+我们从推论~\ref{cor:ch10:u-statistic-variance-order} 中看到的是：U-统计量方差的收敛速度与它是否退化有关，
+
+\begin{itemize}
+\tightlist
+\item
+  对``非退化''情况，即 $\xi_1>0$ 时， $\mathrm{Var}[U_n]=O(1/n)$ ， $U_n-\theta=O_P(n^{-1/2})$ ；
+\item
+  对``(一阶) 退化''情况，即 $\xi_1=0$ 、 $\xi_2>0$ 时， $\mathrm{Var}[U_n]=O(1/n^2)$ ， $U_n-\theta=O_P(n^{-1})$ ；
+\item
+  以此类推，当 $\xi_1=\cdots=\xi_{r-1}=0$ 、 $\xi_r>0$ 时， $\mathrm{Var}[U_n]=O(1/n^r)$ ， $U_n-\theta=O_P(n^{-r/2})$ 。
+\end{itemize}
+
+这当然也会影响最终 $U_n$ 渐近分布。事实上，只有非退化的情形， $U_n$ 才是渐近正态的；对于 (一阶) 退化的情况， $U_n$ 的渐近分布会变成无限个 χ² 分布的加权和。
+
+当我们想分析 $U_n$ 统计量的渐近分布时，一个重要的麻烦是，由式~\eqref{eq:ch10b:tag-2} 所定义的 $U_n$ ，
+
+\begin{equation}
+\label{eq:ch10b:tag-2}
+U_n=\binom nm^{-1}\sum_{1\le j_1<\cdots<j_m\le n}h(X_{j_1},\dots,X_{j_m})
+\end{equation}
+
+由于样本的诸 m-元子集存在重叠，导致 $h(X_{j_1},\dots,X_{j_m})$ 并不相互独立，没法用诸如独立随机变量和中心极限独立的工具。为此，Hoeffding 提出了``投影''的方法。
+
+\subsection{Hájek 投影}
+
+所谓``投影''，指的是将 $U_n$ 投影到每个 $X_j$ 所张成的空间上，也就是
+
+\begin{equation}
+\label{eq:ch10b:tag-3}
+\widetilde{U}_n = \mathbb{E}[U_n] + \sum_{j=1}^n \bigl( \mathbb{E}[U_n| X_j] - \mathbb{E}[U_n] \bigr)
+\end{equation}
+
+由于 $X_i$ 相互独立，$\mathbb{E}[U_n| X_i]$ 也是独立的，因此 $\widetilde{U}_n$ 是独立随机变量（加上常数）的线性组合，可以直接使用中心极限定理，提供正态性。在此基础上，若能够证明 $U_n$ 与 $\widetilde{U}_n$ 在适当的归一化下，其差值可以忽略，那么 $U_n$ 的渐近分布就由 $\widetilde{U}_n$ 完全决定。
+
+为什么它被称作``投影''呢？设每个 $X_j$ 均取值于样本空间 $(\mathscr X,\mathscr B_x)$ ，我们记在 $n$ 个样本的乘积空间上、全体平方可积函数记作 $L^2$ ，这是一个 Hilbert 空间，内积为
+\[
+\langle f,g\rangle
+=\mathbb E[f(X_1,\dots,X_n)g(X_1,\dots,X_n)].
+\]
+在 Hilbert 空间中，我们可以对每个元素向其闭子空间进行正交投影，这里要研究的闭子空间 $\mathscr S_n$ 定义如下：它是全体形如
+\[\sum_{j=1}^ng_j(X_j)\]
+的统计量张成的空间，其中每个 $g_j$ 是平方可积的可测函数（ $\mathbb E[g_j^2(X)]<\infty$ ）。简而言之，这类统计量完全由每个样本独立的贡献相加而成。显然 $\mathscr S_n$ 是 $L^2$ 的线性闭子空间。
+
+\begin{lemma}[Hájek 投影]\label{lem:ch10:hajek-projection}
+
+设独立样本 $X_1,\dots,X_n$ 取值于样本空间 $(\mathscr X,\mathscr B_x)$，$T=T(X_1,\dots,X_n)$ 是任意满足 $\mathbb E[T^2]<\infty$ 的统计量。那么，$T$ 向 $\mathscr S_n$ 进行投影所得到的便是
+\[
+\begin{aligned}
+\widetilde T
+&=\mathbb E[T]+\sum_{j=1}^n(\mathbb E[T|X_j]-\mathbb E[T])\\
+&=\sum_{j=1}^n\mathbb E[T|X_j]-(n-1)\mathbb E[T].
+\end{aligned}
+\]
+
+换言之，对任意 $S\in\mathscr S_n$ ，有 $\mathbb E[(T-\widetilde T)S]=0$ 。
+
+\end{lemma}
+
+\begin{proof}
+
+注意到（在 a.s. 的意义上）有
+\[\begin{aligned} \mathbb E[\widetilde T|X_j]&=\sum_{i=1}^n\mathbb E\Big[\mathbb E[T|X_i]\Big|X_j\Big]-(n-1)\mathbb E[T]\\ &=(n-1)\mathbb E[T]+\mathbb E[T|X_j]-(n-1)\mathbb E[T]\\ &=\mathbb E[T|X_j] \end{aligned}\]
+从而
+\[\begin{aligned} \mathbb E[(T-\widetilde T)S]&=\mathbb E\left[(T-\widetilde T)\sum_{j=1}^ng_j(X_j)\right]\\ &=\sum_{j=1}^n\mathbb E[(T-\widetilde T)g_j(X_j)]\\ &=\sum_{j=1}^n\mathbb E\big[g_j(X_j)\mathbb E[(T-\widetilde T)|X_j]\big]\\ &=\sum_{j=1}^n\mathbb E\Big[g_j(X_j)\big(\underbrace{\mathbb E[T|X_j]-\mathbb E[\widetilde T|X_j]}_{0}\big)\Big]\\ &=0 \end{aligned}\]
+\end{proof}
+
+如果 $X_1,\dots,X_n$ 是 i.i.d. 的，且 $T=T(X_1,\dots,X_n)$ 是对称的，那么对每个 $j$ ，
+\[
+\mathbb E[T|X_j=x]=\mathbb E[T|X_1=x]=\mathbb E[T(x,X_2,\dots,X_n)].
+\]
+
+是不依赖于 $j$ 的。我们便可以对 Hájek 投影用经典 i.i.d. 条件下的中心极限定理。
+
+另一个要解决的问题是，投影 $\widetilde T$ 是否能足够接近 $T$ 呢？见下，
+
+\begin{lemma}[投影逼近]\label{lem:ch10:hajek-approximation}
+
+设 $T_n=T_n(X_1,\dots,X_n)$ 是任意 $\mathbb E[T_n^2]<\infty$ 的统计量， $\mathscr S\subset L^2$ 是任一包含常数的闭子空间， $T_n$ 向 $\mathscr S$的投影为 $\widetilde T\!_n$ 。那么，若
+\[
+\mathrm{Var}[T_n]-\mathrm{Var}[\widetilde T\!_n]=o(1/n),
+\]
+
+则
+\[
+\sqrt n(T_n-\widetilde T_n)\overset{L^2}\longrightarrow 0.
+\]
+
+\end{lemma}
+
+\begin{proof}
+
+首先由投影的正交性知
+\[
+\mathbb{E}\big[(T_n - \widetilde{T}\!_n)\widetilde{T}\!_n\big] = 0,\quad \mathbb{E}\big[(T_n - \widetilde{T}\!_n)1\big] = 0.
+\]
+
+从而 $T_n-\widetilde T\!_n$ 和 $\widetilde T\!_n$ 不相关：
+\[\mathrm{Cov}[T_n-\widetilde T\!_n,\widetilde T\!_n]=\underbrace{\mathbb E\big[(T_n-\widetilde T\!_n)\widetilde T\!_n\big]}_{0}-\mathbb E\big[\widetilde T\!_n\big]\underbrace{\mathbb E\big[T_n-\widetilde T\!_n\big]}_{0}=0\]
+那么方差满足
+\[
+\mathrm{Var}[T_n]=\mathrm{Var}[\widetilde T\!_n]+\mathrm{Var}\big[T_n-\widetilde T\!_n\big].
+\]
+
+因此
+\[
+n\mathbb E\big[(T_n-\widetilde T\!_n)^2\big]=n\mathrm{Var}\big[T_n-\widetilde T\!_n\big]=n\big(\mathrm{Var}[T_n]-\mathrm{Var}[\widetilde T_n]\big)=n\cdot o(1/n)=o(1)\longrightarrow 0.
+\]
+
+\end{proof}
+
+下面我们将这套方法用在 U-统计量上。
+
+\subsection{非退化情形下的渐近正态性}
+
+对于参数 $\theta$ 的 U-统计量 $U_n$ ，
+\[\begin{aligned} \mathbb E[U_n|X_j]&=\binom nm^{-1}\mathbb E\left[\sum_{1\le j_1<\cdots<j_m\le n}h(X_{j_1},\dots,X_{j_m})\Bigg|X_1\right]\\ &=\binom nm^{-1}\mathbb E\Bigg[\sum_{\substack{j_1>1\\j_1< j_2<\cdots<j_m\le n}}h(X_{j_1},\dots,X_{j_m})+\sum_{\substack{j_1=1\\j_1< j_2<\cdots<j_m\le n}}h(X_{j_1},\dots,X_{j_m})\Bigg|X_1\Bigg]\\ &= {\binom{n}{m}}^{-1}\left( \binom{n-1}{m}\theta + \binom{n-1}{m-1} h_1(X_j) \right)\\ &=\frac{n-m}{n}\theta + \frac{m}{n} h_1(X_j) \end{aligned}\]
+所以根据式~\eqref{eq:ch10b:tag-3} ，它的 Hájek 投影是
+
+\begin{equation}
+\label{eq:ch10b:tag-4}
+\widetilde{U}_n = \theta + \sum_{j=1}^n \bigl( \mathbb{E}[U_n|X_j] - \theta \bigr) = \theta + \frac{m}{n}\sum_{j=1}^n \bigl( h_1(X_j) - \theta \bigr)
+\end{equation}
+
+这里可以看出非退化要求的必要性，因为
+\[
+\mathrm{Var}[\widetilde U_n]=\left(\frac mn\right)^2\cdot n\mathrm{Var}[h_1(X)]=\frac{m^2}n\xi_1.
+\]
+
+如果 $\xi_1=0$ （退化），那么 $\widetilde U_n=\theta$ 几乎处处，这意味着一阶信息完全缺失，U‑统计量渐近分布的主导项必然来自更高阶的投影。
+
+现设 $\xi_1>0$ （非退化），那么我们可以放心对式~\eqref{eq:ch10b:tag-4} 用经典中心极限定理：
+\[
+\sqrt n(\widetilde U-\theta)\overset{\rm d}\to \mathcal N(0,m^2\xi_1).
+\]
+
+而另一方面，推论~\ref{cor:ch10:u-statistic-variance-order} 告诉我们
+\[
+\mathrm{Var}[U_n]=\frac{m^2}{n}\xi_1+O\left(\frac1{n^2}\right)=\mathrm{Var}[\widetilde U_n]+O\left(\frac1{n^2}\right).
+\]
+
+所以根据引理~\ref{lem:ch10:hajek-approximation}， $\sqrt{n}(U_n-\widetilde U_n)$ 均方收敛到 0，自然也依概率收敛到 0：
+\[
+P(\sqrt n|U_n-\widetilde U_n|>\epsilon)\le\frac{n\mathbb E[(U_n-\widetilde U_n)^2]}{\epsilon^2}\to 0.
+\]
+
+从而就证明了我们想要的结论：
+\[\begin{aligned} \sqrt n(U_n-\theta)&=\sqrt n(\widetilde U_n-\theta)+\sqrt n(U_n-\widetilde U_n)\\ &=\sqrt n(\widetilde U_n-\theta)+o_P(1)\\ &\overset{\rm d}\to\mathcal N(0,m^2\xi_1) \end{aligned}\]
+我们写作定理：
+
+\begin{theorem}[U-统计量的渐近正态性：非退化情形]\label{thm:ch10:u-statistic-nondegenerate-clt}
+
+设 $U_n$ 是基于 i.i.d. 样本 $X_1,\dots,X_n\sim P$ 的 U-统计量，核函数 $h(X_1,\dots,X_m)$ 对称且 $\mathbb E[h^2(X_1,\dots,X_m)]<\infty$ 。若 \[ \xi_1:=\mathrm{Var}_P[h_1(X)]=\mathrm{Var}_P\big[\mathbb{E}_P[h(X_1,X_2,\dots,X_m)|X_1]\big] \]满足 $0<\xi_1<\infty$ ，那么
+\[\sqrt n(U_n-\mathbb E_P[U_n])\overset{\rm d}\longrightarrow \mathcal N(0,m^2\xi_1)\]
+\end{theorem}
+
+下面简单举一个利用定理~\ref{thm:ch10:u-statistic-nondegenerate-clt} 的应用例子。在非退化情形（$\xi_1 > 0$）下，要找 $\theta=\mathbb E[U_n]$ 的渐近置信区间，若已知 $\xi_1$，则直接有渐近水平为 $1-\alpha$ 的置信区间为
+\[U_n \pm z_{1-\alpha/2}\, \frac{m\sqrt{\xi_1}}{\sqrt{n}}\]
+其中 $z_{1-\alpha/2}$ 是标准正态分布的上 $1-\alpha/2$ 分位数。然而问题在于， $\xi_1 = \mathrm{Var}[h_1(X)]$ 依赖于未知的总体分布 ，除非特殊情况，我们是不知道 $\xi_1$ 的真实值的，必须想办法从样本中估计 $\xi_1$。
+
+对每个观测 $X_i$，考虑所有包含 $i$ 的 $m$ 元组，并计算这些核函数值的平均：
+\[\hat{h}_{1,i} = \binom{n-1}{m-1}^{-1} \sum_{\substack{A\subseteq\{1,\dots,n\}\\ |A|=m,\; i\in A}} h(X_A)\]
+这个量称为\emph{留一平均}（leave‑one‑in average），因为它固定了 $X_i$，而对其他 $m-1$ 个位置在所有可能的组合上平均。由 U‑统计量的无偏性，
+\[\mathbb{E}\bigl[\hat{h}_{1,i}\bigr] = h_1(X_i).\]
+表明 $\hat{h}_{1,i}$ 是 $h_1(X_i)$ 的一个无偏估计。在此基础上，可构造 $\xi_1 = \mathrm{Var}[h_1(X)]$ 的估计：
+\[\hat{\xi}_1 = \frac{1}{n-1}\sum_{i=1}^n \bigl(\hat{h}_{1,i} - U_n\bigr)^2\]
+可以证明 $\hat{\xi}_1$ 是 $\xi_1$ 的相合估计：$\hat{\xi}_1 \overset P\to \xi_1$，于是可将
+\[U_n \pm z_{1-\alpha/2}\frac{m\sqrt{\hat{\xi}_1}}{\sqrt{n}}\]
+作为渐近 $1-\alpha$ 置信区间。
+
+类似地，对于检验 $H_0:\theta = \theta_0$，若原假设下统计量非退化，则可构造检验统计量
+\[Z_n = \frac{\sqrt{n}\,(U_n - \theta_0)}{m\sqrt{\hat{\xi}_1}} \overset{\rm d}\to\mathcal{N}(0,1)\]
+在显著性水平 $\alpha$ 下，当 $|Z_n| > z_{1-\alpha/2}$ 时拒绝 $H_0$。
+
+不过，U-统计量可能是退化的（如例~\ref{ex:ch10:mmd} 和例~\ref{ex:ch10:hsic}），导致上述正态近似无效，甚至 $\sqrt{n}$ 的缩放也是错误的；要特别声明，U-统计量的退化不是仅仅理论上的病态，在实际中，退化是很常见的。接下来我们讲解退化 U-统计量的渐近理论。
+
+\subsection{Hoeffding 分解}
+
+接下来研究 $\xi_1=0$ 、 $\xi_2>0$ 的情形，我们称这样的 U‑统计量为一阶退化的。注意到，此时 $U_n$ 的 Hájek 投影 $\widetilde U_n$ 几乎处处是常数，无法为我们提供任何信息。因此，将``Hájek 投影''这一概念推广到高阶，是很有必要的。
+
+（本节的细节比较繁琐，读者可以跳过，只需承认推论~\ref{cor:ch10:hoeffding-decomposition} 即可。）
+
+Hájek 投影之所以是一个``一阶''的概念，是因为它将统计量表述为一个样本 $X_j$ 的函数 $g_j(X_j)$ 的求和。我们需要将其推广成二元、三元等多元函数。为此，对任一 $A\subset\{1,\dots,n\}$ ，定义 $H_A$ 是全体形如 $g_A(X_j:j\in A)$
+
+的统计量张成的子空间，其中 $g_A$ 是平方可积的可测函数，且满足退化条件：
+\[\mathbb E\big[g_A(X_j:j\in A)\ \big|\ X_j:j\in B\big]=0,\quad \forall\ |B|<|A|\]
+（特别定义 $\mathbb E[T|\emptyset]=\mathbb E[T]$ )
+
+即： $g_A$ 只用来捕捉 $|A|$ 个元素的共同信息，或者叫 $|A|$ 阶信息；而对任何 $|B|<|A|$ ， $g_A$ 不包含 $|B|$ 阶信息。由于 $X_j$ 的独立性，这里的 $B$ 可以推广到任意不包含 $A$ 的子集，于是，上述退化条件保证了不同子集对应的空间是正交的，整个空间可以分解成 $L^2=\bigoplus_{A\subset \{1,\dots,n\}}H_A$
+
+那么任何 $T\in L^2$ 都可以唯一地向每个子空间进行投影，并表示为所有投影之和。若记 $P_AT$ 表示 $T$ 向 $H_A$ 的投影，则
+\[T=\sum_{A\subset\{1,\dots,n\}}P_AT\]
+特别地，
+
+\begin{itemize}
+\tightlist
+\item
+  $P_\emptyset T=\mathbb E[T]$ ；
+\item
+  $P_{\{j\}}T=\mathbb E[T|X_j]-\mathbb E[T]$ ；
+\item
+  $P_{\{i,j\}}T=\mathbb E[T|X_i,X_j]-\mathbb E[T|X_i]-\mathbb E[T|X_j]+\mathbb E[T]$ ；
+\item
+  \ldots{}
+\end{itemize}
+
+可见，Hájek 投影只是对应 $\textstyle P_\emptyset T+\sum_{j=1}^nP_{\{j\}}T$ 。而一般地，如果我们想明确写出某个 $P_AT$ 的表达式，有如下结论，
+
+\begin{lemma}[子集上的正交投影]\label{lem:ch10:subset-projection}
+
+设 $X_1,\dots,X_n$ 独立，对任意子集 $A\subset\{1,\dots,n\}$ 和任意平方可积的统计量 $T=T(X_1,\dots,X_n)$ ， $T$ 向 $P_A$ 的投影是
+\[P_AT=\sum_{B\subset A}(-1)^{|A|-|B|}\mathbb E\big[T\big|X_j:j\in B\big]\]
+\end{lemma}
+
+\begin{proof}
+
+简洁起见，记 $\mathbb E_B[T]:=\mathbb E[T|X_j:j\in B]$ 。证明分两步，
+
+\begin{itemize}
+\tightlist
+\item
+  首先证明 $P_AT\in H$ 。我们需要验证：对任意 $C \subsetneq A$，有 $\mathbb E_C[P_AT]=0$ 。代入 $P_AT$ ，
+\[\begin{aligned} \mathbb E_C[P_AT]&= \sum_{B\subset A} (-1)^{|A|-|B|} \mathbb E_{B\cap C} [T]\\ &=\sum_{D\subset C}\sum_{E\subset A\setminus C}(-1)^{|A|-|D|-|E|}\mathbb E_D[T]\\ &=\left(\sum_{D\subset C}(-1)^{|A|-|D|}\mathbb E_D[T]\right)\left(\sum_{E\subset A\setminus C}(-1)^{|E|}\right)\\ &=\left(\sum_{D\subset C}(-1)^{|A|-|D|}\mathbb E_D[T]\right)(1-1)^{|A\setminus C|}\\ &=0 \end{aligned}\]
+其中第四行来自二项式定理。
+
+\item
+  其次证明 $T-P_AT$ 与 $H_A$ 正交。任取 $g_A=g_A(X_j:j\in A)\in H_A$ ，
+\[\begin{aligned} \mathbb{E}\bigl[(T-P_A T)g_A\bigr] &= \mathbb{E}\bigl[(T-\mathbb{E}_A[T])g_A\bigr] - \sum_{B\subsetneq A} (-1)^{|A|-|B|} \mathbb{E}\bigl[\mathbb{E}_B[T] \, g_A\bigr] \\ &= \underbrace{\mathbb{E}\bigl[(T-\mathbb{E}_A[T])g_A\bigr]}_0 - \sum_{B\subsetneq A} (-1)^{|A|-|B|} \mathbb{E}\Bigl[\mathbb{E}_B[T] \  \underbrace{\mathbb{E}_B[g_A]}_{0}\Bigr] \\ &= 0 \end{aligned}\]
+\end{itemize}
+
+\end{proof}
+
+接下来设 $X_1,\dots,X_n$ 独立同分布，且 $T(X_1,\dots,X_n)$ 是对称函数，那么由对称性， $P_AT$ 仅依赖于 $|A|$ 的大小，因此对 $|A|=r$ ，可以记 $P_AT=g_r(X_j:j\in A)$ ；根据引理~\ref{lem:ch10:subset-projection}，这里的 $g_r$ 可以显式写出
+\[\begin{aligned} g_r(X_j:j\in A)&=\sum_{A\subset\{1,\dots,r\}}(-1)^{r-|A|}\mathbb E[T|X_j:j\in A]\\ &=\sum_{c=0}^r(-1)^{r-c}\sum_{1\le j_1<\cdots<j_c\le r}\mathbb E[T|X_{j_1},\dots,X_{j_c}] \end{aligned}\]
+可见 $g_r$ 也是对称函数。那么
+\[\begin{aligned} T&=\sum_{A\subset\{1,\dots,n\}}P_AT=\sum_{r=0}^n\sum_{|A|=r}g_r(X_j:j\in A)\\ &=\mathbb E[T]+\sum_{j=1}^ng_1(X_j)+\sum_{1\le j_1<j_2\le n}g_2(X_{j_1},X_{j_2})+\sum_{1\le j_1<j_2<j_3\le n}g_3(X_{j_1},X_{j_2},X_{j_3})+\cdots+g_n(X_1,\dots,X_n) \end{aligned}\]
+这便是 \textbf{\emph{Hoeffding 分解}} 。
+
+放在 U-统计量的情境下，我们将式~\eqref{eq:ch10b:tag-2} 中的每个核 $h(X_{j_1},\dots,X_{j_m})$ 进行 Hoeffding 分解，注意到
+
+\begin{itemize}
+\tightlist
+\item
+  $r=0$ 项是 $\theta$ ；
+\item
+  当 $|A|=r>m$ 时， $h(X_{j_1},\dots,X_{j_m})$ 与每个 $H_A$ 都正交；
+\item
+  所以只需将 $h(X_{j_1},\dots,X_{j_m})-\theta$ 写作对 $r=1,\dots,m$ 的求和形式。
+\end{itemize}
+
+所以式~\eqref{eq:ch10b:tag-2} 推出
+\[\begin{aligned} U_n - \theta  &= \binom{n}{m}^{-1} \sum_{1\le j_1<\cdots<j_m\le n} (h(X_{j_1},\dots,X_{j_m}) -\theta)\\ &= \binom{n}{m}^{-1} \sum_{1\le j_1<\cdots<j_m\le n} \; \sum_{r=1}^{m} \; \sum_{\substack{A\subset\{j_1,\dots,j_m\}\\ |A|=r}} P_A h(X_{j_1},\dots,X_{j_m}) \\ &= \binom{n}{m}^{-1} \sum_{r=1}^{m} \; \sum_{1\le j_1<\cdots<j_m\le n} \; \sum_{\substack{A\subset\{j_1,\dots,j_m\}\\ |A|=r}} g_r(X_A) \\ &= \binom{n}{m}^{-1} \sum_{r=1}^{m} \; \sum_{|A|=r} g_r(X_A) \cdot \binom{n-r}{m-r} \\ &= \sum_{r=1}^{m} \binom{m}{r}{\binom{n}{r}}^{-1} \sum_{|A|=r} g_r(X_A) \\  \end{aligned}\]
+其中 $g_r(X_A):=g_r(X_j:j\in A)=P_Ah(X_{j_1},\dots,X_{j_m})$ 。
+
+我们写作引理，
+
+\begin{lemma}[U-统计量的 Hoeffding 分解]\label{lem:ch10:u-statistic-hoeffding-decomposition}
+
+设参数 $\theta$ 的 U-统计量是 $U_n$ ，其核 $h(X_1,\dots,X_m)$ 对称且 $\mathbb E[|h(X_1,\dots,X_m)|]<\infty$ ，那么
+\[
+U_n-\theta=\sum_{r=1}^m\binom mr\widetilde U_{n,r}.
+\]
+
+其中 $\widetilde U_{n,r}$ 是一个以 $g_r(x_1,\dots,x_r)$ 为核、期望为 0 的 U-统计量，
+\[g_r(x_1,x_2,\dots,x_r)=\sum_{c=0}^r(-1)^{r-c}\sum_{1\le j_1<\cdots<j_c\le r}h_c(x_{j_1},\dots,x_{j_c}),\quad r=1,\dots,m\]
+这里 $h_c$ 定义同前文： $h_0=\theta$ 、 $h_r(x_1,\dots,x_r)=\mathbb E[h(x_1,\dots,x_r,X_{r+1},\dots,X_{m})]$ ， $r=1,\dots,m$ 。
+
+我们继续利用退化性质：核 $g_r$ 满足：对任意的 $c<r$ ，
+\[
+\mathbb E[g_r(x_1,\dots,x_c,X_{c+1},\dots,X_r)]=\mathbb E[g_r(X_1,\dots,X_r)|X_1=x_1,\dots,X_c=x_c]=0.
+\]
+
+因此，当 $r\ge 2$ 时，引理~\ref{lem:ch10:u-statistic-hoeffding-decomposition} 中的每个 $U_{n,r}$ 都是 $r-1$ 阶退化的 U-统计量。根据推论~\ref{cor:ch10:u-statistic-variance-order}，
+\[
+\mathrm{Var}[\widetilde U_{n,r}]=\frac{r!}{n^r}\mathrm{Var}[g_r(X_1,\dots,X_r)]+O\left(\frac1{n^{r+1}}\right).
+\]
+
+特别地，在 U-统计量 $r-1$ 阶退化时，我们展开到 $r$ 阶项，能得到如下结论：
+
+\end{lemma}
+
+\begin{corollary}[Hoeffding 分解]\label{cor:ch10:hoeffding-decomposition}
+若 $U_n$ 一阶退化，即 $\xi_1=\mathrm{Var}[h_1(X)]=0$，那么 $U_n-\theta=\binom m2\widetilde U_{n,2}+R_n$。
+
+其中
+\[
+\widetilde U_{n,2}=\binom n2^{-1}\sum_{1\le j_1<j_2\le n}(h_2(X_{j_1},X_{j_2})-\theta).
+\]
+
+是一个均值为 0 的、一阶退化的 U-统计量；余项 $R_n$ 满足 $\mathbb E[R_n]=0$ 、 $\mathrm{Var}[R_n]=O(n^{-3})$ 。
+
+更一般地，若 $U_n$ 是 $r-1$ 阶退化的，即 $\xi_1=\cdots=\xi_{r-1}=0$ ，那么 $U_n-\theta=\binom mr\widetilde U_{n,r}+R_n$
+
+其中
+\[
+\widetilde U_{n,r}=\binom nr^{-1}\sum_{1\le j_1<\cdots<j_r\le n}(h_r(X_{j_1},\dots,X_{j_r})-\theta).
+\]
+
+是一个均值为 0 的、$r-1$ 阶退化的 U-统计量。余项 $R_n$ 满足 $\mathbb E[R_n]=0$、$\mathrm{Var}[R_n]=O(n^{-r-1})$。
+\end{corollary}
+
+\subsection{积分算子与谱分解}
+
+根据推论~\ref{cor:ch10:hoeffding-decomposition}，为了得出 $U_n$ 一阶退化条件下的渐近分布，我们需要转而研究 $\widetilde U_{n,2}$ 的渐近分布。这里需要引入一个工具：\textbf{\emph{Hilbert‑Schmidt 算子}} 。设 $X_1,\dots,X_n\sim P$ i.i.d. 取值于 $(\mathscr X,\mathscr B_x)$ ， $\widetilde h_2(x_1,x_2)=h(x_1,x_2)-\theta$ ，且
+\[
+\mathbb E\big[\widetilde h^2_2(X_1,X_2)]=\mathrm{Var}[h_2(X_1,X_2)]=\xi_2<\infty.
+\]
+
+那么以 $\widetilde h_2$ 为核的 Hilbert‑Schmidt 算子 $T$ 定义为
+\[\psi\mapsto T\psi= \int_{\mathscr X}\widetilde h_2(x,y)\psi (y)\mathrm dP(y),\quad \psi\in L^2(\mathscr X,\mathscr B_x,P)\]
+它是一个紧的自伴算子，并且 \textbf{\emph{Hilbert-Schmidt 定理}} 断言，该算子存在 (至多) 可数多个非零实数特征值 $\{\lambda_k\}_{k=1}^\infty$ ， $\textstyle\sum_{k=1}^\infty\lambda^2_k=\xi_2$ ，以及对应的 $L^2(\mathscr X,\mathscr B_x,P)$ 中的一组标准正交基 $\{\phi_i\}_{i=1}^\infty$ ，
+\[\int_{\mathscr X}\phi_i(x)\phi_j(x)\mathrm dP(x)=\delta_{ij}=\begin{cases}0,&\text{ 若 }i\ne j\\1,&\text { 若 }i=j\end{cases}\]
+使得
+\[T\phi_k=\lambda_k\phi_k,\quad \text{ 即 }\int_{\mathscr X}\widetilde h_2(x,y)\phi_k(y)\mathrm dP(y)=\lambda_k\phi_k(x)\enspace \text{a.e.}x,\quad k=1,2,\dots\]
+核函数 $\widetilde h_2$ 可以展开成
+
+\begin{equation}
+\label{eq:ch10b:tag-5}
+\widetilde h_2(x,y)\sim\sum_{k=1}^\infty\lambda_k\phi_k(x)\phi_k(y)
+\end{equation}
+
+上式的``\textasciitilde{}''应理解成 $L^2$ 收敛，即，
+\[\lim_{K\to\infty}\mathbb E_P\left[\left(\widetilde h_2(X_1,X_2)-\sum_{k=1}^K\lambda_i\phi_k(X_1)\phi_k(X_2)\right)^2\right]=0\]
+例如，读者可以参考 \cite{steinshakarchi2009} 一书的 §4.6 以及 Exercise 4.34。如果核是正定的，那么根据 Mercer 定理，可以得到一致收敛，但我们这里不需要这么强的结论。
+
+通过式~\eqref{eq:ch10b:tag-5} 还能推出
+
+\begin{equation}
+\label{eq:ch10b:tag-6}
+\widetilde h_1(x)\sim\sum_{k=1}^\infty\lambda_k\phi_k(x)\mathbb E[\phi_k(X)]
+\end{equation}
+
+这是因为由 $\widetilde h_1(x)=\mathbb E_P[\widetilde h_2(x,X_2)]$ a.s. 和 Jensen 不等式，\[\lim_{K\to\infty}\mathbb E_P\left[\left(\widetilde h_1(X_1)-\sum_{k=1}^K\lambda_k\phi_k(X_1)\mathbb E_P[\phi_k(X_2)]\right)^2\right]\le\lim_{K\to\infty}\mathbb E_P\left[\left(\widetilde h_2(X_1,X_2)-\sum_{k=1}^K\lambda_k\phi_k(X_1)\phi_k(X_2)\right)^2\right]=0.\]
+在一阶退化 $\xi_1=0$ 情形下， $\widetilde h_1(x)\equiv 0$ ，根据式~\eqref{eq:ch10b:tag-6} ，有
+
+\begin{equation}
+\label{eq:ch10b:tag-7}
+\mathbb E[\phi_k(X)]=0,\quad k=1,2,\dots
+\end{equation}
+
+\subsection{一阶退化情形下的渐近分布}
+
+在一阶退化情形下， $U_n-\theta=O_P(n^{-1})$ ，我们期望有
+\[
+n(U_n-\theta)\overset{\rm d}\to \text{ 某个渐近分布 },\quad \text{ 当 }n\to\infty.
+\]
+
+这个渐近分布的形式比较复杂，证明也比较长，总的思路如下：
+
+\begin{itemize}
+\tightlist
+\item
+  利用推论~\ref{cor:ch10:hoeffding-decomposition}，由于余项满足 $\mathbb E[(nR_n)^2]=O(n^{-1})\to 0$ 可知 $nR_n=o_P(1)$ ，所以由 Slutsky 定理，在分析渐近分布时可以把 $R_n$ 忽略，要找 $U_n$ 的渐近分布，只需考察 $\widetilde U_{n,2}$ 即可。在后面的证明中，这转化为证明 $T_n$ 有渐近分布 $Y$ 。
+\item
+  使用特征函数的方法，证明 $\mathbb E_P[e^{ixT_n}]$ 逐点收敛至 $\mathbb E[e^{ixY}]$ 。
+\item
+  用式~\eqref{eq:ch10b:tag-5} 的展开式，对 $T_n$ 中的 $\widetilde h_2(x,y)$ 项取前 $K$ 项和的截断，截断后记作 $T_{n,K}$ ，并表明 $T_{n,K}$ 当 $n\to\infty$ 时有渐近分布 $Y_K$ 。
+\item
+  当 $K\to\infty$ 时， $Y_K$ 均方收敛的极限是 $Y$ 。
+\item
+  分别控制 $T_n-T_{n,K}$ 、 $T_{n,K}-Y_K$ 、 $Y_K-Y$ 三部分差距，从而证明 $T_n\overset{\rm d}\to Y$ 。
+\end{itemize}
+
+\begin{theorem}[U-统计量的渐近分布：一阶退化情形]\label{thm:ch10:u-statistic-degenerate-limit}
+
+设 $U_n$ 是基于 i.i.d. 样本 $X_1,\dots,X_n\sim P$ 的 U-统计量，核函数 $h(X_1,\dots,X_m)$ 对称且 $\mathbb E_P[h^2(X_1,\dots,X_m)]<\infty$ 。若 $\xi_1=0$ 但 $\xi_2>0$ ，那么
+\[n(U_n-\mathbb E[U_n])\overset{\rm d}\to \frac{m(m-1)}{2}\sum_{k=1}^\infty\lambda_k(\chi^2_{1,k}-1)\]
+其中 $\{\chi_{1,k}^2\}_{k=1}^\infty$ 是 i.i.d. $\chi^2_1$ 随机变量，常数 $\lambda_k$ 满足 $\textstyle\sum_{k=1}^\infty \lambda_k^2=\xi_2$ 。
+
+\end{theorem}
+
+\begin{proof}
+
+根据前文分析，我们只需证明 $n\binom m2\widetilde U_{n,2}=\frac{m(m-1)}{n-1}\sum_{1\le j_1<j_2\le n}\widetilde h_2(X_{j_1},X_{j_2})$ 有渐近分布 $\tfrac{m(m-1)}{2}Y$ ，其中 $Y:=\sum_{k=1}^\infty\lambda_k(W_k^2-1)$，且 $W_k\sim \mathcal N(0,1)$ i.i.d.。定义 $T_n:=\frac1n\sum_{i\ne j}\widetilde h_2(X_i,X_j)$。
+
+则只需证 $n\to\infty$ 时 $T_n\overset{\rm d}\longrightarrow Y$。考虑用 Lévy 连续定理，即证明特征函数的逐点收敛：
+\[
+\mathbb E_P[e^{ixT_n}]\to\mathbb E[e^{ixY}],\quad \text{ 当 }n\to\infty,\ \forall x.
+\]
+
+要证明这一点，还需考虑截断技巧。从式~\eqref{eq:ch10b:tag-5} 出发，对任意固定的正整数 $K$ ，定义式~\eqref{eq:ch10b:tag-5}的有限和，
+\[\tilde{h}_{2,K}(x,y) := \sum_{k=1}^{K} \lambda_k \phi_k(x) \phi_k(y)\]
+其中 $\lambda_k$ 和 $\phi_k$ 来自上一节的 Hilbert-Schmidt 定理。由式~\eqref{eq:ch10b:tag-7}，有
+
+\begin{itemize}
+\tightlist
+\item
+  $\mathbb{E}[\phi_k(X_1)\phi_k(X_2)] = \mathbb{E}[\phi_k(X_1)]\mathbb{E}[\phi_k(X_2)] = 0$ ，说明 $\mathbb E[\widetilde h_{2,K}(X_1,X_2)]=0$ ；
+\item
+  $\mathbb{E}[\phi_k(X_1)\phi_k(X_2)|X_1] = \phi_k(X_1) \mathbb{E}[\phi_k(X_2)] = 0$ a.s.，说明 $\mathbb E[\widetilde h_{2,K}(X_1,X_2)|X_1]=0$ a.s.。
+\end{itemize}
+
+这表明 $\widetilde h_{2,K}(x,y)$ 和 $\widetilde h_2(x,y)$ 一样，也是均值为 0、一阶退化的二阶核函数。
+
+再记
+
+\begin{equation}
+\label{eq:ch10b:tag-8}
+\begin{aligned} T_{n,K} &:= \frac{1}{n} \sum_{i\neq j} \tilde{h}_{2,K}(X_i,X_j) \\ &= \sum_{k=1}^{K} \lambda_k \left( \frac{1}{n} \sum_{i\neq j} \phi_k(X_i)\phi_k(X_j) \right)\\ &=\sum_{k=1}^{K} \lambda_k \left( \frac{1}{n} \left( \sum_{i=1}^{n} \phi_k(X_i) \right)^2 - \frac{1}{n} \sum_{i=1}^{n} \phi_k^2(X_i)\right)\\ &= \sum_{k=1}^{K} \lambda_k \bigl( W_{kn}^2 - Z_{kn} \bigr) \end{aligned}
+\end{equation}
+
+其中 
+$$W_{kn} := \frac{1}{\sqrt{n}} \sum_{i=1}^{n} \phi_k(X_i), \qquad Z_{kn} := \frac{1}{n} \sum_{i=1}^{n} \phi_k^2(X_i)$$
+
+此时截断的好处立现：
+\begin{itemize}
+\tightlist
+\item
+  由 $\mathbb E[\phi_k(X)]=0$ 、 $\mathbb E[\phi_k^2(X)]=1$ 和多维中心极限定理，对任意固定的 $K$， 
+  $$(W_{1n}, \dots, W_{Kn}) \overset{\rm d}\longrightarrow (W_1, \dots, W_K)\sim \mathcal N(0,\mathbf I_{K\times K})$$
+\item
+  由强大数律，对任意固定的 $K$， $(Z_{1n},\dots,Z_{Kn})\overset{\text{a.s.}}\longrightarrow (1,\dots,1)$
+\end{itemize}
+
+从而，式~\eqref{eq:ch10b:tag-8} 给出：
+\begin{equation}
+\label{eq:ch10b:tag-9}
+T_{n,K} \overset{\rm d}\to \sum_{k=1}^{K} \lambda_k (W_k^2 - 1) =:Y_K
+\end{equation}
+下一步我们要控制截断误差。令 $g_K(x,y) := \widetilde{h}_2(x,y) - \widetilde{h}_{2,K}(x,y)$，则
+
+$$T_n - T_{n,K} = \frac{1}{n} \sum_{i\neq j} g_K(X_i,X_j)$$
+或者说，
+\[U_{nK}:=\frac1{n-1}(T_n - T_{n,K}) = \frac1{n-1}\frac{1}{n} \sum_{i\neq j} g_K(X_i,X_j)=\binom n2^{-1}\sum_{1\le i<j\le n}g_K(X_i,X_j)\]
+是一个以 $g_K$ 为核的 U-统计量！考察其性质：
+
+\begin{itemize}
+\tightlist
+\item
+  $\mathbb{E}[g_K(X_1,X_2)] = 0$，$\mathbb{E}[g_K(X_1,X_2)|X_1] = 0$ a.s.，
+
+\begin{itemize}
+  \tightlist
+  \item
+    ------ 这是因为 $\widetilde h_2(x,y)$ 和 $\widetilde h_{2,K}(x,y)$ 都满足均值为 0、一阶退化， $g_K$ 作为二者之差自然满足。
+  \end{itemize}
+\item
+  $\mathbb{E}[g_K^2(X_1,X_2)] = \sum_{k=K+1}^{\infty} \lambda_k^2$，
+
+\begin{itemize}
+  \tightlist
+  \item
+    ------ 这是因为根据式~\eqref{eq:ch10b:tag-5} ，在 $L_2$ 收敛的意义下， $g_K(x,y)\sim\sum_{k=K+1}^{\infty} \lambda_k \phi_k(x) \phi_k(y)$，这推出
+    \[    \begin{aligned} \mathbb{E}\bigl[ g_K^2(X_1,X_2) \bigr] &= \mathbb{E}\left[ \left( \sum_{k=K+1}^{\infty} \lambda_k \phi_k(X_1)\phi_k(X_2) \right)^2 \right] \\ &= \sum_{k=K+1}^{\infty} \sum_{l=K+1}^{\infty} \lambda_k \lambda_l \, \mathbb{E}\bigl[ \phi_k(X_1)\phi_l(X_1) \bigr] \, \mathbb{E}\bigl[ \phi_k(X_2)\phi_l(X_2) \bigr] \\ &=\sum_{k=K+1}^{\infty} \lambda_k^2(\underbrace{\mathbb E[\phi_k^2(X)]}_{1})^2\\ &= \sum_{k=K+1}^{\infty} \lambda_k^2. \end{aligned}
+    \]  \end{itemize}
+\end{itemize}
+
+总之， $g_K$ 也是一阶退化的二阶核。由定理~\ref{thm:ch10:u-statistic-variance} 的方差公式， $U_{nK}$ 的方差为
+\[
+\mathrm{Var}[U_{nK}]
+=\frac{2}{n(n-1)}\mathbb{E}[g_K^2(X_1,X_2)]
+=\frac{2}{n(n-1)}\sum_{k=K+1}^\infty\lambda_k^2.
+\]
+
+于是
+\[\mathbb {E}[(T_n-T_{n,K})^2]=(n-1)^2\mathrm{Var}[U_{nK}]=2\frac{n-1}{n}\sum_{k=K+1}^\infty\lambda_k^2\le 2\sum_{k=K+1}^\infty\lambda_k^2\]
+下面我们对特征函数的收敛进行论证。
+
+\begin{itemize}
+\tightlist
+\item
+  利用 $|e^{i x} - 1| \le |x|$ 以及 Cauchy-Schwarz 不等式， $T_n$ 和 $T_{n,K}$ 的特征函数之差满足
+  \[  |\mathbb{E}[e^{ixT_n}]-\mathbb{E}[e^{ixT_{n,K}}]| \le |x| \,\mathbb{E}[|T_n - T_{n,K}|] \le |x| \sqrt{\mathbb{E}[(T_n - T_{n,K})^2]} \le |x| \sqrt{2\sum_{k>K} \lambda_k^2}.
+  \]  固定任意 $x$ 和任意 $\epsilon > 0$，由于 $\textstyle\sum_{k=1}^{\infty} \lambda_k^2 < \infty$，可以选择 $K$ 充分大使得上式右侧不超过 $\tfrac \epsilon 3$。
+\item
+  对上述固定的 $K$，由式~\eqref{eq:ch10b:tag-9}，可以选择 $n$ 充分大使得 $|\mathbb{E}[e^{i x T_{n,K}}]-\mathbb{E}[e^{i x Y_{K}}]| \le \tfrac\epsilon3$ 。
+\item
+  最后，
+  \[  \mathbb{E}\bigl[ (Y - Y_K)^2 \bigr] = \sum_{k=K+1}^{\infty} \lambda_k^2 \underbrace{\mathbb{E}\bigl[ (W_k^2 - 1)^2 \bigr] }_{2} =2 \sum_{k=K+1}^{\infty} \lambda_k^2.
+  \]  所以
+  \[  \bigl| \mathbb{E}[e^{i x Y_K}] - \mathbb{E}[e^{i x Y}] \bigr| \le |x| \, \mathbb{E}[|Y_K - Y|] \le |x| \sqrt{ \mathbb{E}[(Y_K - Y)^2] } = |x| \sqrt{ 2\sum_{k=K+1}^{\infty} \lambda_k^2 }.
+  \]  同样，可以选择 $K$ 充分大使得上式右侧不超过 $\tfrac \epsilon 3$。
+\end{itemize}
+
+综上，对任意 $\epsilon$，先取充分大的 $K$，再取充分大的 $n$，便有\[\begin{aligned} &\bigl| \mathbb{E}[e^{i x T_n}] - \mathbb{E}[e^{i x Y}] \bigr| \\ \le\ & \bigl| \mathbb{E}[e^{i x T_n}] - \mathbb{E}[e^{i x T_{n,K}}] \bigr| + \bigl| \mathbb{E}[e^{i x T_{n,K}}] - \mathbb{E}[e^{i x Y_K}] \bigr| + \bigl| \mathbb{E}[e^{i x Y_K}] - \mathbb{E}[e^{i x Y}] \bigr| \\ \le\ & \frac{\epsilon}{3} + \frac{\epsilon}{3} + \frac{\epsilon}{3} \\ =\ & \epsilon. \end{aligned}\]从而完成证明。
+
+\end{proof}
+
+\subsection{一般的退化情形}
+
+（本节仅作扩展阅读，读者完全可以跳过。）
+
+我们观察定理~\ref{thm:ch10:u-statistic-degenerate-limit} 的证明，结论中的 `` $\chi_{1,k}^2-1$ ''这一形式来自于式~\eqref{eq:ch10b:tag-9} ，而式~\eqref{eq:ch10b:tag-9} 又源自于式~\eqref{eq:ch10b:tag-8} 中 $\widetilde h_{2,K}$ 的形式。下面的例子更直观：
+
+\begin{example}[总体均值平方的 U-统计量]\label{ex:ch10:mean-square}
+考虑估计总体均值的平方 $\mu^2$ ，取核函数为 $h(x_1,x_2)=x_1x_2$ ，
+\[U^{(2)}_n=\binom n2^{-1}\sum_{1\le i<j\le n}h(X_i,X_j)=\frac2{n(n-1)}\sum_{1\le i<j\le n} X_iX_j\]
+则 $h_1(x)=\mu x$ 、 $\xi_1=\mathrm{Var}_P[\mu X]=\mu^2\sigma^2$ ，这里设总体方差总满足 $0<\sigma^2<\infty$ ，那么 U-统计量退化当且仅当 $\mu=0$ ：
+
+\begin{itemize}
+\tightlist
+\item
+  若 $\mu\ne 0$ ，则由定理~\ref{thm:ch10:u-statistic-nondegenerate-clt}， $\sqrt n(U^{(2)}_n-\mu^2)\overset{\rm d}\to \mathcal N(0,4\mu^2\sigma^2)$ ；
+\item
+  若 $\mu=0$ ，则极限分布直接计算得出：
+  \[  nU^{(2)}_n = \frac{1}{n-1} \sum_{i\neq j} X_i X_j = \frac{n\sigma^2}{n-1}\underbrace{\frac{ n\bar{X}_n^2}{\sigma^2}}_{\overset{\rm d}\to\chi_1^2} - \frac{n}{n-1} \cdot \underbrace{\frac{1}{n}\sum_i X_i^2}_{\overset P\to\sigma^2}\overset{\rm d}\to\sigma^2(\chi_1^2-1).
+  \]\end{itemize}
+
+\begin{remark}
+该例同时表明，分布 $P$ 本身会影响 U-统计量是否退化。
+\end{remark}
+
+
+可见：当 $\mu=0$ 、 $\sigma^2=1$ 时，取形如 $h(x_1,x_2)=x_1x_2$ 的核，就是会得到 $nU_n^{(2)}$ 有 $\chi_1^2-1$ 的极限分布，它是标准正态分布在 $\mathrm{He}_2(x)=x^2-1$ 下的变换。
+
+之所以要举这个例子，是因为可以将之向更高阶推广：以下均假设 $\mu=0$ 、 $\sigma^2=1$ ，记 $\textstyle a_{n,r}:=\frac1n\sum_{j=1}^nX_j^r$ 代表样本 $r$ 阶矩，
+
+\begin{itemize}
+\tightlist
+\item
+  设 $\mathbb E[X^3]<\infty$ ，取核函数为 $h(x_1,x_2,x_3)=x_1x_2x_3$ 的 U-统计量 $U_n^{(3)}$ ，那么
+  \[
+  \begin{aligned}
+  \mathbb E[h(X_1,X_2,X_3)]
+  &=\mathbb E[h(X_1,X_2,X_3)|X_1]\\
+  &=\mathbb E[h(X_1,X_2,X_3)|X_1,X_2]=0.
+  \end{aligned}
+  \]
+  这是一个二阶退化的核。且
+\end{itemize}
+\[\begin{aligned} n^{3/2}U^{(3)}_n&=\frac {n^{1/2}}{(n-1)(n-2)}\sum_{j_1,j_2,j_3\text{ 互不相同 }}X_{j_1}X_{j_2}X_{j_3}\\ &= \frac{ n^{1/2} }{ (n-1)(n-2) }\Big(n^3 a_{n,1}^3 - 3n^2 a_{n,1} a_{n,2} + 2n a_{n,3}\Big)\\ &=\Big((\sqrt na_{n,1})^3-3(\sqrt na_{n,1})a_{n,2}\Big)+o_P(1)\\ &\overset{\rm d}\to W^3-3W \end{aligned}\]
+其中 $W\sim\mathcal N(0,1)$ ，故极限分布是标准正态分布在 $\mathrm{He}_3(x)=x^3-3x$ 下的变换。 - 设 $\mathbb E[X^4]<\infty$ ，取核函数为 $h(x_1,x_2,x_3,x_4)=x_1x_2x_3x_4$ 的 U-统计量 $U_n^{(4)}$ ，它三阶退化，且
+\[\begin{aligned} n^{2}U^{(4)}_n &= \frac{n}{(n-1)(n-2)(n-3)} \sum_{j_1,j_2,j_3,j_4\text{ 互不相同}} X_{j_1}X_{j_2}X_{j_3}X_{j_4} \\ &= \frac{n}{(n-1)(n-2)(n-3)} \Bigl( n^4 a_{n,1}^4 - 6n^3 a_{n,1}^2 a_{n,2} + 3n^2 a_{n,2}^2 + 8n^2 a_{n,1}a_{n,3} - 6n a_{n,4} \Bigr) \\ &=\Big((\sqrt n a_{n,1})^2-6(\sqrt n a_{n,1})^2a_{n,2}+3a_{n,2}^2\Big)+o_P(1)\\ &\overset{\rm d}\to W^4 - 6W^2 + 3  \end{aligned}\]
+故极限分布是标准正态分布在 $\mathrm{He}_4(x)=x^4-6x^2+3$ 下的变换。
+
+一般地，设 $\mathbb{E}[X^r]<\infty$ ，那么取核函数 $h(x_1,\dots,x_r)=x_1\dots x_r$ 的 U-统计量 $U_n^{(r)}$ 是 $r-1$ 阶退化的，
+
+\begin{equation}
+\label{eq:ch10b:tag-10}
+n^{r/2}U^{(r)}_n\overset{\rm d}\to \mathrm{He}_r(W)
+\end{equation}
+
+其中 $\mathrm{He}_r(x)$ 是 $r$ 阶 \href{https://en.wikipedia.org/wiki/Hermite_polynomials}{Hermite 多项式}。
+为什么会冒出来个 Hermite 多项式？我们简单归纳地推导一下，由 \href{https://en.wikipedia.org/wiki/Newton%27s_identities}{Newton 恒等式}， $na_{n,r}-\binom n1 U_n^{(1)} na_{n,r-1}+\binom n2 U_n^{(2)}na_{n,r-2}+\cdots+(-1)^{r-1}\binom n{r-1}U_n^{(r-1)}na_{n,1}+(-1)^rr\binom nrU_n^{(r)}=0$ 有
+
+\begin{equation}
+\label{eq:ch10b:tag-11}
+n^{r/2}U_n^{(r)} = \frac{n^{r/2}}{r \binom{n}r} \sum_{k=0}^{r-1} (-1)^{r+k-1} \binom{n}k U_n^{(k)} na_{n,r-k}
+\end{equation}
+
+其中约定 $U_n^{(0)}=1$ 。
+
+利用 $U_n^{(k)}=O_P(n^{-k/2}),\ k=0,1,\dots,r-1$ ，可以看出，式~\eqref{eq:ch10b:tag-11} 右侧各项
+
+\begin{itemize}
+\tightlist
+\item
+  对 $k=r-1$ 项，该项的阶为 
+  $$n^{r/2}\binom nr^{-1}\binom n{r-1} U_n^{(r-1)}n\underbrace{a_{n,1}}_{O_P(n^{-1/2})}=O_P(n^{(r-1)/2})U_n^{(r-1)}=O_P(1)$$
+
+\begin{itemize}
+  \tightlist
+  \item
+    ------ 用归纳假设 $n^{(r-1)/2}U_n^{(r-1)}\overset{\rm d}\to \mathrm{He}_{r-1}(W)$ ，这一项的渐近分布为 
+    $$\frac{n}{n-r+1}(\sqrt na_{n,1})n^{(r-1)/2}U_n^{(r-1)}\overset{\rm d}\to W\mathrm{He}_{r-1}(W)$$
+  \end{itemize}
+\item
+  对 $k=r-2$ 项，该项的阶为 
+  $$n^{r/2}\binom nr^{-1}\binom n{r-2}U_n^{(r-2)}n\underbrace{a_{n,2}}_{\overset{P}\to1}=O_P(n^{(r-2)/2})U_n^{(r-2)}=O_P(1)$$
+
+\begin{itemize}
+  \tightlist
+  \item
+    ------ 用归纳假设 $n^{(r-2)/2}U_n^{(r-2)}\overset{\rm d}\to \mathrm{He}_{r-2}(W)$ ，这一项的渐近分布为 
+    $$-(r-1)\frac{n^2}{(n-r+1)(n-r+2)}\underbrace{a_{n,2}}_{\overset P\to 1}n^{(r-2)/2}U_n^{(r-1)}\overset{\rm d}\to -(r-1)\mathrm{He}_{r-2}(W)$$
+  \end{itemize}
+\item
+  对 $k=0,1,\dots,r-3$ 项，这些项的阶都是 
+  $$n^{r/2}\binom nr^{-1}\binom nk \underbrace{U_n^{(k)}}_{O_P(n^{-k/2})}n\underbrace{a_{n,r-k}}_{O_P(1)}=O_P(n^{(k+2-r)/2})=o_P(1)$$
+
+\begin{itemize}
+  \tightlist
+  \item
+    所以 $n\to\infty$ 时，这些项都可以忽略。
+  \end{itemize}
+\end{itemize}
+
+综上，式~\eqref{eq:ch10b:tag-11} 在取极限后，
+$$U_n^{(r)}\overset{\rm d}\to W\mathrm{He}_{r-1}(W)-(r-1)W\mathrm{He}_{r-2}(W)=\mathrm{He}_r(W)$$
+
+这正是 Hermite 多项式的递推 ！
+
+\begin{remark}
+
+\begin{itemize}
+\tightlist
+\item
+  还有一种理解： $U_n^{(r)}$ 的 $r-1$ 阶退化性质决定了它与所有仅依赖于 $r-1$ 个样本的函数正交，从而，它与所有 $U_n^{(r-1)},\dots,U_n^{(1)}$ 正交。在极限情形下，它们所得到的分布作为 $W$ 的函数，我们直觉上期望也满足正交性质；而 Hermite 多项式正好如此。
+\item
+  需要指出的是，实际上，上文中 $\mathbb E[X^r]<\infty$ 的条件（包括前两例中的 $\mathbb E[X^3]<\infty$ 、 $\mathbb E[X^4]<\infty$ ）都是不必要的。因为根据 Marcinkiewicz-Zygmund 大数律 ：对 $\mu=0,\ \sigma^2=1$的总体以及 $r>2$ ，总有 $a_{n,r}=o_P(n^{r/2-1})$ ，换言之： \[ \frac{1}{n^{r/2}}\sum_{j=1}^nX_j^r\overset{P}\to 0 \]此时前述结论仍然成立。
+\end{itemize}
+\end{remark}
+
+我们在式~\eqref{eq:ch10b:tag-10} 的基础上继续：显见，若核函数形如
+\[
+h(x_1,\dots,x_r)=f(x_1)f(x_2)\cdots f(x_r)=f^{\otimes r}(x_1,\dots,x_r),
+\]
+
+且 $\mathbb E[f(X)]=0$ 、 $\mathbb E[f^2(X)]=1$ ，那么需将前文推导中的 $X_j$ 替换为 $f(X_j)$ 、 $a_{n,r}$ 替换为 $\textstyle\frac1n\sum_{j=1}^nf^r(X_j)=\mathbb P_nf^r$ ，应有与式~\eqref{eq:ch10b:tag-10} 一模一样的结论。
+
+下面考虑一般的 $r-1$ 阶退化 U-统计量 $U_n$ 。根据推论~\ref{cor:ch10:hoeffding-decomposition} 的 Hoeffding 分解，我们可以用 $\binom mr \widetilde U_{n,r}$ 的分布近似之，因此直接考虑找 $\widetilde U_{n,r}$ 的渐近分布。仍然假设 $\mathbb {E}[\widetilde h_r^2(X_1,\dots,X_r)]<\infty$ 。
+
+取 $L^2(\mathscr X,\mathscr B_x,P)$ 的一列 (非常数的) 标准正交基 $\{f_k\}_{k=1}^\infty$ ，则 $\widetilde h_r$ 可以展开为
+\[\widetilde{h}_r(x_1,\dots,x_r) \sim \sum_{k_1,\dots,k_r \ge 1} \lambda_{k_1,\dots,k_r} \prod_{j=1}^r f_{k_j}(x_j)\]
+其中 $\lambda_{k_1,\dots,k_r}=\langle \widetilde h_r,f_{k_1}\otimes \cdots\otimes f_{k_r}\rangle$ 。
+
+记 $k:=(k_1,\dots,k_r)$ ，其中出现的不同指标有 $d(k)$ 个，每个指标出现 $a_i(k)$ 次， $\textstyle\sum_{i=1}^{d(k)}a_i(k)=r$ 。对每个固定的 $k$ ，根据 式~\eqref{eq:ch10b:tag-10}的结论：每个重复了 $a_i(k)$ 次的函数，就会在 $\textstyle \prod_{j=1}^r f_{k_j}(x_j)$ 的极限分布中贡献一个 $\mathrm{He}_{a_i(k)}(W_i)$ ，而不同函数之间的贡献是独立的；因此，最终的极限分布应该形如
+\[n^{r/2}\widetilde U_{n,r} \overset{\rm d}\longrightarrow \sum_{k_1,\dots,k_r\ge 1} \langle \widetilde h_r,\, f_{k_1}\otimes\cdots\otimes f_{k_r}\rangle \; \prod_{i=1}^{d(k)} \mathrm{He}_{a_i(k)}(W_i)\]
+其中 $W_i\sim \mathcal N(0,1)$ i.i.d.。
+
+\end{example}
+
+\subsection{两样本 U-统计量的结论}
+
+两样本 U-统计量的概念已在第~\ref{ch:u-statistics}~章介绍。对全体独立的样本 $X_1,\dots,X_{n_1}\sim P$、$Y_1,\dots,Y_{n_2}\sim Q$，两样本 U-统计量如下。
+\[U_{n_1,n_2}:={\binom {n_1}{m_1}}^{-1}{\binom{n_2}{m_2} }^{-1}\sum_{1\le \alpha_1<\cdots<\alpha_{m_1}\le n_1}\sum_{1\le \beta_1<\cdots<\beta_{m_2}\le n_2}h\big(X_{\alpha_1},\dots,X_{\alpha_{m_1}};Y_{\beta_1},\dots,Y_{\beta_{m_2}}\big).\]其中核函数对 $X$ 和 $Y$ 两部分分别对称。相关的结论，与一样本 U 统计量大抵接近。例如，记
+\begin{align*}
+h_{c_1,c_2}(x_1,\dots,x_{c_1};y_1,\dots,y_{c_2})
+&:=\mathbb E[h(x_1,\dots,x_{c_1},X_{c_1+1},\dots,X_{m_1};y_1,\dots,y_{c_2},Y_{c_2+1},\dots,Y_{m_2})],\\
+\xi_{c_1,c_2}&:=\mathrm{Var}_{P,Q}[h_{c_1,c_2}(X_1,\dots,X_{c_1},Y_1,\dots,Y_{c_2})].
+\end{align*}
+
+那么，当 $\mathbb E[h^2(X_1,\dots,X_{m_1};Y_1,\dots,Y_{m_2})]<\infty$ 时，对应于定理~\ref{thm:ch10:u-statistic-variance}，有方差公式
+\[\mathrm{Var}_{P,Q}[U_{n_1,n_2}] = \binom{n_1}{m_1}^{-1}\binom{n_2}{m_2}^{-1} \sum_{c_1=0}^{m_1}\sum_{c_2=0}^{m_2} \binom{m_1}{c_1}\binom{m_2}{c_2}\binom{n_1-m_1}{m_1-c_1}\binom{n_2-m_2}{m_2-c_2}\xi_{c_1,c_2}\]
+对应于推论~\ref{cor:ch10:u-statistic-variance-order}，当 $n_1,n_2$ 大时，
+\[\mathrm{Var}_{P,Q}[U_{n_1,n_2}] =\frac{m_1^2}{n_1}\xi_{10}+\frac{m^2_2}{n_2}\xi_{01}+O\left(\frac1{n_1^2}+\frac1{n_2^2}\right)\]
+对应于定理~\ref{thm:ch10:u-statistic-nondegenerate-clt}，有渐近正态性：
+
+\begin{theorem}[两样本 U-统计量的渐近正态性：非退化情形]\label{thm:ch10:two-sample-u-statistic-clt}
+
+设 $\mathbb E[h^2(X_1,\dots,X_{m_1};Y_1,\dots,Y_{m_2})]<\infty$ ，且 $\xi_{10}>0$ 、 $\xi_{01}>0$ ，那么当 $n_1\to\infty,n_2\to\infty$ 时，
+\[
+\sqrt{n_1+n_2}\bigl(U_{n_1,n_2}-\mathbb E[U_{n_1,n_2}]\bigr)
+\overset{\rm d}\longrightarrow
+\mathcal N\left(0,(n_1+n_2)\left(
+\frac{m_1^2}{n_1}\xi_{10}+\frac{m_2^2}{n_2}\xi_{01}
+\right)\right).
+\]
+
+\end{theorem}
+
+\begin{proof}
+证明与定理~\ref{thm:ch10:u-statistic-nondegenerate-clt} 如出一辙，也是利用 Hájek 投影
+$$\widetilde{U}_{n_1,n_2} = \theta + \frac{m_1}{n_1} \sum_{i=1}^{n_1} h_{1,0}(X_i) + \frac{m_2}{n_2} \sum_{j=1}^{n_2} h_{0,1}(Y_j)$$
+其余步骤不再赘述。
+
+\end{proof}
+
+\section{U-统计量的例子（续）}
+
+当我们面对一个 U-统计量时，可以按照下述固定的程序，对其进行分析：
+
+\begin{itemize}
+\tightlist
+\item
+  确定核 $h$ 与目标参数 $\theta=\mathbb E[h(X_1,\dots,X_m)]$ ；如若必要，将 $h$ 对称化。
+\item
+  计算 $h_1(x)=\mathbb{E}[h(X_1,\dots,X_m)|X_1=x]$ ，并计算 $\xi_1=\mathrm{Var}[h(X)]$ 。
+\item
+  若 $\xi_1>0$ ，用定理~\ref{thm:ch10:u-statistic-nondegenerate-clt} 获得渐近分布是正态的，且渐近方差为 $m^2\xi_1/n$ ；当 $\xi_1$ 未知时，可以先估计 $\xi_1$ ，再用于解决置信区间/假设检验问题。
+\item
+  若 $\xi_1=0$ ，说明 U-统计量退化，极限分布不再是正态，且收敛速率也与非退化情形不同；此时可能需要继续求解首个非零的 $\xi_r$ ，或者考虑置换检验、Bootstrap 等方法。
+\end{itemize}
+
+这里拿出一些 U-统计量例子，并给出各自的渐近分布。
+
+\subsection{简单例子}
+
+\begin{examplecontinue}[方差（续）]{ex:ch10:variance}
+记 $\mu$ 是总体均值、 $\sigma^2$ 是总体方差、 $\mu_k=\mathbb E_P[(X-\mu)^k]$ 代表总体 $k$ 阶中心矩，并设 $\mu_4<\infty$ 。我们已经算出了 $\xi_1=\tfrac{\mu_4-\sigma^4}{4}$ 。根据 Jensen 不等式，除非 $|X-\mu|$ 几乎处处是常数，否则一定
+\[
+\mu_4=\mathbb E_P[(X-\mu)^4]>(\mathbb E_P[(X-\mu)^2])^2=\sigma^4.
+\]
+
+此时 U 统计量，即样本方差 $\textstyle U_n=\frac1{n-1}\sum_{j=1}^n(X_j-\bar X)^2$ 作为二阶 U-统计量是非退化的，根据定理~\ref{thm:ch10:u-statistic-nondegenerate-clt}，
+\[
+\sqrt n(U_n-\sigma^2)\overset{\rm d}\longrightarrow
+\mathcal N(0,4\xi_1)=\mathcal N(0,\mu_4-\sigma^4).
+\]
+\end{examplecontinue}
+
+\begin{example}[Gini 平均差]\label{ex:ch10:gini-mean-difference}
+对于一维分布，Gini 均值差定义为 $\theta = \mathbb{E}_P[|X_1 - X_2|]$，其中 $X_1,X_2\sim P$ i.i.d.，U‑统计量为
+\[U_n = \binom{n}{2}^{-1} \sum_{1\le i<j\le n} |X_i - X_j|\]
+一阶投影为 $h_1(x) = \mathbb{E}[|x - X|]$。若 $\xi_1=\mathrm{Var}_P[h_1(X)] > 0$，则 $n\to\infty$ 时，
+\[\sqrt{n}(U_n - \theta) \overset{\rm d}\longrightarrow \mathcal{N}\big(0, 4\xi_1\big)\]
+例如，当 $P=\mathrm{Exp}(\lambda),\ \lambda>0$ 是指数分布时，可以验证（留给读者） $\theta=1/\lambda$ ，且
+\[
+\sqrt{n}\left(U_n - \frac1\lambda\right) \overset{\rm d}\longrightarrow \mathcal{N}\left(0, \frac4{3\lambda^2}\right).
+\]
+这个例子表明 U‑统计量理论允许核函数不可微，仍然可以建立渐近正态性。
+\end{example}
+
+
+\begin{examplecontinue}[Kendall's $\tau$（续）]{ex:ch10:kendall}
+为了对 $\widehat \tau$ 应用渐近理论，我们需要计算一阶投影 $h_1(z)$，其中 $z=(x,y)$。记 $F_X$ 和 $F_Y$ 分别为 $X$ 和 $Y$ 的边际分布，$F$ 为二者联合分布。则
+\[\begin{aligned} h_1(x,y) &= \mathbb{E}\bigl[\operatorname{sign}((x-X)(y-Y))\bigr] \\ &= P((x-X)(y-Y) > 0) - P((x-X)(y-Y) < 0) \\ &= \bigl( P(X < x,\ Y < y) + P(X > x,\ Y > y) \bigr) \\ &\qquad - \bigl( P(X < x,\ Y > y) + P(X > x,\ Y < y) \bigr) \\ &= \bigl( F(x,y) + (1 - F_X(x) - F_Y(y) + F(x,y)) \bigr) \\ &\qquad - \bigl( (F_Y(y) - F(x,y)) + (F_X(x) - F(x,y)) \bigr) \\ &= 1 - 2F_X(x) - 2F_Y(y) + 4F(x,y) \\ &= \bigl(1-2F_X(x)\bigr)\bigl(1-2F_Y(y)\bigr) + 4\bigl(F(x,y) - F_X(x)F_Y(y)\bigr) \end{aligned}\]
+若 $X,Y$ 是独立的，那么正好有 $h_1(x,y)=(1-2F_X(x))(1-2F_Y(y))$ ；若再假设 $F_X,F_Y$ 是连续的，则
+\[
+\mathrm{Var}[h_1(X,Y)]=\mathrm{Var}[(1-2F_X(x))(1-2F_Y(y))]=\mathrm{Var}_{U_1,U_2\sim\mathcal U(-1,1)}[U_1U_2]=\frac19.
+\]
+
+故 $\widehat\tau$ 在上述假设下是非退化的，且
+\[
+\sqrt n\widehat\tau\overset{\rm d}\to \mathcal N\left(0,\tfrac 49\right).
+\]
+\end{examplecontinue}
+
+
+\begin{examplecontinue}[最大均值差异（续）]{ex:ch10:mmd}
+记 $k(\cdot,\cdot)$ 是 $\mathscr X\times\mathscr Y$ 上的对称、正定核函数， $\widehat {\text{MMD}}_{k}$ 为 U-统计量形式的 MMD 估计量，对于配对数据，我们可以将之视作联合分布的一样本 U-统计量。算得\[ \begin{aligned} h_1(x,y) &= \mathbb{E}\bigl[k(x,X_2) + k(y,Y_2) - k(x,Y_2) - k(X_2,y)\bigr] \\ &= \mu_P(x) + \mu_Q(y) - \mu_Q(x)-\mu_P(y) \end{aligned} \]
+
+当 $P\ne Q$ 时， $\xi_1=\mathrm {Var}[h_1(X,Y)]$ 往往是大于 0 的，从而有
+\[
+\sqrt n(\widehat{\text{MMD}}_k-\text{MMD}_k)\overset{\rm d}\to \mathcal N(0,4\xi_1).
+\]
+
+当 $P=Q$ 时， $h_1(x,y)\equiv0$ ，由定理~\ref{thm:ch10:u-statistic-degenerate-limit}，应该有
+\[
+n\widehat {\text{MMD}}_k\overset{\rm d}\to\sum_{k=1}^\infty\lambda_k(\chi_{1,k}^2-1).
+\]
+\end{examplecontinue}
+
+
+例~\ref{ex:ch10:hsic} 的 HSIC 也类似，在 $X\perp Y$ 时 $\widehat{\text{HSIC}}_{k,l}$ 发生退化。
+
+如果我们要用 MMD (或者 HSIC ) 做假设检验，那么在原假设情况下，由于统计量退化，极限分布会很难处理。一种方法是用置换检验，或者叫``置换校准 (Permutation calibration)''：对 $Y$ 进行很多次随机重排，选择置换分布的 α 分位数作为拒绝原假设的阈值。但这种方法计算成本很高。
+
+有工作对此进行了改进，使改进后的统计量在原假设下也能有标准正态的渐近分布，从而避免了置换校准的问题，见 \cite{shekharkimramdas2022,kimramdas2024}。
+
+\subsection{Cramér--von Mises 统计量}
+
+对一维连续分布函数 $F$ 和 i.i.d. 样本 $X_1,\dots,X_n$ ，记经验分布函数为 $\textstyle\mathbb F_n(t)=\sum_{j=1}^n\mathbb I(X_j\le t)$ ，\textbf{\emph{Cramér-von Mises 统计量}} 记作
+\[
+\omega_n^2:=n\int_{\mathbb R}(\mathbb F_n(t)-F(t))^2\mathrm dF(t).
+\]
+
+这个统计量的分布不依赖于 $F$ （请读者验证），因而常用作拟合优度检验，判断给定样本是否确实服从某个特定的 $F$ 。
+
+我们将之写作 V-统计量的形式
+\[\omega_n^2=\frac1n\sum_{i=1}^n\sum_{j=1}^n\int_{\mathbb R}(\mathbb I(X_i\le t)-F(t))(\mathbb I(X_j\le t)-F(t))\mathrm dF(t)\]
+可见其核函数为 $$\int_{\mathbb R}(\mathbb I(x_1\le t)-F(t))(\mathbb I(x_2\le t)-F(t))\mathrm{d}F(t)$$
+由于 $\textstyle|h(x_1,x_2)|\le \int\mathrm dF=1$ ，核函数有界，所以其矩总存在。
+
+利用代换 $Z=F(X)\sim\mathcal U(0,1)$ ，我们将核函数写作
+\[h(z_1,z_2)=\int_0^1(\mathbb I(z_1\le t)-t)(\mathbb I(z_2\le t)-t)\mathrm dt\]
+后文在分析渐近分布时，总采用这种简单的形式，并记 $Z_i:=F(X_i)$ 。
+
+为了利用 U-统计量的理论，将 $\omega_n^2$ 改写作
+\[\omega_n^2=(n-1)U_n+\frac1n\sum_{j=1}^nh(Z_j,Z_j)\]
+其中第一项 $\textstyle U_n=\binom n2^{-1}\sum_{1\le i<j\le n}h(Z_i,Z_j)$ 是以 $h$ 为核函数的 U-统计量；而第二项（对角项）满足
+\[\begin{aligned} \mathbb{E}[h(Z,Z)]&=\int_0^1\mathbb {E}[(\mathbb I(Z\le t)-t)^2]\mathrm dt\qquad \text{\scriptsize Fubini}\\ &=\int_0^1 (t-t^2)\mathrm dt\\ &=\frac16 \end{aligned}\]
+由强大数律， 式~\eqref{eq:ch10b:tag-11}的第二项有极限 $\textstyle \frac1n\sum_{j=1}^nh(Z_j,Z_j)\overset P\to \frac16$ ；从而只需再研究 $U_n$ 的渐近分布。
+
+易验证 $h(z_1,z_2)$ 满足：
+
+\begin{itemize}
+\tightlist
+\item
+  $\mathbb E[h(Z_1,Z_2)]=0$ ，
+
+\begin{itemize}
+  \tightlist
+  \item
+    ------ 这是因为由 Fubini 定理， $$\mathbb E[h(Z_1,Z_2)]=\int_0^1\underbrace{\mathbb E[\mathbb I(Z_1\le t)-t]}_0\underbrace{\mathbb E[\mathbb I(Z_2\le t)-t]}_0\mathrm dt=0$$
+  \end{itemize}
+\item
+  $\mathbb{E}[h(X_1,X_2) | X_1] = 0$ a.s.，
+
+\begin{itemize}
+  \tightlist
+  \item
+    ------ 道理类似 $$\mathbb{E}[h(z_1, Z_2)]=\int_0^1(\mathbb I(z_1\le t)-t)\underbrace{\mathbb E[\mathbb I(Z_2\le t)-t]}_0\mathrm dt=0$$
+  \end{itemize}
+\end{itemize}
+
+所以 $U_n$ 是均值为 0 的、一阶退化的 U-统计量。
+
+为了用定理~\ref{thm:ch10:u-statistic-degenerate-limit}，我们要算出其中的特征值 $\lambda_k$ ，这化作求解如下积分方程
+\[(T\psi)(z_1)=\int_0^1h(z_1,z_2)\psi(z_2)\mathrm dz_2=\lambda \psi(z_1),\quad \forall z_1\in[0,1]\]
+注意到核函数可以显式写作 $h(z_1,z_2) = \frac{z_1^2+z_2^2}{2} - \max(z_1,z_2) + \frac{1}{3}$ ，将之代入方程：
+\[\begin{aligned} &(T\psi)(z_1)=\int_0^{z_1}\Bigl(\frac{z_1^2+z_2^2}{2}-z_1+\frac13\Bigr)\psi(z_2)\mathrm dz_2+\int_{z_1}^1\Bigl(\frac{z_1^2+z_2^2}{2}-z_2+\frac13\Bigr)\psi(z_2)\mathrm dz_2=\lambda \psi(z_1)\\ \overset{\text{ 对 $z_1$ 求导}}\implies&(T\psi)'(z_1)=(z_1-1)\int_0^{z_1}\psi(z_2)\,\mathrm dz_2+z_1\int_{z_1}^1\psi(z_2)\,\mathrm dz_2=\lambda\psi'(z_1)\\ \overset{\text{ 再对 $z_1$ 求导}}\implies&(T\psi)''(z_1)=\color{blue}{\int_0^1\psi(z_2)\,\mathrm dz_2-\psi(z_1)=\lambda\psi''(z_1)} \end{aligned}\]
+这便将积分方程转化成了一个二次常微分方程，由 $(T\psi)'(0)=(T\psi)'(1)=0$ 得出边界条件： $\psi'(0)=\psi'(1)=0$ 。而该常微分方程是很容易求解的，最终给出全体非平凡解为
+\[\lambda_k=\frac1{k^2\pi^2},\qquad \psi_k(z_1)=\sqrt 2\cos(k\pi z_1),\quad k=1,2,3,\dots\]
+（这里 $\psi_n$ 经过了归一化。）
+
+综上，根据定理~\ref{thm:ch10:u-statistic-degenerate-limit} 及式~\eqref{eq:ch10b:tag-11} ，
+\[\begin{aligned} \omega^2_n&=\frac {n-1}{n}(nU_n)+\frac16+o_P(1)\\ &\overset{\rm d}\to \sum_{k=1}^\infty \frac1{k^2\pi^2}(\chi_{1,k}^2-1)+\frac16\\ &=\sum_{k=1}^\infty\frac{\chi_{1,k}^2}{k^2\pi^2} \end{aligned}\]
+这个结论最早由 Anderson 与 Darling 证明 \cite{andersondarling1952}，但作者动用了经验过程的``重型武器''：先证明 $\omega_n$ 弱收敛到 Brown 桥平方积分的分布 $\textstyle\int_0^1B^2(t)\mathrm dt$ ，再用与前文类似的的积分方程，得到分布的确切形式。我们这里的做法利用 U-统计量的结论，走了一条相对简单的道路。
+
+\subsection{核函数依赖 n 的例子}
+
+设有 i.i.d. 样本 $X_1,\dots,X_n \sim f$，其中 $f$ 是未知密度函数，核密度估计 (KDE) 为
+\[\widehat{f}\!_n(x) = \frac{1}{n b_n} \sum_{i=1}^n K\!\left(\frac{x-X_i}{b_n}\right) = \frac{1}{n}\sum_{i=1}^n K_{b_n}(x-X_i),\]
+其中 $K$ 是核函数，$b_n$ 是带宽，满足 $b_n\to 0$ 且 $n b_n \to \infty$ 。考虑\textbf{\emph{积分平方误差}} (integrated square error, ISE)：
+\[T_n = \int \bigl( \widehat{f}\!_n(x) - f(x) \bigr)^2 \mathrm dx\]
+将 $T_n$ 展开：\[\begin{aligned} T_n &= \int \bigl( \widehat{f}\!_n(x) - \mathbb{E}[\widehat{f}\!_n(x) ] \bigr)^2 \mathrm{d}x \\ &\quad + 2 \int \bigl( \widehat{f}\!_n(x) - \mathbb{E}[\widehat{f}\!_n(x) ] \bigr) \bigl( \mathbb{E}[\widehat{f}\!_n(x) ] - f(x) \bigr) \mathrm{d}x \\ &\quad + \int \bigl( \mathbb{E}[\widehat{f}\!_n(x) ] - f(x) \bigr)^2 \mathrm{d}x. \end{aligned}\]注意上式 $\mathbb{E}[\widehat{f}\!_n(x) ] = \frac{1}{n}\sum_{i=1}^n \mathbb{E}[K_{b_n}(x-X_i)] = \mathbb{E}[K_{b_n}(x-X)]$，$x$ 是固定的，期望作用在样本上。
+
+$T_n$ 的展开式中，第三项是完全确定的常数项；第二项（交叉项）可以写作 $$\frac{2}{n}\sum_{i=1}^n \int \bigl( K_{b_n}(x-X_i) - \mathbb{E}[K_{b_n}(x-X_i)] \bigr) \bigl( \mathbb{E}[\widehat{f}\!_n(x) ] - f(x) \bigr) \mathrm{d}x$$
+
+这是 $n$ 个独立同分布随机变量之和，所以其渐近分布可由中心极限定理直接描述。最关键的是第一项：\[\begin{aligned} &\int \bigl( \widehat{f}\!_n(x) - \mathbb{E}[\widehat{f}\!_n(x) ] \bigr)^2 \mathrm{d}x \\ &= \frac{1}{n^2} \sum_{i=1}^n \sum_{j=1}^n \int \bigl( K_{b_n}(x-X_i) - \mathbb{E}[K_{b_n}(x-X_i)] \bigr) \bigl( K_{b_n}(x-X_j) - \mathbb{E}[K_{b_n}(x-X_j)] \bigr) \mathrm{d}x. \end{aligned}\]这里 $i=j$ 的 $n$ 个对角项仍然是``$n$ 个独立同分布随机变量之和''的形式，用 CLT 描述之。最后剩下非对角项：\[\frac{2}{n^2} \sum_{1\le i<j\le n} \int \bigl( K_{b_n}(x-X_i) - \mathbb{E}[K_{b_n}(x-X_i)] \bigr) \bigl( K_{b_n}(x-X_j) - \mathbb{E}[K_{b_n}(x-X_j)] \bigr) \mathrm{d}x.\]如果忽略掉系数，这完全就是一个二阶 U-统计量！它的核函数是\[h_n(x_1,x_2) = \int \bigl( K_{b_n}(x-x_1) - \mathbb{E}[K_{b_n}(x-X)] \bigr) \bigl( K_{b_n}(x-x_2) - \mathbb{E}[K_{b_n}(x-X)] \bigr) \mathrm{d}x.\]与我们之前的所有例子都不同，该例的最大特征是：核函数是依赖于 $n$ 的；在这种推广的语境下，仍然可以称之为 ``U-统计量''。由于\[\mathbb{E}\bigl[h_n(x, X_2) \bigr] = \int \bigl( K_n(u,x) - \mathbb{E}[K_n(u,X_1)] \bigr) \, \mathbb{E}\bigl[ K_n(u,X_2) - \mathbb{E}[K_n(u,X_1)] \bigr] \, \mathrm{d}u = 0,\]
+所以它也是一个一阶退化的 U-统计量。
+
+推荐读者参考 \cite{hall1984}。Hall 表明，由于 $h_n$ 本身的变化，这里 U-统计量极限分布没有退化为 χ² 分布的加权和，仍然是正态分布。
+
+上述技术可以应用于参数族的拟合优度检验
+\[H_0: f = f_\theta\]
+其中 $f_\theta$ 是一个已知参数族中的密度，$\theta$ 需用样本估计之，例如可用 MLE ，估计量记为 $\hat{\theta}_n$。用 $f_{\widehat\theta_n}$ 代替 ISE 式中的 $f(x)$ 即可。
+
+\subsection{不完全 U‑统计量}
+
+当 $n$ 很大时，按照 式~\eqref{eq:ch10b:tag-2}计算所有的 $\binom{n}{m}$ 项可能不可行，因为这个数量是呈指数级增长的。为了解决计算开销的问题，\textbf{\emph{不完全 U‑统计量}} (Incomplete U-statistics) 通过随机抽取 $B$ 个 $m$ 元子集来近似（\cite{blom1976}; \cite{janson1984}）：
+\[U_{n,B}^{\mathrm{inc}} = \frac{1}{B} \sum_{b=1}^{B} h(X_{I_b}),\]
+其中 $I_1,\dots,I_B$ 是从所有 $\binom{n}{m}$ 个子集中均匀随机抽取的；因此给定数据，$U_{n,B}^{\mathrm{inc}}$ 是条件无偏的：
+\[
+\mathbb{E}[U_{n,B}^{\mathrm{inc}}\mid X_1,\dots,X_n]=U_n.
+\]
+可以预见：$U_{n,B}^{\mathrm{inc}}$ 的方差会来自于两部分：$U_n$ 本身的方差，以及对子集进行采样引入的 Monte Carlo 噪声，所以其方差总是要比完全计算所有子集的 $U_n$ 要高的，这是节省计算量的牺牲。
+
+不完全 U‑统计量在现代机器学习中应用广泛，例如大规模核检验、Bagging 方法、以及处理各种需要将样本成对地比较/排序的目标函数等等。
+
+\begin{example}[大数据的分治 U-统计量]\label{ex:ch10:divide-conquer-u-statistic}
+设
+\[
+U_N=\binom Nm^{-1}\sum_{1\leq i_1<\cdots<i_m\leq N}
+h(X_{i_1},\ldots,X_{i_m})
+\]
+是以 $h(x_1,\ldots,x_m)$ 为对称核函数的 U-统计量，并假设
+\[
+\theta=\mathbb E[h(X_1,\ldots,X_m)],\qquad
+\mathbb E[h^2(X_1,\ldots,X_m)]<\infty.
+\]
+定义一阶投影
+\[
+h_1(x)=\mathbb E[h(x,X_2,\ldots,X_m)]
+\]
+并假设 $\zeta_1=\operatorname{Var}[h_1(X_1)]>0$。设 $N=nK$，将数据
+$\{X_1,\ldots,X_N\}$ 划分为 $K$ 个互不重叠的子集
+\[
+D_k=\{X_{(k-1)n+1},\ldots,X_{kn}\},\qquad k=1,\ldots,K,
+\]
+并分别在 $K$ 台计算机上处理。记 $U_{kn}$ 为基于 $D_k$ 的 U-统计量，并令
+\[
+AU_N=\frac1K\sum_{k=1}^K U_{kn}.
+\]
+那么可以表明：对 U-统计量做这种``分块并行计算、再平均"的分治算法，在非退化且每块样本量足够大的条件下，所得估计与用全部数据一次性计算的 U-统计量有相同的渐近正态性与相同的渐近方差。
+具体来说，若 $K=o(N)$，则
+\[
+\sqrt N(AU_N-\theta)\overset{\rm d}\longrightarrow
+\mathcal N(0,m^2\zeta_1).
+\]
+
+\begin{proof}
+由 $K=o(N)$ 及 $N=nK$ 可知 $n=N/K\to\infty$。第 $k$ 个数据块上
+U-统计量的 H\'ajek 投影为
+\[
+\widetilde U_{kn}
+=\theta+\frac mn\sum_{i=(k-1)n+1}^{kn}\bigl(h_1(X_i)-\theta\bigr).
+\]
+由定理~\ref{thm:ch10:u-statistic-nondegenerate-clt} 证明中使用的投影余项估计，
+\[
+\operatorname{Var}(U_{kn}-\widetilde U_{kn})=O(n^{-2}).
+\]
+各数据块相互独立，故
+\[
+\begin{aligned}
+\operatorname{Var}\left[
+  \frac1K\sum_{k=1}^K(U_{kn}-\widetilde U_{kn})
+\right]
+&=\frac1{K^2}\sum_{k=1}^K O(n^{-2})
+=O\left(\frac1{Kn^2}\right),\\
+N\operatorname{Var}\left[
+  \frac1K\sum_{k=1}^K(U_{kn}-\widetilde U_{kn})
+\right]
+&=O\left(\frac1n\right)=o(1).
+\end{aligned}
+\]
+因此，由 Chebyshev 不等式，
+\[
+\sqrt N\left(
+AU_N-\frac1K\sum_{k=1}^K\widetilde U_{kn}
+\right)=o_P(1).
+\]
+
+另一方面，投影的平均值满足
+\[
+\begin{aligned}
+\frac1K\sum_{k=1}^K\widetilde U_{kn}-\theta
+&=\frac1K\sum_{k=1}^K\frac mn
+  \sum_{i=(k-1)n+1}^{kn}\bigl(h_1(X_i)-\theta\bigr)\\
+&=\frac mN\sum_{i=1}^N\bigl(h_1(X_i)-\theta\bigr).
+\end{aligned}
+\]
+由于 $\mathbb E[h_1(X_1)]=\theta$ 且
+$\operatorname{Var}[h_1(X_1)]=\zeta_1>0$，经典中心极限定理给出
+\[
+\frac m{\sqrt N}\sum_{i=1}^N\bigl(h_1(X_i)-\theta\bigr)
+\overset{\rm d}\longrightarrow \mathcal N(0,m^2\zeta_1).
+\]
+最后结合投影余项为 $o_P(1)$ 以及 Slutsky 定理
+（推论~\ref{cor:ch1:slutsky}），即得所证结论。
+\end{proof}
+\end{example}

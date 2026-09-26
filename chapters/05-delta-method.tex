@@ -1,4 +1,13 @@
 % Generated from: Zhihu/专栏：概率与统计/渐近统计 (5)：Delta 方法_金鱼马_2026-04-23.md
+在参数估计中，一个常见的情境是：对参数 $\theta\in\mathbb R^k$，我们有一列估计量 $\{T_n\}_{n=1}^\infty$，并且知道其渐近性质，如
+\[
+T_n\overset{P}\longrightarrow\theta,
+\qquad
+\sqrt n(T_n-\theta)\overset{\rm d}\longrightarrow F.
+\]
+
+但现在我们关心的不是 $\theta$ 本身，而是它的一个函数 $\phi(\theta)$，其中 $\phi:\mathbb R^k\to\mathbb R^m$。比如，$\theta$ 是正态分布的方差，我们想要估计标准差 $\sqrt\theta$；或者 $\theta$ 是两点分布的参数 $p$，我们想要估计对数几率 $\log\tfrac p{1-p}$。朴素的想法是直接用 $\phi(T_n)$ 去估计 $\phi(\theta)$，那么 $\phi(T_n)$ 的渐近分布是什么？这就是 Delta 方法回答的问题。
+
 \section{一阶 Delta 方法}
 
 如果 $\phi$ 是连续的，那么由连续映射定理，$T_n\overset{P}\to\theta\implies \phi(T_n) \overset{P}\to \phi(\theta)$，但这没有提供 $\phi(T_n)$ 渐近分布的信息。我们想知道的是
@@ -37,7 +46,6 @@ Delta 方法本质上就是这样的一套基于 Taylor 展开的``分布传播'
 =o_P(O_P(1))=o_P(1).
 \end{aligned}
 \]
-
 这就证明了 (1.)。(2.) 直接由 Slutsky 定理（推论~\ref{cor:ch1:slutsky}）即得：\\\[a_n\big(\phi(T_n)-\phi(\theta)\big) = \phi'(\theta)\big(a_n(T_n-\theta)\big) + o_P(1) \overset{\rm d}\to \phi'(\theta)F\]
 \end{proof}
 
@@ -118,6 +126,8 @@ n\bigl(f(\widehat\theta_n)-f(\theta)\bigr)
 \end{aligned}
 \]
 其中最后一步使用了 Bernoulli 样本均值的中心极限定理。
+% 证明嵌在例子内，结尾仅保留 example 环境的一个方块。
+\let\endproof\par
 \end{proof}
 \end{example}
 
@@ -176,7 +186,11 @@ n\bigl(f(\widehat\theta_n)-f(\theta)\bigr)
 \end{itemize}
 
 设总体的四阶矩存在。根据多维的中心极限定理，我们知道
-\[ \sqrt{n}\begin{pmatrix} a_{1,n}-\alpha_1 \\ a_{2,n}-\alpha_2 \end{pmatrix} \overset{\rm d}\to \mathcal{N}\left(0, \mathrm{Var}\left[\begin{pmatrix} X \\ X^2 \end{pmatrix}\right]\right),\quad \text{ 当 }n\to\infty \]另一方面，样本方差可写作 \[ S_n := \frac1n\sum_{i=1}^n (X_i-\bar{X}_n)^2 = a_{2,n} - a_{1,n}^2 \]考虑函数 $\phi(x_1,x_2)=x_2-x_1^2$ ，Jacobi 矩阵为 $\phi'(\alpha_1,\alpha_2) = (-2\alpha_1,\, 1)^\top\ne 0$，因此由 Delta 方法， $\sqrt{n}(S_n - \mu_2)$ 依分布收敛于正态分布 $\mathcal N(0,\Sigma)$ ，其中，
+\[ \sqrt{n}\begin{pmatrix} a_{1,n}-\alpha_1 \\ a_{2,n}-\alpha_2 \end{pmatrix} \overset{\rm d}\to \mathcal{N}\left(0, \mathrm{Var}\left[\begin{pmatrix} X \\ X^2 \end{pmatrix}\right]\right),\quad \text{ 当 }n\to\infty \]
+
+另一方面，样本方差可写作 
+\[ S_n := \frac1n\sum_{i=1}^n (X_i-\bar{X}_n)^2 = a_{2,n} - a_{1,n}^2 \]
+考虑函数 $\phi(x_1,x_2)=x_2-x_1^2$ ，Jacobi 矩阵为 $\phi'(\alpha_1,\alpha_2) = (-2\alpha_1,\, 1)^\top\ne 0$，因此由 Delta 方法， $\sqrt{n}(S_n - \mu_2)$ 依分布收敛于正态分布 $\mathcal N(0,\Sigma)$ ，其中，
 \[\begin{aligned} \Sigma&=(-2\alpha_1,1)\mathrm{Var}\left[\begin{pmatrix}X_1\\ X_1^2\end{pmatrix}\right]\begin{pmatrix}-2\alpha_1\\ 1\end{pmatrix}\\ &=\mathrm{Var}[-2\alpha_1X_1+X_1^2]\\ &=\mathrm{Var}[(X_1-\alpha_1)^2]\\ &=\mu_4-\mu_2^2 \end{aligned}\]
 即，
 \[\sqrt n(S_n-\mu_2)\overset{\rm d}\to \mathcal N(0,\mu_4-\mu_2^2),\quad \text{ 当 }n\to\infty\]
@@ -190,7 +204,7 @@ n\bigl(f(\widehat\theta_n)-f(\theta)\bigr)
 
 \subsection{渐近正态的变换}
 
-\begin{example} 
+\begin{example} \label{ex:ch5:asymptotic-normal}
 设 $X_n$ 满足 $\frac{X_n-\mu}{\sigma_n^2}\overset{\rm d}\to \mathcal N(0,1)$ ，其中 $\sigma_n\to 0$ ，我们常简记为 $X_n \sim AN(\mu,\sigma_n^2)$。利用一阶 Delta 方法，有以下变换成立：
 
 \begin{itemize}
@@ -204,10 +218,11 @@ n\bigl(f(\widehat\theta_n)-f(\theta)\bigr)
 \item
   $\log |X_n|\sim AN(\log |\mu|,\mu^{-2}\sigma_n^2 )$ ，其中 $\mu\ne 0$ 。
 \end{itemize}
-
-值得注意的是，在第一个例子里，若 $\mu=0$ ，那么结论相应地要改成 $X_n^2/\sigma_n^2 \to \chi_1^2$ 。这可以推广到高维，见下例，
-
 \end{example}
+
+
+值得注意的是，在例~\ref{ex:ch5:asymptotic-normal} 的第一条里，若 $\mu=0$ ，那么结论相应地要改成 $X_n^2/\sigma_n^2 \to \chi_1^2$ 。这可以推广到高维，见下例，
+
 
 \begin{example}[二次型的 Delta 方法]
 设 $k$ 维随机向量 $X_1,\dots,X_n$ i.i.d. ，总体有均值 $\mu$ 和协方差矩阵 $\Sigma$ ；多维中心极限定理告诉我们 \[ \sqrt{n}(\bar{X}-\mu)\overset{\rm d}\to \mathcal N_k(0,\Sigma) \]下面考察 $\phi(\bar{X})=\bar{X}^\top \bar X$ ，若 $\mu\ne 0$ ，那么 $\phi'(\mu)=2\mu$ ，故
@@ -288,10 +303,10 @@ T_n := \sum_{i=1}^K \frac{(n_i-np_i)^2}{np_i} = n\sum_{i=1}^K \frac{1}{p_i}(\wid
 \end{itemize}
 
 故 $T_n \overset{\rm d}\to \chi_{K-1}^2$，这是 Pearson χ² 检验的基本理论依据。
-\end{example} 
+\end{example}
 注意到 Pearson 统计量不是一个对称的统计量，这里的``不对称''指的是，它不是一个``实际频率'' $\widehat p_i$ 和``理论频率'' $p_i$ 的对称函数，因而也无法视作两个分布的``度量 (metric)''。不过，我们可以利用 Delta 方法对它进行改造：对 $\phi(x)=\sqrt x$ 用定理~\ref{thm:ch5:first-order-delta} 的第 (1.) 条，得到
 \[
-\sqrt n\big(\sqrt{\hat{p_i}}-\sqrt{p_i}\big)
+\sqrt n\big(\sqrt{\widehat{p_i}}-\sqrt{p_i}\big)
 -\frac1{2\sqrt{p_i}}\sqrt n(\widehat p_i-p_i)
 \overset{P}\to 0.
 \]
@@ -314,7 +329,7 @@ H(\widehat p,p)
 \]
 是 \emph{\textbf{Hellinger 距离}}。它关于 $p_i$ 和 $\widehat p_i$ 是对称的，且取值位于 0 到 1 之间；相比于 Pearson $\chi^2$ 检验，Hellinger 距离往往拥有更好的鲁棒性。
 
-\subsection{Wald 检验}
+\subsection{Wald 检验}\label{ex:ch5:wald-test}
  
 
 \begin{example}[Wald 检验]
@@ -347,7 +362,7 @@ W_n:=n(\bar X_n-\mu_0)^\top S_n^{-1}(\bar{X}_n-\mu_0).
 Delta 方法允许我们将这套方法用在非线性假设上面： 
 $$H_0:g(\mu)=0\quad \iff \quad H_1:g(\mu)\ne 0$$
 
-其中 $g:\mathbb R^k\to\mathbb R^m$连续可微，且 Jacobian 矩阵 $g'(\mu)$ 总有秩 $m$ 。那么，我们可以使用如下检验统计量 
+其中 $g:\mathbb R^k\to\mathbb R^m$ 连续可微，且 Jacobian 矩阵 $g'(\mu)$ 总有秩 $m$ 。那么，我们可以使用如下检验统计量 
 
 $$W_n:=ng(\bar{X})^\top\bigl(g'(\bar X)S_n g'(\bar X)^\top\bigr)^{-1}g(\bar{X})$$
 
@@ -371,7 +386,7 @@ $$H_0:\theta\in\Theta_0\quad \iff\quad H_1:\theta\in\Theta\setminus\Theta_0$$
 \item
   $g:\Theta\to\mathbb R^m$ 连续可微，在参数空间上其 Jacobian $g'(\theta)$ 总有秩 $m$ ；
 \item
-  $\theta$ 有一个渐近正态估计 $\hat\theta_n$ 使得 $a_n(\widehat\theta_n-\theta)\overset{\rm d}\to \mathcal N_k(0,\Sigma)$ ；
+  $\theta$ 有一个渐近正态估计 $\widehat\theta_n$ 使得 $a_n(\widehat\theta_n-\theta)\overset{\rm d}\to \mathcal N_k(0,\Sigma)$ ；
 \item
   $\Sigma\succ 0$ ，并且存在一个相合估计使得 $\widehat \Sigma_n\overset{P}\to \Sigma$ ，同时（至少当 $n$ 充分大时） $\widehat \Sigma_n\succ 0$ 。
 \end{itemize}
@@ -385,7 +400,7 @@ $$H_0:\theta\in\Theta_0\quad \iff\quad H_1:\theta\in\Theta\setminus\Theta_0$$
 \begin{itemize}
 \tightlist
 \item
-  在一定的正则条件下，极大似然估计 (MLE) 就是渐近正态的： $\sqrt n\big(\widehat\theta_n-\theta\big)\overset{\rm d}\to \mathcal N(0,I(\theta)^{-1})$ 所以往往取 $\widehat\theta_n$ 为 MLE。上式中 $I(\theta)$ 是总体分布的 Fisher 信息矩阵，用样本 Fisher 信息矩阵估计之。
+  在一定的正则条件下，极大似然估计 (MLE) 就是渐近正态的： $\sqrt n\big(\widehat\theta_n-\theta\big)\overset{\rm d}\to \mathcal N(0,I(\theta)^{-1})$ 所以往往取 $\widehat\theta_n$ 为 MLE。上式中 $I(\theta)$ 是总体分布的 Fisher 信息矩阵，用样本 Fisher 信息矩阵估计之。可见~\ref{sec:ch7:wald-test} 节。
 \item
   这里的某些条件是可以放松的，如矩阵不可逆时能用广义逆取代 (\cite{andrews1987})。
 \end{itemize}
@@ -486,4 +501,4 @@ summary(z); sd(z)
 
 关于密度估计，有一本经典的参考教材 \cite{silverman1986}，介绍得十分详尽。
 
-最后要说的是，在现代统计学中，由于 Bootstrap（自助法）的普及，我们往往可以直接通过重采样来计算复杂置信区间。但除了构建置信区间，VST 还有两个重要作用：一是满足经典模型（如方差分析、线性回归）的同方差性假设；二是去除估计量方差与均值的耦合关系，使得我们可以更客观地比较不同总体的离散程度。
+% 最后要说的是，在现代统计学中，由于 Bootstrap（自助法）的普及，我们往往可以直接通过重采样来计算复杂置信区间。但除了构建置信区间，VST 还有两个重要作用：一是满足经典模型（如方差分析、线性回归）的同方差性假设；二是去除估计量方差与均值的耦合关系，使得我们可以更客观地比较不同总体的离散程度。

@@ -1,14 +1,21 @@
 % Generated from: Zhihu/专栏：概率与统计/渐近统计 (9)：M-估计和 Z-估计_金鱼马_2026-06-15.md
+在前面的章节中，我们已经详细介绍了两类经典估计：第~\ref{ch:method-of-moments}~章的矩估计和第~\ref{ch:maximum-likelihood}~章的极大似然估计 (MLE)。
+
+其中，矩估计通过求解矩方程来获得估计值，而 MLE 通过最大化似然函数来寻找最优参数。另一方面，MLE 可以看作求解对数似然方程的解，而广义矩估计将求解参数写作最小化二次型的问题。我们注意到，“通过最大化或最小化函数获得估计值”以及“求解方程获得估计值”似乎可以看作两种基本范式，这正是本章将介绍的 M-估计和 Z-估计；它们提供了一个更加一般化、灵活的参数估计框架。
+
+本章主要参考 van der Vaart~\cite[第 5、19 章]{vandervaart1998}。
+
 \section{M-估计和 Z-估计的基本概念}
 
-M-估计量（M-estimators）由 Peter J. Huber 于 1964 年提出：\cite{huber1964}。
+M-估计量（M-estimators）由 Peter J. Huber 于 1964 年提出~\cite{huber1964}。
 
 \begin{definition*}[M-估计量与 Z-估计量]
-假设 $X_1,X_2,\dots,X_n$ 是取值于概率空间 $(\mathscr X,\mathscr B_x)$ 的随机变量，其总体分布有参数 $\theta$ ------这个 $\theta$ 既可以是参数分布族的参数，也可以在非参数模型下作为总体分布的某个泛函。若一个估计量 $\widehat\theta_n=\widehat\theta_n(X_1,\dots,X_n)$ 最大化某\textbf{\emph{准则函数}} (criterion function) $\theta \mapsto M_n(\theta)=\frac1n\sum_{j=1}^nm_\theta(X_j)$，
-
+假设 $X_1,X_2,\dots,X_n$ 是取值于概率空间 $(\mathscr X,\mathscr B_x)$ 的随机变量，其总体分布有参数 $\theta$ ------这个 $\theta$ 既可以是参数分布族的参数，也可以在非参数模型下作为总体分布的某个泛函。若一个估计量 $\widehat\theta_n=\widehat\theta_n(X_1,\dots,X_n)$ 最大化某\textbf{\emph{准则函数}} (criterion function) 
+$$\theta \mapsto M_n(\theta)=\frac1n\sum_{j=1}^nm_\theta(X_j)$$
 那么我们称其为 \textbf{\emph{M-估计量}} ，其中 $m_\theta:\mathscr X\to \overline{\mathbb R}$ 是确定的函数。
 
-当上式的 $M_n$ （或者说 $m_\theta$ ）可导时，我们自然会通过令导数为零来求解最大化问题。这引出了 \textbf{\emph{Z-估计量}} (Z-estimators) 的概念：其寻找一个估计量 $\hat{\theta}_n$ 来求解\textbf{\emph{估计方程}} (estimating equations)：\[\Psi_n(\theta)=\frac1n\sum_{j=1}^n\psi_\theta(X_j)=0\]
+s当上式的 $M_n$ （或者说 $m_\theta$ ）可导时，我们自然会通过令导数为零来求解最大化问题。这引出了 \textbf{\emph{Z-估计量}} (Z-estimators) 的概念：其寻找一个估计量 $\widehat{\theta}_n$ 来求解\textbf{\emph{估计方程}} (estimating equations)：
+\[\Psi_n(\theta)=\frac1n\sum_{j=1}^n\psi_\theta(X_j)=0\]
 其中 $\psi_\theta$ 是确定的向量值函数。一般而言，当 $\theta$ 是 $k$ 维参数时， $\psi_\theta$ 也是一个 $k$ 维函数。
 \end{definition*}
 
@@ -29,8 +36,7 @@ M-估计量（M-estimators）由 Peter J. Huber 于 1964 年提出：\cite{huber
 \[
 Pf:=\mathbb {E}_P[f(X)]=\int_{\mathscr X}f(x)\mathrm{d}P(x).
 \]
-
-以 $\mathbb P_n$ 代表\emph{经验测度} (empirical measure)，记
+再以 $\mathbb P_n$ 代表\emph{经验测度} (empirical measure)，记
 \[
 \mathbb P_nf:=\frac1n\sum_{j=1}^nf(X_j).
 \]
@@ -78,8 +84,17 @@ F^{-1}(\tau):=\inf\{x\in\mathbb R:F(x)\ge \tau\},\quad 0<\tau<1.
 总体中位数是 $\tau = 0.5$ 的特例。样本分位数大致可以定义为一个点 $\widehat\theta_n$ ，使得 $\tau n$ 部分的样本小于 $\widehat\theta_n$ 而 $(1-\tau)n$ 部分的样本大于 $\widehat\theta_n$ ；一种方法是取 $\widehat\theta_n=\mathbb F_n^{-1}(\tau)$ ，其中 $\mathbb F_n(t):=\frac1n\sum_{j=1}^n\mathbb I(X_j\le t)$ 是经验分布函数。
 
 定义 $$\rho_\tau(y) := y(\tau - \mathbb{I}(y < 0))=y(\tau\mathbb I(y\ge 0)-(1-\tau)\mathbb I(y< 0))$$
+这个函数的图像如图~\ref{fig:ch9:quantile-loss-function} 所示。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.58\textwidth]{figures/09-quantile-loss-function.jpg}
+  \caption{$\rho_\tau(y)$ 函数的图像，图片来自~\cite{chen2023recursive}。}
+  \label{fig:ch9:quantile-loss-function}
+\end{figure}
+
 不难证明 $$\operatorname*{\arg\min}_{\theta\in\mathbb R}\mathbb E[\rho_\tau(X-\theta)]=F^{-1}(\tau)$$
-从而 $\tau$-样本分位数 $\hat{\theta}$ 可以表示为 M-估计量：\[M_n(\theta) := \frac{1}{n}\sum_{j=1}^n \rho_\tau(X_j - \theta)\]
+从而 $\tau$-样本分位数 $\widehat{\theta}$ 可以表示为 M-估计量：\[M_n(\theta) := \frac{1}{n}\sum_{j=1}^n \rho_\tau(X_j - \theta)\]
 对 $\rho_\tau$ 取次导数 (subderivative)，也可以表示为 Z-估计量：\[\Psi_n(\theta) := \frac{1}{n}\sum_{j=1}^n \left((1 - \tau)\mathbb{I}(X_j < \theta) - \tau\mathbb{I}(X_j> \theta)\right) = 0\]
 需要说明的是，上述 $\Psi_n(\theta)$ 可能是存在跳跃的，导致 $\Psi_n(\theta)=0$ 无解，如图~\ref{fig:ch9:z-estimator-jump} 所示：
 
@@ -126,7 +141,7 @@ Huber 估计量的提出源于鲁棒估计中关于极端数据点对估计影�
 \[
 \theta_0:=\operatorname*{\arg\max}_{\theta\in\Theta}\mathbb E[m_\theta(X)].
 \]
-非常自然地，我们期望 $M_n$ 的最大值点 $\hat{\theta}_n$ 能收敛到 $M$ 的最大值点 $\theta_0$。这也是本节首先要证明的东西。不过，要证明这一点，
+非常自然地，我们期望 $M_n$ 的最大值点 $\widehat{\theta}_n$ 能收敛到 $M$ 的最大值点 $\theta_0$。这也是本节首先要证明的东西。不过，要证明这一点，
 
 \begin{itemize}
 \tightlist
@@ -248,7 +263,8 @@ Z-估计的结论和 M-估计如出一辙，只需把定理~\ref{thm:ch9:m-estim
 
 \begin{proof}
 
-对任意 $\delta>0$ ，我们记 $B_\delta(\theta_0):=\{\theta:d(\theta,\theta_0)<\delta\}$ 代表 $\theta_0$ 为中心的球。从参数空间中挖去这个球，连续函数 $M$ 在紧集 $\Theta\cap B^c(\theta_0)$ 上有最大值点，记作 $\theta^*$ 。则 (2.) 保证，$M(\theta^*)=\sup\limits_{\theta\in\Theta\cap B^c(\theta_0)}M(\theta)<M(\theta_0)$
+对任意 $\delta>0$ ，我们记 $B_\delta(\theta_0):=\{\theta:d(\theta,\theta_0)<\delta\}$ 代表 $\theta_0$ 为中心的球。从参数空间中挖去这个球，连续函数 $M$ 在紧集 $\Theta\cap B^c(\theta_0)$ 上有最大值点，记作 $\theta^*$ 。则 (2.) 保证，
+$$M(\theta^*)=\sup\limits_{\theta\in\Theta\cap B^c(\theta_0)}M(\theta)<M(\theta_0).$$
 
 下面我们要证明，对任意 $\epsilon>0$ ，当 $n\to\infty$时，下面的式子以趋近于 1 的概率成立
 
@@ -278,7 +294,6 @@ M(\widehat\theta_n)>M_n(\widehat\theta_n)-\frac\epsilon3>M_n(\theta_0)-\frac{2\e
 
 \begin{definition*}[Glivenko--Cantelli 类]
 一族可测函数 $\mathscr F$ 若满足 $\|\mathbb P_n-P\|_{\mathscr F}:=\sup\limits_{f\in\mathscr F}|\mathbb P_nf-Pf|\to 0\quad \text{a.s.}$，
-
 则称 $\mathscr F$ （关于 $P$ ）是一个 \textbf{\emph{Glivenko-Cantelli 类}} (Glivenko-Cantelli class)，简称 GC 类。
 \end{definition*}
 
@@ -368,13 +383,12 @@ $$\Psi_n(\theta)\overset P\to \Psi(\theta)=\mathbb{E}[\mathrm{sign}(X-\theta)]=P
 \item
   $-\Psi(\theta_0-\epsilon)<0<-\Psi(\theta_0+\epsilon)$ 。
 \end{itemize}
-
 那么根据定理~\ref{thm:ch9:monotone-z-consistency}， $\widehat\theta_n\overset P\to \theta_0$ 。
 
+\end{example}
 
 类似于前面的中位数例子，请读者结合分位数估计的例子和定理~\ref{thm:ch9:monotone-z-consistency} 自行证明：如果 $F$ 有唯一的 $\tau$ 分位数 $F^{-1}(\tau)$ ，则样本 $\tau$ -分位数 $\mathbb F_n^{-1}(\tau)$ 也是相合估计。
 
-\end{example}
 
 \subsection{Wald 的相合性证明}
 
@@ -388,7 +402,7 @@ $$\Psi_n(\theta)\overset P\to \Psi(\theta)=\mathbb{E}[\mathrm{sign}(X-\theta)]=P
 则称其在点 $x_0$ 处\textbf{\emph{下半连续}} （lower semi-continuous, l.s.c.）。
 \end{definition*}
 
-图~\ref{fig:ch9:semicontinuity} 直观展示了上半连续与下半连续的区别。
+图~\ref{fig:ch9:semicontinuity} 直观展示了上半连续与下半连续的区别\footnote{注意，上/下半连续与左/右连续没有任何关系。}。
 
 \begin{figure}[htbp]
   \centering
@@ -397,7 +411,7 @@ $$\Psi_n(\theta)\overset P\to \Psi(\theta)=\mathbb{E}[\mathrm{sign}(X-\theta)]=P
   \label{fig:ch9:semicontinuity}
 \end{figure}
 
-（注意，上/下半连续与左/右连续没有任何关系。）%，例子见 \url{https://math.stackexchange.com/q/3884576}。）
+% （注意，上/下半连续与左/右连续没有任何关系。）%，例子见 \url{https://math.stackexchange.com/q/3884576}。）
 
 对函数 $\theta\mapsto Pm_\theta=\mathbb{E}_P[m_\theta(X)]$ ，之前的假设都是它有唯一的最大值点 $\theta_0$ 。但在这里，我们允许它有多个最大值点，并记 \[ \Theta_0:=\big\{\theta_0\in\Theta:Pm_{\theta_0}=\sup\nolimits_\theta Pm_\theta\big\}\ne\varnothing \]代表所有能取到最大值的点集。
 
@@ -430,7 +444,7 @@ P(d(\widehat\theta_n,\Theta_0)\ge\epsilon,\ \widehat\theta_n\in K)\to 0.
 
 \begin{proof}
 
-记集合 $B := \{\theta \in K : d(\theta, \Theta_0) \geq \varepsilon\}$，我们要证明 $P(\hat{\theta}_n \in B) \to 0$。
+记集合 $B := \{\theta \in K : d(\theta, \Theta_0) \geq \varepsilon\}$，我们要证明 $P(\widehat{\theta}_n \in B) \to 0$。
 
 首先，如果函数 $\theta \mapsto Pm_\theta$ 恒等于 $-\infty$ ，则 $\Theta_0 = \Theta$，结论平凡成立。否则，我们可以假设存在 $\theta_0\in\Theta_0$ 使得 $Pm_{\theta_0} > -\infty$ ；那么由条件 (2.)， $\mathbb{E}_P[|m_{\theta_0}(X)|]<\infty$ 。
 
@@ -447,11 +461,10 @@ P(d(\widehat\theta_n,\Theta_0)\ge\epsilon,\ \widehat\theta_n\in K)\to 0.
 \end{itemize}
 
 从而 $\lim\limits_{l\to\infty} m_{U_l}(x) = m_\theta(x)$ ，即 $m_{U_l} \downarrow m_\theta$ a.s.。
-对函数列 $\{-m_{U_l}\}$ 用单调收敛定理，有 
+对函数列 $\{-m_{U_l}\}$ 用单调收敛定理，有 \footnote{这里的右侧可能是 $-\infty$ 。}
 
 $$\mathbb{E}[m_{U_l}(X)] \to \mathbb{E}[m_\theta(X)] ,\quad \text{ 当 }l\to\infty$$
 
-（这里的右侧可能是 $-\infty$ ）
 
 当 $\theta\not\in\Theta_0$ 时，由于 $\mathbb{E}[m_{U_l}(X)] \to \mathbb E[m_\theta(X)]<\mathbb E[m_{\theta_0}(X)]$ ，故在序列 $\{U_l\}$ 中总存在一个包含 $\theta$ 的开球 $U_\theta$ 使得
 
@@ -469,9 +482,9 @@ $$\mathbb{E}[m_{U_l}(X)] \to \mathbb{E}[m_\theta(X)] ,\quad \text{ 当 }l\to\inf
 
 其中最后一行来自式~\eqref{eq:ch9:tag-4} 。
 
-另一方面，如果 $\widehat\theta_n\in B$ ，那么根据条件 (3.) 和大数律\[ \sup_{\theta \in B} \mathbb{P}_n m_\theta \geq \mathbb{P}_n m_{\hat{\theta}_n} \geq \mathbb{P}_n m_{\theta_0} - o_P(1) = \mathbb{E}[m_{\theta_0}(X)]-o_P(1) \]
+另一方面，如果 $\widehat\theta_n\in B$ ，那么根据条件 (3.) 和大数律\[ \sup_{\theta \in B} \mathbb{P}_n m_\theta \geq \mathbb{P}_n m_{\widehat{\theta}_n} \geq \mathbb{P}_n m_{\theta_0} - o_P(1) = \mathbb{E}[m_{\theta_0}(X)]-o_P(1) \]
 
-这表明事件 $\{\hat{\theta}_n \in B\}$ 蕴含 $\sup\limits_{\theta\in B} \mathbb{P}_n m_\theta \ge \mathbb{E}[m_{\theta_0}(X)] - o_P(1)$。结合式~\eqref{eq:ch9:tag-5} ，\[P(\widehat\theta_n\in B)\le P\left(\sup_{\theta\in B}\mathbb P_nm_\theta\ge\mathbb E[m_{\theta_0}(X)]-o_P(1)\right)\to 0\]
+这表明事件 $\{\widehat{\theta}_n \in B\}$ 蕴含 $\sup\limits_{\theta\in B} \mathbb{P}_n m_\theta \ge \mathbb{E}[m_{\theta_0}(X)] - o_P(1)$。结合式~\eqref{eq:ch9:tag-5} ，\[P(\widehat\theta_n\in B)\le P\left(\sup_{\theta\in B}\mathbb P_nm_\theta\ge\mathbb E[m_{\theta_0}(X)]-o_P(1)\right)\to 0\]
 \end{proof}
 
 \begin{remark}
@@ -492,11 +505,10 @@ Cauchy 分布 $\text{Cauchy}(\theta)$ 的 PDF 为
 \[
 p_\theta(x)=\frac1{\pi(1+(x-\theta)^2)},\quad x\in\mathbb R.
 \]
-
 其中 $\theta$ 是位置参数，我们取参数空间为扩展实数轴 $\Theta=\overline{\mathbb R}$ 。
 
-设有 i.i.d. 样本 $X_1,\dots,X_n$ ，则 $\theta$ 的 MLE 最大化 $\theta\mapsto\mathbb P_nm_\theta$ ，其中， $m_\theta(x)=-\log(1+(x-\theta)^2)$
-
+设有 i.i.d. 样本 $X_1,\dots,X_n$ ，则 $\theta$ 的 MLE 最大化 $\theta\mapsto\mathbb P_nm_\theta$ ，其中， 
+$$m_\theta(x)=-\log(1+(x-\theta)^2)$$
 特别地，定义\[\begin{aligned} m_{-\infty}(x)&=\limsup_{\theta\to-\infty}m_\theta(x)=-\infty\\ m_{\infty}(x)&=\limsup_{\theta\to\infty}m_\theta(x)=-\infty\\  \end{aligned}\]
 我们验证一下定理~\ref{thm:ch9:wald-consistency} 的条件：
 
@@ -513,7 +525,6 @@ p_\theta(x)=\frac1{\pi(1+(x-\theta)^2)},\quad x\in\mathbb R.
 \item
   $\widehat\theta_n$ 是 MLE，自然满足 $M_n(\widehat\theta_n)=\sup\limits_{\theta\in\Theta}M_n(\theta)\ge M_n(\theta_0)-o_P(1)$ 。
 \end{enumerate}
-
 由可识别性， $\Theta_0=\{\theta_0\}$ ，故定理~\ref{thm:ch9:wald-consistency} 给出 $\widehat\theta_n\overset P\to \theta_0$ 。
 
 
@@ -527,23 +538,20 @@ p_\theta(x)=\frac1{\pi(1+(x-\theta)^2)},\quad x\in\mathbb R.
 
 设 $X_1,\dots,X_n$ 是来自分布 $P$ 的 i.i.d. 样本， $\mathbb P_n=\frac1n\sum_{j=1}^n\delta_{X_j}$ 是经验测度。定义\href{https://en.wikipedia.org/wiki/Empirical_process}{经验过程} (Empirical process)\[\mathbb G_n:=\sqrt n(\mathbb P_n-P)\]
 我们可以将 $\mathbb G_n$ 看作是一个符号测度，用于衡量经验分布与真实分布的差距。对可积函数 $f:\mathscr X\to\mathbb R$ ，定义经验过程在 $f$ 处的取值为 
-$$\mathbb G_nf=\sqrt n(\mathbb P_nf-Pf)=\sqrt n\left(\frac1n\sum_{j=1}^n\ f(X_j)-\mathbb E[f(X)]\right)$$
-
+$$\mathbb G_nf=\sqrt n(\mathbb P_nf-Pf)=\sqrt n\left(\frac1n\sum_{j=1}^n\ f(X_j)-\mathbb E[f(X)]\right)$$s
 给定一族 $\mathscr X\to \mathbb R$ 的 $P$ -可积函数 $\mathscr F$ ，则上述 $P$ 、 $\mathbb P_n$ 和 $\mathbb G_n$ 又都可以视作 $\mathscr F\to \mathbb R$ 的算子。
 
 记 $\ell^\infty(\mathscr F)$ 是所有 $\mathscr F\to \mathbb R$ 的有界算子构成的 Banach 空间：
 \[
 x\in \ell^\infty(\mathscr F)\quad \iff \quad \sup_{f\in\mathscr F}|x(f)|<\infty.
 \]
-
 如果函数族 $\mathscr F$ 满足
 \[
 \sup_{f\in\mathscr F}|f(x)-Pf|<\infty,\qquad \forall x\in\mathscr X,
 \]
 那么 $\mathbb G_n$ 还可以视作从 $\ell^\infty (\mathscr F)$ 中取值的随机元。
 $$\mathbb G_n:\omega\mapsto \sqrt n\left(\frac1n\sum_{j=1}^nf(X_j(\omega))-\mathbb{E}[f(X)]\right)$$
-我们考察其在 $\ell^\infty(\mathscr F)$ 中的极限
-
+我们考察其在 $\ell^\infty(\mathscr F)$ 中的极限：
 \begin{definition*}[Donsker 类]
 若存在 $\ell^\infty(\mathscr F)$ 中 Borel-可测的、胎紧的随机元 $\mathbb G_P$，使得 $\mathbb G_n$ 在 $\ell^\infty(\mathscr F)$ 中弱收敛到 $\mathbb G_P$，那么称 $\mathscr F$ 是一个 \textbf{\emph{Donsker 类}}，或者 $P$-Donsker 类。
 \end{definition*}
@@ -608,7 +616,7 @@ $$\mathrm{Cov}(\mathbb G(\theta_0),\mathbb G(\theta_1))=\mathrm{Cov}_{X\sim P}[f
 
 设 $\mathscr{F}$ 是一族可测函数的 $P$ -Donsker 类， $\{\widehat{f}\!_n\}$ 为一列在 $\mathscr{F}$ 中取值的随机元，使得对某个 $f_0\in L^2(P)$ （即 $Pf_0^2<\infty$ ）有
 \[
-\int_{\mathscr X} (\hat{f}_n(x) - f_0(x))^2 \,\mathrm{d}P(x) = P(\widehat{f}\!_n - f_0)^2 \overset{P}{\to} 0.
+\int_{\mathscr X} (\widehat{f}_n(x) - f_0(x))^2 \,\mathrm{d}P(x) = P(\widehat{f}\!_n - f_0)^2 \overset{P}{\to} 0.
 \]
 
 则 $\mathbb G_n(\widehat f\!_n-f)\overset P\to 0$ ，从而， $\mathbb G_n\widehat f\!_n\overset{\rm d}\to \mathbb G_P f_0$ 。
@@ -638,13 +646,13 @@ Gaussian 过程 $\mathbb G_P$ 的轨道在 $\mathscr F$ 上几乎处处连续，
 
 \end{proof}
 
-设 $\widehat{f}\!_n := \psi_{\widehat{\theta}_n}$，$f_0 := \psi_{\theta_0}$，且存在平方可积的 $\dot{\psi}$ 使得，\[P(\psi_{\hat{\theta}_n} - \psi_{\theta_0})^2 \leq P(\dot{\psi}^2) \|\hat{\theta}_n - \theta_0\|^2 = O_P(\|\hat{\theta}_n - \theta_0\|^2)\]
-如果 $\hat{\theta}_n \overset{P}{\to} \theta_0$，则上式趋于 0。因此，只要函数类 $\{\psi_\theta\}$ 是 $P$ -Donsker 的，根据引理~\ref{lem:ch9:donsker-random-substitution}，我们就有\[\mathbb{G}_n(\psi_{\hat{\theta}_n} - \psi_{\theta_0}) \overset{P}{\to} 0\]
+设 $\widehat{f}\!_n := \psi_{\widehat{\theta}_n}$，$f_0 := \psi_{\theta_0}$，且存在平方可积的 $\dot{\psi}$ 使得，\[P(\psi_{\widehat{\theta}_n} - \psi_{\theta_0})^2 \leq P(\dot{\psi}^2) \|\widehat{\theta}_n - \theta_0\|^2 = O_P(\|\widehat{\theta}_n - \theta_0\|^2)\]
+如果 $\widehat{\theta}_n \overset{P}{\to} \theta_0$，则上式趋于 0。因此，只要函数类 $\{\psi_\theta\}$ 是 $P$ -Donsker 的，根据引理~\ref{lem:ch9:donsker-random-substitution}，我们就有\[\mathbb{G}_n(\psi_{\widehat{\theta}_n} - \psi_{\theta_0}) \overset{P}{\to} 0\]
 即
 
 \begin{equation}
 \label{eq:ch9:tag-6}
-\sqrt{n}(\mathbb{P}_n \psi_{\hat{\theta}_n} - P\psi_{\hat{\theta}_n}) = \sqrt{n}(\mathbb{P}_n \psi_{\theta_0} - P\psi_{\theta_0}) + o_P(1)
+\sqrt{n}(\mathbb{P}_n \psi_{\widehat{\theta}_n} - P\psi_{\widehat{\theta}_n}) = \sqrt{n}(\mathbb{P}_n \psi_{\theta_0} - P\psi_{\theta_0}) + o_P(1)
 \end{equation}
 
 这一结论在后面的渐近正态证明中有重要作用。
@@ -652,7 +660,9 @@ Gaussian 过程 $\mathbb G_P$ 的轨道在 $\mathscr F$ 上几乎处处连续，
 \subsection{渐近正态性的证明}
 
 首先证明 Z-估计的结论，我们先简单描述一下思路和动机。从估计方程出发：Z-估计满足 $\Psi_n(\widehat{\theta}_n)=\mathbb P_n\psi_{\widehat\theta_n}=0$ ，而参数真值满足 $\Psi(\theta_0)=P\psi_{\theta_0}=0$ 。在 $\theta_0$ 处将 $\Psi$Taylor 展开，\[\Psi(\widehat\theta_n)\approx \Psi(\theta_0)+\Psi'(\theta_0)(\widehat\theta_n-\theta_0)\]
-由于 $\Psi(\theta_0)=0$，这给出了 $\hat\theta_n-\theta_0$ 与 $\Psi(\hat\theta_n)$ 的近似线性关系： $\sqrt n(\widehat\theta_n-\theta)\approx (\Psi'(\theta_0))^{-1}\Psi(\widehat\theta_n)$ 。 但这里面的 $\Psi(\widehat\theta_n)$ 是未知的！我们需要用经验过程把它替换掉：注意到 \[ \Psi(\hat\theta_n) = \Psi(\hat\theta_n) - \Psi_n(\hat\theta_n) = (P-\mathbb P_n)\psi_{\hat\theta_n} \]从而 $\sqrt{n}(\hat\theta_n-\theta_0) \approx (\Psi'(\theta_0))^{-1} \sqrt{n}(P-\mathbb P_n)\psi_{\hat\theta_n}$；利用式~\eqref{eq:ch9:tag-6} ，把右侧的 $\psi_{\widehat\theta_n}$ 替换为 $\psi_{\theta_0}$ ，那么根据经典中心极限定理，上式右侧是收敛于总体分布的： $\sqrt{n}(P -\mathbb P_n)\psi_{\theta_0} \;\overset{\rm d}{\to}\; N\bigl(0,\, P\psi_{\theta_0}\psi_{\theta_0}^\top\bigr)$ 一言以蔽之，利用 Taylor 展开将估计方程转化为经验过程的线性形式，并通过式~\eqref{eq:ch9:tag-6} 将 $\widehat\theta_n$ 替换为真值 $\theta_0$ ，从而将估计量的极限分布归结为经验过程的中心极限定理。
+由于 $\Psi(\theta_0)=0$，这给出了 $\widehat\theta_n-\theta_0$ 与 $\Psi(\widehat\theta_n)$ 的近似线性关系： $\sqrt n(\widehat\theta_n-\theta)\approx (\Psi'(\theta_0))^{-1}\Psi(\widehat\theta_n)$ 。 但这里面的 $\Psi(\widehat\theta_n)$ 是未知的！我们需要用经验过程把它替换掉：注意到 \[ \Psi(\widehat\theta_n) = \Psi(\widehat\theta_n) - \Psi_n(\widehat\theta_n) = (P-\mathbb P_n)\psi_{\widehat\theta_n} \]从而 $\sqrt{n}(\widehat\theta_n-\theta_0) \approx (\Psi'(\theta_0))^{-1} \sqrt{n}(P-\mathbb P_n)\psi_{\widehat\theta_n}$；利用式~\eqref{eq:ch9:tag-6} ，把右侧的 $\psi_{\widehat\theta_n}$ 替换为 $\psi_{\theta_0}$ ，那么根据经典中心极限定理，上式右侧是收敛于总体分布的： 
+$$\sqrt{n}(P -\mathbb P_n)\psi_{\theta_0} \;\overset{\rm d}{\to}\; N\bigl(0,\, P\psi_{\theta_0}\psi_{\theta_0}^\top\bigr)$$ 
+一言以蔽之，利用 Taylor 展开将估计方程转化为经验过程的线性形式，并通过式~\eqref{eq:ch9:tag-6} 将 $\widehat\theta_n$ 替换为真值 $\theta_0$ ，从而将估计量的极限分布归结为经验过程的中心极限定理。
 
 下面是严格一些的论述，
 
@@ -676,7 +686,7 @@ Gaussian 过程 $\mathbb G_P$ 的轨道在 $\mathscr F$ 上几乎处处连续，
   V_{\theta_0} := \frac{\partial}{\partial\theta} P\psi_\theta \Big|_{\theta=\theta_0}.
   \]
 \item
-  $\widehat\theta_n$ 满足 $\mathbb{P}_n \psi_{\hat{\theta}_n} = o_P(n^{-1/2})$ 且 $\hat{\theta}_n \overset{P}{\to} \theta_0$。
+  $\widehat\theta_n$ 满足 $\mathbb{P}_n \psi_{\widehat{\theta}_n} = o_P(n^{-1/2})$ 且 $\widehat{\theta}_n \overset{P}{\to} \theta_0$。
 \end{enumerate}
 
 则\[\sqrt{n}(\widehat{\theta}_n - \theta_0) = -V_{\theta_0}^{-1} \frac{1}{\sqrt{n}}\sum_{j=1}^n \psi_{\theta_0}(X_j) + o_P(1) \ \overset{\mathrm{d}}{\to}\ \mathcal{N}\left(0,\ V_{\theta_0}^{-1} P\psi_{\theta_0}\psi_{\theta_0}^\top(V_{\theta_0}^{-1})^\top\right)\]
@@ -688,23 +698,23 @@ Gaussian 过程 $\mathbb G_P$ 的轨道在 $\mathscr F$ 上几乎处处连续，
 
 \begin{equation}
 \label{eq:ch9:tag-7}
-\begin{aligned} \sqrt{n}(P\psi_{\theta_0} - P\psi_{\hat{\theta}_n}) &= -\sqrt{n}P\psi_{\hat{\theta}_n} \\ &= \underbrace{\sqrt{n}(\mathbb{P}_n\psi_{\hat{\theta}_n} - P\psi_{\hat{\theta}_n})}_{\sqrt{n}(\mathbb{P}_n\psi_{\theta_0} - P\psi_{\theta_0}) + o_P(1)} - \underbrace{\sqrt{n}\mathbb{P}_n\psi_{\hat{\theta}_n} }_{o_P(1)}\\  &= \sqrt n\mathbb P_n\psi_{\theta_0} + o_P(1)  \end{aligned}
+\begin{aligned} \sqrt{n}(P\psi_{\theta_0} - P\psi_{\widehat{\theta}_n}) &= -\sqrt{n}P\psi_{\widehat{\theta}_n} \\ &= \underbrace{\sqrt{n}(\mathbb{P}_n\psi_{\widehat{\theta}_n} - P\psi_{\widehat{\theta}_n})}_{\sqrt{n}(\mathbb{P}_n\psi_{\theta_0} - P\psi_{\theta_0}) + o_P(1)} - \underbrace{\sqrt{n}\mathbb{P}_n\psi_{\widehat{\theta}_n} }_{o_P(1)}\\  &= \sqrt n\mathbb P_n\psi_{\theta_0} + o_P(1)  \end{aligned}
 \end{equation}
 
 现在对 式~\eqref{eq:ch9:tag-7}左侧在 $\theta_0$ 处做 Taylor 展开 ，由条件 (3.)，\[\begin{aligned} \sqrt n(P\psi_{\widehat\theta_n} -  P\psi_{\theta_0}) &= \sqrt nV_{\theta_0}(\widehat\theta_n-\theta_0) + \sqrt no(\|\widehat\theta_n-\theta_0\|)\\  \end{aligned}\]
 代入式~\eqref{eq:ch9:tag-7} ：
 \begin{equation}
 \label{eq:ch9:tag-8}
-\sqrt{n}V_{\theta_0}(\hat{\theta}_n - \theta_0) =\underbrace{-\sqrt n\mathbb P_n \psi_{\theta_0}}_{O_P(1)} + o_P(1)+o(\sqrt{n}\|\hat{\theta}_n - \theta_0\|)
+\sqrt{n}V_{\theta_0}(\widehat{\theta}_n - \theta_0) =\underbrace{-\sqrt n\mathbb P_n \psi_{\theta_0}}_{O_P(1)} + o_P(1)+o(\sqrt{n}\|\widehat{\theta}_n - \theta_0\|)
 \end{equation}
 
-现在要证明 $\sqrt{n}\|\hat{\theta}_n - \theta_0\| = O_P(1)$ ，从而上式里的 $o(\sqrt n\|\widehat\theta_n-\theta\|)=o_P(1)$ ；这也是容易的，因为式~\eqref{eq:ch9:tag-8} 同时告诉我们
+现在要证明 $\sqrt{n}\|\widehat{\theta}_n - \theta_0\| = O_P(1)$ ，从而上式里的 $o(\sqrt n\|\widehat\theta_n-\theta\|)=o_P(1)$ ；这也是容易的，因为式~\eqref{eq:ch9:tag-8} 同时告诉我们
 \[
-\sqrt{n}\|\widehat{\theta}_n - \theta_0\| \le \|V_{\theta_0}^{-1}\|\sqrt n\|V_{\theta_0}(\widehat{\theta}_n - \theta_0)\|=O_P(1)+o(\sqrt{n}\|\hat{\theta}_n - \theta_0\|).
+\sqrt{n}\|\widehat{\theta}_n - \theta_0\| \le \|V_{\theta_0}^{-1}\|\sqrt n\|V_{\theta_0}(\widehat{\theta}_n - \theta_0)\|=O_P(1)+o(\sqrt{n}\|\widehat{\theta}_n - \theta_0\|).
 \]
 从而由 Slutsky 定理，式~\eqref{eq:ch9:tag-8} 的后两项可以忽略，我们便证明了
 \[
-\sqrt{n}V_{\theta_0}(\hat{\theta}_n - \theta_0) = -\frac{1}{\sqrt{n}}\sum_{j=1}^n \psi_{\theta_0}(X_j) + o_P(1).
+\sqrt{n}V_{\theta_0}(\widehat{\theta}_n - \theta_0) = -\frac{1}{\sqrt{n}}\sum_{j=1}^n \psi_{\theta_0}(X_j) + o_P(1).
 \]
 
 渐近正态性由经典中心极限定理即可。
@@ -737,7 +747,7 @@ M-估计的结论完全类似，只需将定理~\ref{thm:ch9:z-estimator-asympto
   V_{\theta_0} = \frac{\partial^2}{\partial\theta^2} Pm_\theta \big|_{\theta=\theta_0}.
   \]
 \item
-  $\widehat\theta_n$ 满足 $\mathbb{P}_n m_{\hat{\theta}_n} \geq \sup_\theta \mathbb{P}_n m_\theta - o_P(n^{-1})$ 且 $\hat{\theta}_n \overset{P}{\to} \theta_0$。
+  $\widehat\theta_n$ 满足 $\mathbb{P}_n m_{\widehat{\theta}_n} \geq \sup_\theta \mathbb{P}_n m_\theta - o_P(n^{-1})$ 且 $\widehat{\theta}_n \overset{P}{\to} \theta_0$。
 \end{enumerate}
 
 则\[\sqrt{n}(\widehat{\theta}_n - \theta_0) = -V_{\theta_0}^{-1} \frac{1}{\sqrt{n}}\sum_{j=1}^n \dot{m}_{\theta_0}(X_j) + o_P(1) \ \overset{\mathrm{d}}{\to}\ \mathcal{N}\left(0,\ V_{\theta_0}^{-1} P\dot{m}_{\theta_0}\dot{m}_{\theta_0}^\top V_{\theta_0}^{-1}\right).\]
@@ -749,21 +759,21 @@ M-估计的结论完全类似，只需将定理~\ref{thm:ch9:z-estimator-asympto
 
 \begin{theorem*}[Z-估计渐近正态性的另一表述]
 
-若对每个 $x$，$\theta\mapsto\psi_\theta(x)$ 二次连续可微，且 $\Psi(\theta_0)=P\psi_{\theta_0}=0$，$P\|\psi_{\theta_0}\|^2<\infty$，矩阵 $V:=P\dot{\psi}_{\theta_0}$ 非奇异，且其所有二阶偏导在 $\theta_0$ 的某邻域内被一个可积函数 $\dot{\psi}(x)$ 控制，则对任意满足 $\Psi_n(\hat{\theta}_n)=\mathbb P_n\psi_{\widehat\theta_n}=0$ 的相合估计量 $\hat{\theta}_n$，有\[\sqrt{n}(\hat{\theta}_n-\theta_0) = -(P\dot{\psi}_{\theta_0})^{-1}\frac{1}{\sqrt{n}}\sum_{j=1}^n\psi_{\theta_0}(X_j) + o_P(1)\]
+若对每个 $x$，$\theta\mapsto\psi_\theta(x)$ 二次连续可微，且 $\Psi(\theta_0)=P\psi_{\theta_0}=0$，$P\|\psi_{\theta_0}\|^2<\infty$，矩阵 $V:=P\dot{\psi}_{\theta_0}$ 非奇异，且其所有二阶偏导在 $\theta_0$ 的某邻域内被一个可积函数 $\dot{\psi}(x)$ 控制，则对任意满足 $\Psi_n(\widehat{\theta}_n)=\mathbb P_n\psi_{\widehat\theta_n}=0$ 的相合估计量 $\widehat{\theta}_n$，有\[\sqrt{n}(\widehat{\theta}_n-\theta_0) = -(P\dot{\psi}_{\theta_0})^{-1}\frac{1}{\sqrt{n}}\sum_{j=1}^n\psi_{\theta_0}(X_j) + o_P(1)\]
 \end{theorem*}
 
 \begin{proof}
 
-由 Taylor 展开，\[0=\Psi_n(\hat{\theta}_n)=\Psi_n(\theta_0)+\dot{\Psi}_n(\theta_0)(\hat{\theta}_n-\theta_0)+\frac12(\hat{\theta}_n-\theta_0)^\top\ddot{\Psi}_n(\tilde{\theta}_n)(\hat{\theta}_n-\theta_0)\]
-其中 $\dot\Psi_n(\theta):=\mathbb P_n\dot\psi_{\theta}$ 、 $\ddot{\Psi}_n(\theta)=\mathbb P_n\ddot{\psi}_\theta$ 。中心极限定理给出 $\sqrt{n}\Psi_n(\theta_0)\overset{\rm d}\to \mathcal{N}(0,P\psi_{\theta_0}\psi_{\theta_0}^\top)$、大数律给出 $\dot{\Psi}_n(\theta_0)\overset{P}{\to} V=P\dot{\psi}_{\theta_0}$，余项由一致可积控制为 $O_P(\|\hat{\theta}_n-\theta_0\|^2)$；再结合相合性保证 $\|\hat{\theta}_n-\theta_0\|=o_P(1)$，故余项为 $o_P(\|\hat{\theta}_n-\theta_0\|)$。整理后得
+由 Taylor 展开，\[0=\Psi_n(\widehat{\theta}_n)=\Psi_n(\theta_0)+\dot{\Psi}_n(\theta_0)(\widehat{\theta}_n-\theta_0)+\frac12(\widehat{\theta}_n-\theta_0)^\top\ddot{\Psi}_n(\widetilde{\theta}_n)(\widehat{\theta}_n-\theta_0)\]
+其中 $\dot\Psi_n(\theta):=\mathbb P_n\dot\psi_{\theta}$ 、 $\ddot{\Psi}_n(\theta)=\mathbb P_n\ddot{\psi}_\theta$ 。中心极限定理给出 $\sqrt{n}\Psi_n(\theta_0)\overset{\rm d}\to \mathcal{N}(0,P\psi_{\theta_0}\psi_{\theta_0}^\top)$、大数律给出 $\dot{\Psi}_n(\theta_0)\overset{P}{\to} V=P\dot{\psi}_{\theta_0}$，余项由一致可积控制为 $O_P(\|\widehat{\theta}_n-\theta_0\|^2)$；再结合相合性保证 $\|\widehat{\theta}_n-\theta_0\|=o_P(1)$，故余项为 $o_P(\|\widehat{\theta}_n-\theta_0\|)$。整理后得
 \[
--\Psi_n(\theta_0)=(V+o_P(1))(\hat\theta_n-\theta_0).
+-\Psi_n(\theta_0)=(V+o_P(1))(\widehat\theta_n-\theta_0).
 \]
 注意到 $V+o_P(1)$ 以趋于 1 的概率可逆，两边左乘 $\sqrt{n}$ 并乘以 $(V+o_P(1))^{-1}$ 即得结论。
 
 \end{proof}
 
-类似于第~\ref{ch:maximum-likelihood}~章的定理~\ref{thm:ch7:score-root-consistency}，当 $n\to \infty$ 时，可以证明这里的 $\Psi_n(\hat{\theta}_n)=0$ 也以趋于 1 的概率至少有一个解，并且存在一列解满足 $\widehat\theta_n\overset P\to \theta_0$。
+类似于第~\ref{ch:maximum-likelihood}~章的定理~\ref{thm:ch7:score-root-consistency}，当 $n\to \infty$ 时，可以证明这里的 $\Psi_n(\widehat{\theta}_n)=0$ 也以趋于 1 的概率至少有一个解，并且存在一列解满足 $\widehat\theta_n\overset P\to \theta_0$。
 
 \subsection{例子}
 
@@ -786,14 +796,16 @@ V_{\theta_0}^{-1} P\dot{m}_{\theta_0}^2 V_{\theta_0}^{-1} = \frac{1}{(2f(\theta_
 
 根据定理~\ref{thm:ch9:m-estimator-asymptotic-normality}，
 \[
-\sqrt{n}(\hat{\theta}_n - \theta_0) \overset{\mathrm{d}}{\to} \mathcal{N}\left(0, \frac{1}{(2f(\theta_0))^2}\right).
+\sqrt{n}(\widehat{\theta}_n - \theta_0) \overset{\mathrm{d}}{\to} \mathcal{N}\left(0, \frac{1}{(2f(\theta_0))^2}\right).
 \]
 
+\end{example}
 
-请读者结合例~\ref{ex:ch9:quantile} 自行验证：如果把这里的中位数改成 $\tau$ -分位数 $F^{-1}(\tau)$ 、样本中位数改成 $\mathbb F_n^{-1}(\tau)$ ，则相应的结论如下（见 \cite{vandervaart1998} 的 Problem 5.11）：\[\sqrt{n}(\mathbb F_n^{-1}(\tau) - F^{-1}(\tau)) \overset{\mathrm{d}}{\to} \mathcal{N}\left(0, \frac{\tau(1-\tau)}{(f(\theta_0))^2}\right)\]
+
+请读者结合例~\ref{ex:ch9:quantile} 自行验证：如果把这里的中位数改成 $\tau$ -分位数 $F^{-1}(\tau)$ 、样本中位数改成 $\mathbb F_n^{-1}(\tau)$ ，则相应的结论如下\footnote{见 \cite{vandervaart1998} 的 Problem 5.11。更一般的关于样本分位数的渐近正态性质，以及 Bahadur 表示等结论，可参考包括但不限于~\cite{chenxiru2009} 的 §4.4.2。}：
+\[\sqrt{n}(\mathbb F_n^{-1}(\tau) - F^{-1}(\tau)) \overset{\mathrm{d}}{\to} \mathcal{N}\left(0, \frac{\tau(1-\tau)}{(f(\theta_0))^2}\right)\]
 % \href{https://www.zhihu.com/question/1579360351}{一般抽样的均值为正态分布，那抽样的其他统计特征如中位数、百分位数等会是什么分布呢？}
 
-\end{example}
 
 \begin{example}[非线性最小二乘]\label{ex:ch9:nonlinear-least-squares}
 考虑回归模型 $Y = f_{\theta_0}(X) + \varepsilon$，其中 $f_\theta$ 是一参数族回归函数，余项 $\varepsilon$ 满足 \[ \mathbb{E}[\varepsilon|X]=0,\quad \mathrm{Var}[\varepsilon|X]=\sigma^2(X)<\infty \]给定独立样本 $(X_1,Y_1),\dots,(X_n,Y_n)$ ，\emph{最小二乘估计量} (LSE) 的目标是最小化 $\sum_{j=1}^n (Y_j - f_\theta(X_j))^2$，对应 M-估计量 $m_\theta(x,y) = (y-f_\theta(x))^2$------方便起见，我们这里把 M-估计量的``最大化''改成``最小化''。
@@ -802,7 +814,6 @@ V_{\theta_0}^{-1} P\dot{m}_{\theta_0}^2 V_{\theta_0}^{-1} = \frac{1}{(2f(\theta_
 \label{eq:ch9:tag-9}
 \begin{aligned} P m_\theta &= \mathbb{E}\bigl[(Y-f_\theta(X))^2\bigr] \\ &= \mathbb{E}\bigl[(Y-f_{\theta_0}(X) + f_{\theta_0}(X)-f_\theta(X))^2\bigr] \\ &= \mathbb{E}\bigl[\varepsilon^2\bigr] + \mathbb{E}\bigl[(f_{\theta_0}(X)-f_\theta(X))^2\bigr] \end{aligned}
 \end{equation}
-
 因此，最小化 $P m_\theta$ 等价于最小化 $\mathbb{E}[(f_{\theta_0}(X)-f_\theta(X))^2]$。若模型可识别，则 $\theta_0$ 是唯一最大值点。
 
 假设存在可测函数 $\dot{f}(x)$ 使得\[|f_{\theta_1}(x) - f_{\theta_2}(x)| \le \dot{f}(x)\,\|\theta_1-\theta_2\|\]
@@ -824,7 +835,7 @@ V_{\theta_0}^{-1} P\dot{m}_{\theta_0}^2 V_{\theta_0}^{-1} = \frac{1}{(2f(\theta_
 V_{\theta_0} = 2\int \dot{f}\!_{\theta_0}(x)\dot{f}\!_{\theta_0}(x)^\top\,\mathrm{d}P_X(x) = 2P\dot{f}\!_{\theta_0}\dot{f}\!_{\theta_0}^{\ \top}.
 \]
 
-设有 i.i.d. 观测 $(X_1,Y_1),\dots,(X_n,Y_n)$ 以及真实误差项 $\varepsilon_j=Y_j-f_{\theta_0}(X_j)$ ；取相合估计 $\widehat\theta_n$ 满足定理~\ref{thm:ch9:m-estimator-asymptotic-normality} 的条件 (4.)，则 M-估计量的渐近正态性给出\[\begin{aligned} \sqrt{n}(\hat{\theta}_n-\theta_0) &= -V_{\theta_0}^{-1}\,\frac{1}{\sqrt{n}}\sum_{j=1}^n \dot{m}_{\theta_0}(X_j,Y_j) + o_P(1)\\ &=V_{\theta_0}^{-1}\,\frac{2}{\sqrt{n}}\sum_{j=1}^n \varepsilon_j\dot{f}\!_{\theta_0}(X_j) + o_P(1)\\ &\overset{\rm d}\to\mathcal N\Big(0,\bigl(P\dot{f}_{\theta_0}\dot{f}_{\theta_0}^\top\bigr)^{-1} \mathbb{E}\left[\varepsilon^2\dot{f}_{\theta_0}\dot{f}_{\theta_0}^\top\right] \bigl(P\dot{f}_{\theta_0}\dot{f}_{\theta_0}^\top\bigr)^{-1}\Big) \end{aligned}\]
+设有 i.i.d. 观测 $(X_1,Y_1),\dots,(X_n,Y_n)$ 以及真实误差项 $\varepsilon_j=Y_j-f_{\theta_0}(X_j)$ ；取相合估计 $\widehat\theta_n$ 满足定理~\ref{thm:ch9:m-estimator-asymptotic-normality} 的条件 (4.)，则 M-估计量的渐近正态性给出\[\begin{aligned} \sqrt{n}(\widehat{\theta}_n-\theta_0) &= -V_{\theta_0}^{-1}\,\frac{1}{\sqrt{n}}\sum_{j=1}^n \dot{m}_{\theta_0}(X_j,Y_j) + o_P(1)\\ &=V_{\theta_0}^{-1}\,\frac{2}{\sqrt{n}}\sum_{j=1}^n \varepsilon_j\dot{f}\!_{\theta_0}(X_j) + o_P(1)\\ &\overset{\rm d}\to\mathcal N\Big(0,\bigl(P\dot{f}_{\theta_0}\dot{f}_{\theta_0}^\top\bigr)^{-1} \mathbb{E}\left[\varepsilon^2\dot{f}_{\theta_0}\dot{f}_{\theta_0}^\top\right] \bigl(P\dot{f}_{\theta_0}\dot{f}_{\theta_0}^\top\bigr)^{-1}\Big) \end{aligned}\]
 若 $\varepsilon$ 与 $X$ 独立且 $\mathbb{E}[\varepsilon^2]=\sigma^2$，则上面的渐近方差为 $\sigma^2 \bigl(P\dot{f}_{\theta_0}\dot{f}_{\theta_0}^\top\bigr)^{-1}$ 。
 
 
@@ -849,12 +860,11 @@ m_\theta(x,y)=y\log\Psi(\theta^\top x)
 \item
   简单起见，设 $X$ 有界且矩阵 $\mathbb{E}[XX^\top]$ 非奇异。
 \end{itemize}
-
 此时可以验证定理~\ref{thm:ch9:m-estimator-consistency} 的条件，从而 MLE $\widehat\theta_n$ 是相合估计。
 
 记 Fisher 信息矩阵为\[I(\theta) = \mathbb{E}\left[\frac{\Psi'(\theta^\top X)^2}{\Psi(\theta^\top X)(1-\Psi(\theta^\top X))}XX^\top\right]\]
-于是定理~\ref{thm:ch9:z-estimator-asymptotic-normality} 给出\[\sqrt{n}(\hat{\theta}_n - \theta) \overset{\mathrm{d}}{\to} \mathcal{N}(0, I^{-1}(\theta))\]
-
+于是定理~\ref{thm:ch9:z-estimator-asymptotic-normality} 给出\[\sqrt{n}(\widehat{\theta}_n - \theta) \overset{\mathrm{d}}{\to} \mathcal{N}(0, I^{-1}(\theta))\]
+\end{example}
 \section{讨厌参数与两步估计}
 
 在实际问题中，感兴趣的参数往往与\emph{讨厌参数} (nuisance parameter) 共存。例如，
@@ -877,8 +887,6 @@ P_n\psi_{\theta,\widehat\eta_n}=\frac1n\sum_{j=1}^n\psi_{\theta,\widehat\eta_n}(
 从而解得 $\widehat\theta_n$ ------本质上是一个\emph{两步法} (2-step procedure)。此时的渐近性质又如何呢？
 
 \subsection{缺失响应回归}
-
-\end{example}
 
 \begin{example}[缺失响应回归]
 考虑回归模型 $Y_j = m_{\theta_0}(X_j) + \varepsilon_j$，$\mathbb{E}[\varepsilon_j|X_j]=0$。响应变量 $Y_j$ 可能缺失，记\[ R_j := \begin{cases} 1, & \text{若 } Y_j \text{ 被观测到}\\ 0, & \text{若 } Y_j \text{ 缺失} \end{cases} \]
@@ -909,7 +917,7 @@ P(R_i=1| X_j,Y_j) = P(R_j=1| X_j) = \omega_{\eta_0}(X_j).
 这里的加权不会改变期望：MAR 假设下 $\mathbb{E}[R_j \varepsilon_j | X_j] = \omega_{\eta_0}(X_j) \mathbb{E}[\varepsilon_j |X_j] = 0$，从而\[\mathbb{E}\left[ \frac{R_j}{\omega_{\eta_0}(X_j)} \varepsilon_j \frac{\partial m_{\theta_0}}{\partial\theta}(X_j) \right] = \mathbb{E}\left[ \frac{\partial m_{\theta_0}}{\partial\theta}(X_j) \frac{1}{\omega_{\eta_0}(X_j)} \,\mathbb{E}[R_j \varepsilon_j | X_j] \right]=0.\]
 因此，如果 $\eta_0$ 已知的话，由式~\eqref{eq:ch9:tag-11} 解出的 $\widehat\theta_n$ 也是无偏的。
 
-然而， $\eta_0$ 是不知道的。用例~\ref{ex:ch9:nonlinear-least-squares}中完全一样的二分类方法，求解 
+然而， $\eta_0$ 是未知的。用例~\ref{ex:ch9:nonlinear-least-squares}中完全一样的二分类方法，求解 
 $$\sum_{j=1}^n \left( \frac{R_j}{\omega_\eta(X_j)} - \frac{1-R_j}{1-\omega_\eta(X_j)} \right) \frac{\partial \omega_\eta(X_j)}{\partial \eta} = 0$$
 得到 $\widehat\eta_n$ ，并用它代替式~\eqref{eq:ch9:tag-11} 的 $\eta_0$ 即可。
 
@@ -949,10 +957,10 @@ $$\sum_{j=1}^n \left( \frac{R_j}{\omega_\eta(X_j)} - \frac{1-R_j}{1-\omega_\eta(
 \item
   映射 $\theta \mapsto P\psi_{\theta,\eta}$ 在 $\theta_0$ 处可微，且导数 $V_{\theta_0,\eta} := \frac{\partial}{\partial\theta} P\psi_{\theta,\eta}\big|_{\theta=\theta_0}$ 在 $\eta_0$ 的某个邻域内关于 $\eta$ 一致连续，且 $V_{\theta_0,\eta_0}$ 非奇异。
 \item
-  估计 $\widehat\theta_n,\widehat\eta_n$ 满足 $(\hat{\theta}_n,\hat{\eta}_n) \overset{P}{\to} (\theta_0,\eta_0)$ ，且 $\sqrt{n}\,\mathbb{P}_n\psi_{\widehat{\theta}_n,\widehat{\eta}_n} = o_P(1)$。
+  估计 $\widehat\theta_n,\widehat\eta_n$ 满足 $(\widehat{\theta}_n,\widehat{\eta}_n) \overset{P}{\to} (\theta_0,\eta_0)$ ，且 $\sqrt{n}\,\mathbb{P}_n\psi_{\widehat{\theta}_n,\widehat{\eta}_n} = o_P(1)$。
 \end{enumerate}
 
-那么\[\sqrt{n}(\hat{\theta}_n - \theta_0) = -V_{\theta_0,\eta_0}^{-1}\; \sqrt{n}\, P\psi_{\theta_0,\hat{\eta}_n} - V_{\theta_0,\eta_0}^{-1}\; \mathbb{G}_n \psi_{\theta_0,\eta_0} + o_P\!\bigl(1 + \sqrt{n}\,\|P\psi_{\theta_0,\hat{\eta}_n}\|\bigr).\]
+那么\[\sqrt{n}(\widehat{\theta}_n - \theta_0) = -V_{\theta_0,\eta_0}^{-1}\; \sqrt{n}\, P\psi_{\theta_0,\widehat{\eta}_n} - V_{\theta_0,\eta_0}^{-1}\; \mathbb{G}_n \psi_{\theta_0,\eta_0} + o_P\!\bigl(1 + \sqrt{n}\,\|P\psi_{\theta_0,\widehat{\eta}_n}\|\bigr).\]
 \end{theorem}
 
 \begin{remark}
@@ -960,17 +968,17 @@ $$\sum_{j=1}^n \left( \frac{R_j}{\omega_\eta(X_j)} - \frac{1-R_j}{1-\omega_\eta(
 \begin{itemize}
 \tightlist
 \item
-  结论的第一项 $-V_{\theta_0,\eta_0}^{-1} \sqrt{n} P\psi_{\theta_0,\hat{\eta}_n}$ 刻画了用 $\widehat\eta_n$ 估计讨厌参数 $\eta$ 带来的影响，我们称作漂移项 (drift term)。但多出来这一项并不一定意味着渐近方差一定会增大（如例~\ref{ex:ch9:binary-classification}）。
+  结论的第一项 $-V_{\theta_0,\eta_0}^{-1} \sqrt{n} P\psi_{\theta_0,\widehat{\eta}_n}$ 刻画了用 $\widehat\eta_n$ 估计讨厌参数 $\eta$ 带来的影响，我们称作漂移项 (drift term)。但多出来这一项并不一定意味着渐近方差一定会增大（如例~\ref{ex:ch9:binary-classification}）。
 \item
-  如果 $\eta$ 是有限维参数，且 $\eta \mapsto P\psi_{\theta_0,\eta}$ 在 $\eta_0$ 处可微，则我们可以写出 。\[ \sqrt{n}\,P\psi_{\theta_0,\widehat{\eta}_n} = \sqrt{n}\, \frac{\partial P\psi_{\theta_0,\eta_0}}{\partial\eta} (\widehat{\eta}_n-\eta_0) + o_P(1 + \sqrt{n}\|\hat{\eta}_n-\eta_0\|) \]就算 $\widehat\eta_n-\eta_0$ 本身收敛不够快，但只要方向导数 $\frac{\partial P\psi_{\theta_0,\eta_0}}{\partial\eta}$ 为 0 ，或者足够小的（这被称作渐近正交），这也可以帮助我们去除讨厌参数的影响。此时，讨厌参数在真实值附近的小扰动不会引起 $P\psi_{\theta_0,\eta}$ 的过大变化。关于在收敛较慢的讨厌参数下利用 Neyman 正交消除其影响的技术，可参考 \cite{chernozhukov2018}。
+  如果 $\eta$ 是有限维参数，且 $\eta \mapsto P\psi_{\theta_0,\eta}$ 在 $\eta_0$ 处可微，则我们可以写出 。\[ \sqrt{n}\,P\psi_{\theta_0,\widehat{\eta}_n} = \sqrt{n}\, \frac{\partial P\psi_{\theta_0,\eta_0}}{\partial\eta} (\widehat{\eta}_n-\eta_0) + o_P(1 + \sqrt{n}\|\widehat{\eta}_n-\eta_0\|) \]就算 $\widehat\eta_n-\eta_0$ 本身收敛不够快，但只要方向导数 $\frac{\partial P\psi_{\theta_0,\eta_0}}{\partial\eta}$ 为 0 ，或者足够小（这被称作渐近正交），这也可以帮助我们去除讨厌参数的影响。此时，讨厌参数在真实值附近的小扰动不会引起 $P\psi_{\theta_0,\eta}$ 的过大变化。关于在收敛较慢的讨厌参数下利用 Neyman 正交消除其影响的技术，可参考 \cite{chernozhukov2018}。
 \end{itemize}
 \end{remark}
 
 \begin{example}[对称位置模型]
 设 $X_1, X_2, \dots, X_n$ i.i.d.，其分布函数 $F$ 关于某 $\theta_0$ 对称，即 $F(\theta_0 + x) = 1 - F(\theta_0 - x)$ 对所有 $x$ 成立，我们希望估计位置参数 $\theta_0$ 。
 
-考虑一个 Z-估计量，其估计方程形如\[\frac{1}{n} \sum_{j=1}^n \psi\!\left( \frac{X_j - \theta}{\hat{\sigma}_n} \right) = 0,\]
-其中 $\psi$ 是奇函数（ $\psi(-t) = -\psi(t)$），而 $\hat{\sigma}_n$ 是某个尺度参数 $\sigma_0$ 的相合估计。$\hat{\sigma}_n$ 是讨厌参数，不是我们直接关心的。注意到由 $F$ 的对称性和 $\psi$ 是奇函数， \[ P\psi_{\theta_0,\widehat\sigma}=\int_{\mathscr X}\psi\left(\frac{x-\theta_0}{\widehat\sigma}\right)\mathrm{d}F(x)=0,\quad \forall \widehat\sigma \]所以，若定理~\ref{thm:ch9:z-estimator-with-nuisance} 的条件满足，那么它结论中的漂移项是消失的，我们直接得出\[\sqrt{n}(\widehat{\theta}_n - \theta_0) = -V_{\theta_0,\eta_0}^{-1}\,\mathbb{G}_n \psi_{\theta_0,\eta_0} + o_P(1)\]
+考虑一个 Z-估计量，其估计方程形如\[\frac{1}{n} \sum_{j=1}^n \psi\!\left( \frac{X_j - \theta}{\widehat{\sigma}_n} \right) = 0,\]
+其中 $\psi$ 是奇函数（ $\psi(-t) = -\psi(t)$），而 $\widehat{\sigma}_n$ 是某个尺度参数 $\sigma_0$ 的相合估计。$\widehat{\sigma}_n$ 是讨厌参数，不是我们直接关心的。注意到由 $F$ 的对称性和 $\psi$ 是奇函数， \[ P\psi_{\theta_0,\widehat\sigma}=\int_{\mathscr X}\psi\left(\frac{x-\theta_0}{\widehat\sigma}\right)\mathrm{d}F(x)=0,\quad \forall \widehat\sigma \]所以，若定理~\ref{thm:ch9:z-estimator-with-nuisance} 的条件满足，那么它结论中的漂移项是消失的，我们直接得出\[\sqrt{n}(\widehat{\theta}_n - \theta_0) = -V_{\theta_0,\eta_0}^{-1}\,\mathbb{G}_n \psi_{\theta_0,\eta_0} + o_P(1)\]
 
 \end{example}
 
@@ -990,9 +998,9 @@ $$\sum_{j=1}^n \left( \frac{R_j}{\omega_\eta(X_j)} - \frac{1-R_j}{1-\omega_\eta(
 
 我们知道，\href{https://en.wikipedia.org/wiki/Newton\%27s_method}{Newton-Raphson 算法}是经典的寻找零点的迭代算法。单步估计的方法是：从一个初步的估计 $\widetilde\theta_n$ （往往选择鲁棒估计）出发，然后对估计方程 $\Psi_n(\theta)=0$ ，用 Newton-Raphson 算法进行一步迭代，得到改进的估计量 $\widehat\theta_n$ 。这种估计量得来更简单，同时一步迭代可以 ``纠正'' 初始估计的效率损失，使之和精确求解的 Z-估计有相同的渐近效率。
 
-具体来说，在初始估计 $\tilde{\theta}_n$ 处做一阶 Taylor 展开：\[\Psi_n(\tilde{\theta}_n) + \dot{\Psi}_n(\tilde{\theta}_n)(\theta - \tilde{\theta}_n) \approx 0\]
-解得\[\hat{\theta}_n = \tilde{\theta}_n - \dot{\Psi}_n^{-1}(\tilde{\theta}_n) \Psi_n(\tilde{\theta}_n)\]
-作为单步估计。为了保证单步估计量 $\widehat\theta_n$ 的渐近正态性，我们要求初始估计 $\widetilde\theta_n$ 具备 $\sqrt n$-相合性，但并不要求其本身在渐近意义上是有效的。同时，还有一个很常见的做法是，我们用某个相合估计 $\dot{\Psi}_{n,0}$ 代替上式中的 $\dot{\Psi}_n(\tilde{\theta}_n)$ 项。最终的结论如下，
+具体来说，在初始估计 $\widetilde{\theta}_n$ 处做一阶 Taylor 展开：\[\Psi_n(\widetilde{\theta}_n) + \dot{\Psi}_n(\widetilde{\theta}_n)(\theta - \widetilde{\theta}_n) \approx 0\]
+解得\[\widehat{\theta}_n = \widetilde{\theta}_n - \dot{\Psi}_n^{-1}(\widetilde{\theta}_n) \Psi_n(\widetilde{\theta}_n)\]
+作为单步估计。为了保证单步估计量 $\widehat\theta_n$ 的渐近正态性，我们要求初始估计 $\widetilde\theta_n$ 具备 $\sqrt n$-相合性，但并不要求其本身在渐近意义上是有效的。同时，还有一个很常见的做法是，我们用某个相合估计 $\dot{\Psi}_{n,0}$ 代替上式中的 $\dot{\Psi}_n(\widetilde{\theta}_n)$ 项。最终的结论如下，
 
 \begin{theorem}[单步 Z-估计的渐近性质]\label{thm:ch9:one-step-z-estimator}
 
@@ -1003,16 +1011,16 @@ $$\sum_{j=1}^n \left( \frac{R_j}{\omega_\eta(X_j)} - \frac{1-R_j}{1-\omega_\eta(
 \sup_{\sqrt{n}\|\theta - \theta_0\| < M} \left\| \sqrt{n}(\Psi_n(\theta) - \Psi_n(\theta_0)) - \dot{\Psi}_0 \sqrt{n}(\theta - \theta_0) \right\| \overset{P}{\to} 0
 \end{equation}
 
-设 $\tilde{\theta}_n$ 是真实参数 $\theta_0$ 的 $\sqrt{n}$-相合的初始估计， $\dot{\Psi}_{n,0}\overset{P}{\to}\dot{\Psi}_0$ ，那么，单步估计量
+设 $\widetilde{\theta}_n$ 是真实参数 $\theta_0$ 的 $\sqrt{n}$-相合的初始估计， $\dot{\Psi}_{n,0}\overset{P}{\to}\dot{\Psi}_0$ ，那么，单步估计量
 
 \begin{equation}
 \label{eq:ch9:tag-13}
-\hat{\theta}_n = \tilde{\theta}_n - \dot{\Psi}_{n,0}^{-1} \Psi_n(\tilde{\theta}_n)
+\widehat{\theta}_n = \widetilde{\theta}_n - \dot{\Psi}_{n,0}^{-1} \Psi_n(\widetilde{\theta}_n)
 \end{equation}
 
 满足
 \[
-\sqrt{n}(\hat{\theta}_n - \theta_0) = -\dot{\Psi}_0^{-1} \sqrt{n}\Psi_n(\theta_0) + o_P(1)\overset{\rm d}\to -\dot\Psi_0^{-1}Z.
+\sqrt{n}(\widehat{\theta}_n - \theta_0) = -\dot{\Psi}_0^{-1} \sqrt{n}\Psi_n(\theta_0) + o_P(1)\overset{\rm d}\to -\dot\Psi_0^{-1}Z.
 \]
 
 \end{theorem}
@@ -1023,11 +1031,11 @@ $$\sum_{j=1}^n \left( \frac{R_j}{\omega_\eta(X_j)} - \frac{1-R_j}{1-\omega_\eta(
 
 \begin{equation}
 \label{eq:ch9:tag-14}
-\begin{aligned}\dot{\Psi}_{n,0} \sqrt{n}(\widehat{\theta}_n - \theta_0) &= \dot{\Psi}_{n,0} \sqrt{n}(\widetilde{\theta}_n - \theta_0) - \sqrt{n}\Psi_n(\widetilde{\theta}_n)\\ &=\dot{\Psi}_{n,0} \sqrt{n}(\widetilde{\theta}_n - \theta_0)- \sqrt{n}\Psi_n(\theta_0) - \sqrt{n}\left(\Psi_n(\tilde{\theta}_n) - \Psi_n(\theta_0)\right) \end{aligned}
+\begin{aligned}\dot{\Psi}_{n,0} \sqrt{n}(\widehat{\theta}_n - \theta_0) &= \dot{\Psi}_{n,0} \sqrt{n}(\widetilde{\theta}_n - \theta_0) - \sqrt{n}\Psi_n(\widetilde{\theta}_n)\\ &=\dot{\Psi}_{n,0} \sqrt{n}(\widetilde{\theta}_n - \theta_0)- \sqrt{n}\Psi_n(\theta_0) - \sqrt{n}\left(\Psi_n(\widetilde{\theta}_n) - \Psi_n(\theta_0)\right) \end{aligned}
 \end{equation}
 
-鉴于初始估计满足 $\sqrt n(\widetilde\theta_n-\theta_0)=O_P(1)$ ，对任意 $\epsilon>0$ ，我们可以取 $M$ 充分大使得 $P(\sqrt{n}\|\tilde{\theta}_n-\theta_0\|<M)>1-\epsilon$ 。从而，由式~\eqref{eq:ch9:tag-12} ， $\sqrt{n}\left(\Psi_n(\tilde{\theta}_n) - \Psi_n(\theta_0)\right) = \dot{\Psi}_0 \sqrt{n}(\tilde{\theta}_n - \theta_0) + o_P(1)$ 代入式~\eqref{eq:ch9:tag-14} ，整理一下就出来了：\[\begin{aligned} \dot{\Psi}_{n,0} \sqrt{n} (\widehat{\theta}_n - \theta_0) &= \dot{\Psi}_{n,0} \sqrt{n} (\widetilde{\theta}_n - \theta_0) - \dot{\Psi}_0 \sqrt{n} (\widetilde{\theta}_n - \theta_0) - \sqrt{n} \Psi_n(\theta_0) + o_P(1) \\ &= \underbrace{\left( \dot{\Psi}_{n,0} - \dot{\Psi}_0 \right) \sqrt{n} (\widetilde{\theta}_n - \theta_0)}_{=o_P(1)} - \sqrt{n} \Psi_n(\theta_0) + o_P(1) \\ &= -\sqrt{n} \Psi_n(\widetilde{\theta}_0) + o_P(1) \end{aligned}\]
-用 Slutsky 定理即证。
+鉴于初始估计满足 $\sqrt n(\widetilde\theta_n-\theta_0)=O_P(1)$ ，对任意 $\epsilon>0$ ，我们可以取 $M$ 充分大使得 $P(\sqrt{n}\|\widetilde{\theta}_n-\theta_0\|<M)>1-\epsilon$ 。从而，由式~\eqref{eq:ch9:tag-12} ， $\sqrt{n}\left(\Psi_n(\widetilde{\theta}_n) - \Psi_n(\theta_0)\right) = \dot{\Psi}_0 \sqrt{n}(\widetilde{\theta}_n - \theta_0) + o_P(1)$ 代入式~\eqref{eq:ch9:tag-14} ，整理一下就出来了：\[\begin{aligned} \dot{\Psi}_{n,0} \sqrt{n} (\widehat{\theta}_n - \theta_0) &= \dot{\Psi}_{n,0} \sqrt{n} (\widetilde{\theta}_n - \theta_0) - \dot{\Psi}_0 \sqrt{n} (\widetilde{\theta}_n - \theta_0) - \sqrt{n} \Psi_n(\theta_0) + o_P(1) \\ &= \underbrace{\left( \dot{\Psi}_{n,0} - \dot{\Psi}_0 \right) \sqrt{n} (\widetilde{\theta}_n - \theta_0)}_{=o_P(1)} - \sqrt{n} \Psi_n(\theta_0) + o_P(1) \\ &= -\sqrt{n} \Psi_n(\widetilde{\theta}_0) + o_P(1) \end{aligned}\]
+用 Slutsky 定理（推论~\ref{cor:ch1:slutsky}）即证。
 
 \end{proof}
 
@@ -1043,7 +1051,7 @@ Cauchy 分布 $\mathrm{Cauchy}(\theta)$ 的似然方程往往有多个根，很�
 \dot m_\theta(x)=\frac{\dot p_\theta(x)}{p_\theta(x)}= \frac{2(x-\theta)}{1+(x-\theta)^2}.
 \]
 
-取初始估计 $\tilde{\theta}_n$ 为样本中位数（根据例~\ref{ex:ch9:median-consistency}，样本中位数满足 $\sqrt{n}$-相合），然后按照式~\eqref{eq:ch9:tag-13} 做一步 Newton 迭代：
+取初始估计 $\widetilde{\theta}_n$ 为样本中位数（根据例~\ref{ex:ch9:median-consistency}，样本中位数满足 $\sqrt{n}$-相合），然后按照式~\eqref{eq:ch9:tag-13} 做一步 Newton 迭代：
 \[
 \widehat{\theta}_n = \widetilde{\theta}_n - \frac{\mathbb P_n\dot{m}_{\widetilde{\theta}_n}}{\mathbb P_n\ddot{m}_{\widetilde{\theta}_n}}.
 \]
@@ -1058,7 +1066,7 @@ Cauchy 分布 $\mathrm{Cauchy}(\theta)$ 的似然方程往往有多个根，很�
 其中 $f_0,g_0$ 是已知密度。该模型的参数为 $\theta = (\mu,\sigma,\nu,\tau,p)$ ，其中 $\mu,\nu\in\mathbb R$ 、 $\sigma,\tau>0$ ， $0<p<1$ 。如果求 MLE 的话，\[\begin{aligned} L_n(\theta) = \prod_{j=1}^n \left( p\,\frac{1}{\sigma}f\!\left(\frac{X_j-\mu}{\sigma}\right) + (1-p)\,\frac{1}{\tau}g\!\left(\frac{X_j-\nu}{\tau}\right) \right) \end{aligned}\]
 显见它是无界的： $\sup_\theta L_n(\theta)=\infty$ ，因为至少可以让 $\sigma\to 0$ 。所以 MLE 不存在！
 
-考虑使用单步 MLE。初始估计可以找矩估计 $\tilde{\theta}_n = (\tilde{\mu},\tilde{\sigma},\tilde{\nu},\tilde{\tau},\tilde{p})$ ，由于这里有五个参数，矩估计方程至少要有五个，可以计算前五阶样本矩得出。以 $\tilde{\theta}_n$ 为起点，对对数似然进行一次 Newton-Raphson 更新：\[\hat{\theta}_n = \tilde{\theta}_n - \bigl(\ddot{\ell}_n(\tilde{\theta}_n)\bigr)^{-1} \dot{\ell}_n(\tilde{\theta}_n)\]
+考虑使用单步 MLE。初始估计可以找矩估计 $\widetilde{\theta}_n = (\widetilde{\mu},\widetilde{\sigma},\widetilde{\nu},\widetilde{\tau},\widetilde{p})$ ，由于这里有五个参数，矩估计方程至少要有五个，可以计算前五阶样本矩得出。以 $\widetilde{\theta}_n$ 为起点，对对数似然进行一次 Newton-Raphson 更新：\[\widehat{\theta}_n = \widetilde{\theta}_n - \bigl(\ddot{\ell}_n(\widetilde{\theta}_n)\bigr)^{-1} \dot{\ell}_n(\widetilde{\theta}_n)\]
 其中 $\ell_n=\log L_n$ 是对数似然。在这个例子里，单步估计量把参数空间限制在了 $\widetilde\theta_n$ 的周围，从而避免了在非常大的空间中找 MLE 导致似然函数无界的问题。
 
 \end{example}

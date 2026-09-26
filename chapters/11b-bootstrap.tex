@@ -1,4 +1,8 @@
 % Generated from: Zhihu/专栏：概率与统计/渐近统计 (11)：Bootstrap（下）_金鱼马_2026-08-03.md
+% 在上一篇中，我们主要讨论了 Bootstrap 的一些理论上的渐近性质，包括一阶正确性和二阶有效性。
+
+% 本篇简单讨论如何将 Bootstrap 应用于置信区间等统计推断问题。关于 Bootstrap 的应用，也可参考 Davison 与 Hinkley~\cite{davisonhinkley1997}。
+
 \section{Bootstrap 置信区间}
 
 \subsection{回顾区间估计}
@@ -344,7 +348,7 @@ BC-百分位仍然只校正中位偏差。若标准误在参数尺度上变化�
 \begin{itemize}
 \tightlist
 \item
-  精确的 95\% 置信区间可以利用枢轴量 $\tfrac{2n\hat\theta}{\theta}\sim\chi_{2n}^2$ 得出： $\left[\frac{2n\widehat\theta}{\chi^2_{2n}(0.975)},\frac{2n\widehat\theta}{\chi^2_{2n}(0.025)}\right]$ ；
+  精确的 95\% 置信区间可以利用枢轴量 $\tfrac{2n\widehat\theta}{\theta}\sim\chi_{2n}^2$ 得出： $\left[\frac{2n\widehat\theta}{\chi^2_{2n}(0.975)},\frac{2n\widehat\theta}{\chi^2_{2n}(0.025)}\right]$ ；
 \item
   使用参数 Bootstrap ，则应用 $\mathrm{Exp}(1/\widehat\theta)$ 代替样本分布；本例中不需要真的 Monte Carlo 重抽样，只需要再次利用枢轴量，即可用 χ² 分布的分位数得到各 Bootstrap 区间。例如，令 $q_p$ 代表 $\chi^2_{2n}$ 的 $p$ 分位数，则百分位区间为 $\left[\tfrac{q_{0.025}}{2n}\widehat\theta,\tfrac{q_{0.975}}{2n}\widehat\theta\right]$ 。
 \end{itemize}

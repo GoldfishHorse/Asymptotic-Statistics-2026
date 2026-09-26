@@ -11,8 +11,7 @@
 
 矩方法 (Method of Moments, MOM) 是一种经典的参数估计方法。简单来说，这种方法将总体矩表示为目标参数的函数，设目标参数是
 \[ \begin{cases} \alpha_1&=\alpha_1(\theta_1,\theta_2,\dots,\theta_k)\\ \vdots\\ \alpha_r&=\alpha_r(\theta_1,\theta_2,\dots,\theta_k) \end{cases} \]
-
-然后用``插入原则 (plug-in principle)''的思想，用样本矩替代总体矩，得到矩方程
+然后用``插入原则 (plug-in principle)''的思想\footnote{关于所谓``插入原则''，详见~\ref{sec:ch10a:plug-in} 节}，用样本矩替代总体矩，得到矩方程
 \[\begin{cases} a_{1,n}&=\alpha_1\big(\widehat\theta_{1,n},\widehat\theta_{2,n},\dots,\widehat\theta_{k,n}\big)\\ \vdots\\ a_{r,n}&=\alpha_r\big(\widehat\theta_{1,n},\widehat\theta_{2,n},\dots,\widehat\theta_{k,n}\big) \end{cases}\]
 求解方程得到的 $\widehat\theta_1,\dots,\widehat\theta_k$ 便是矩估计。一言以蔽之：列出矩与参数的方程，用样本矩代替总体矩，从而解出参数便是矩估计。
 
@@ -45,7 +44,7 @@ $$\mathbb{E}_{\widehat \theta_n}[f_r(X)]=\frac{1}{n}\sum_{j=1}^n f_r(X_j),\quad 
 
 \subsection{矩估计的渐近正态性}
 
-直觉上，当样本量很大时，样本矩 $a_{f,n}$ 会以 $\sqrt{n}$ 的速度收敛到正态分布。当 $\alpha_f:\mathbb R^k\to\mathbb R^k$ 是单射时， $\widehat\theta_n=\alpha_f^{-1}(a_{f,n})$ ；如果 $\alpha_f^{-1}$ 是可微的，并且 $\mathbb{E}_{\theta_0}[f(X)f(X)^\top]<\infty$ ，那么根据 Delta 方法，矩估计 $\hat{\theta}_n$ 也应该有正态极限。关键在于保证反函数的存在性和可微性。
+直觉上，当样本量很大时，样本矩 $a_{f,n}$ 会以 $\sqrt{n}$ 的速度收敛到正态分布。当 $\alpha_f:\mathbb R^k\to\mathbb R^k$ 是单射时， $\widehat\theta_n=\alpha_f^{-1}(a_{f,n})$ ；如果 $\alpha_f^{-1}$ 是可微的，并且 $\mathbb{E}_{\theta_0}[f(X)f(X)^\top]<\infty$ ，那么根据 Delta 方法，矩估计 $\widehat{\theta}_n$ 也应该有正态极限。关键在于保证反函数的存在性和可微性。
 
 \begin{theorem*}[逆映射定理]：设 $A$ 是 $\mathbb R^k$ 中的开子集， $g:A\mapsto \mathbb R^k$ 在 $a\in A$ 处连续可微，并且在 $a$ 的一个邻域内可微，若 Jacobian 矩阵 $g'(a)\in\mathbb R^{k\times k}$ 是非奇异的，那么
 
@@ -62,7 +61,7 @@ $$\mathbb{E}_{\widehat \theta_n}[f_r(X)]=\frac{1}{n}\sum_{j=1}^n f_r(X_j),\quad 
 
 \end{theorem*}
 
-利用反函数定理，我们可以严格叙述和证明矩估计的渐近正态性，
+利用逆映射定理，我们可以严格叙述和证明矩估计的渐近正态性，
 
 
 \begin{theorem}[矩估计的相合性和渐近正态性]\label{thm:ch6:mom-asymptotic-normality}
@@ -79,7 +78,6 @@ $$\mathbb{E}_{\widehat \theta_n}[f_r(X)]=\frac{1}{n}\sum_{j=1}^n f_r(X_j),\quad 
 \[
 a_{f,n}=\frac1n\sum_{j=1}^nf(X_j)\overset{\text{a.s.}}\to \alpha_f(\theta_0)\in V,\quad \text{ 当 }n\to\infty.
 \]
-
 所以以概率 1 当 $n$ 充分大时， $a_{f,n}\in V$ ，这时 $\widehat\theta_n=\alpha_f^{-1}(a_{f,n})$ 存在，并且根据连续映射定理，这是一个强相合估计：
 \[
 \widehat\theta_n=\alpha_f^{-1}(a_{f,n})\overset{\text{a.s.}}\to \alpha_f^{-1}(\alpha_f(\theta_0))=\theta_0,\quad\text{ 当 }n\to\infty.
@@ -89,8 +87,7 @@ a_{f,n}=\frac1n\sum_{j=1}^nf(X_j)\overset{\text{a.s.}}\to \alpha_f(\theta_0)\in 
 \[
 \sqrt n\big(a_{f,n}-\alpha_f(\theta_0)\big)\overset{\rm d}\to\mathcal N(0,\Sigma_f).
 \]
-
-再对 $\alpha_f^{-1}$ 使用第~\ref{ch:delta-method}~章的 Delta 方法定理~\ref{thm:ch5:first-order-delta}，便得到结论。注意这里 $\left(\alpha_f^{-1}\right)'=\left(\alpha_f'\right)^{-1}$。
+再对 $\alpha_f^{-1}$ 使用第~\ref{ch:delta-method}~章的 Delta 方法（定理~\ref{thm:ch5:first-order-delta}），便得到结论。注意这里 $\left(\alpha_f^{-1}\right)'=\left(\alpha_f'\right)^{-1}$。
 
 \end{proof}
 
@@ -146,7 +143,7 @@ $$L_x(\theta)=\log p(x;\theta)=\log c(\theta)+\log h(x)+\theta^\top T(x)$$
 \[\begin{aligned} a_{T,n}&=\frac1n\sum_{j=1}^nT(x_j)\\ \alpha_T(\theta)&=\mathbb{E}_\theta[T(x)] \end{aligned}\]
 那么似然方程正好是 $\alpha_{T}(\theta)=a_{T,n}$ ！所以此时 MLE 和函数 $T$ 对应的矩估计是相同的。
 
-指数型分布族的良好解析性质保证 $c(\theta)$ 任意阶导数存在，以及 $T(X)$ 各阶矩存在，进一步，这些矩可以通过对 $\ln c(\theta)$ 求导获得：
+指数型分布族的良好解析性质保证 $c(\theta)$ 任意阶导数存在，以及 $T(X)$ 各阶矩存在，进一步，这些矩可以通过对``对数配分 (log partition) 函数" $\ln c(\theta)$ 求导获得：
 \[\begin{aligned} \mathbb{E}_\theta[T(X)]&=(\ln c(\theta))'=\frac{c'(\theta)}{c(\theta)}=\alpha_T(\theta)\\ \mathrm{Var}_\theta[T(X)]&=(\ln c(\theta))''=\alpha_T'(\theta) \end{aligned}\]
 % （见 \href{https://zhuanlan.zhihu.com/p/27452245086}{数理统计 (1) 基本概念} 的定理 1.1。）
 这里 $\mathrm{Var}_\theta[T(X)]$ 代表 $T(X)$ 的协方差矩阵，我们设其满秩。
@@ -155,12 +152,10 @@ $$L_x(\theta)=\log p(x;\theta)=\log c(\theta)+\log h(x)+\theta^\top T(x)$$
 \[
 \mathcal I_\theta=\mathrm{Var}_\theta[L'_X(\theta)]=\mathrm{Var}_\theta\big[T(x)-\mathbb{E}_\theta[T(X)]\big]=\mathrm{Var}_\theta[T(x)].
 \]
-
 我们得到了重要的关系：
 \[
 \mathcal I_\theta=\mathrm{Var}_\theta[T(x)]=\alpha_T'(\theta).
 \]
-
 于是根据定理~\ref{thm:ch6:mom-asymptotic-normality}， \[ \sqrt n\big(\widehat\theta_n-\theta_0\big)\overset{\rm d}\to \mathcal N\Big(0,(\alpha_T'(\theta_0))^{-1}\mathrm{Var}_\theta[T(X)]((\alpha_T'(\theta_0))^{-1})^\top\Big)=\mathcal N(0,\mathcal I^{-1}_{\theta_0}) \]说明 $\widehat\theta_n$ 是渐近有效的，或者说，它是最佳渐近正态 (BAN) 估计。
 
 % 也可以参考 \href{https://zhuanlan.zhihu.com/p/1909962170453726655}{数理统计 (16) : 极大似然估计 - 下 - MLE 的渐近正态性} 的定理 16.2。
@@ -191,7 +186,7 @@ $$L_x(\theta)=\log p(x;\theta)=\log c(\theta)+\log h(x)+\theta^\top T(x)$$
 
 % \href{https://www.zhihu.com/question/55084299/answer/1685871552}{最小二乘法只有在因变量服从正态分布时才能用吗？}
 
-下面是一个稍微复杂点的 
+下面是一个稍微复杂点的例子。
 
 \begin{example}[Yule--Walker 估计]
 考虑一个零均值、平稳的 $\mathrm{AR}(p)$ 过程 $\{X_t\}_{t\in\mathbb Z}$ ：
@@ -228,7 +223,7 @@ GMM 方法来自于 \cite{hansen1982}。其思想是仅依靠一组矩条件进�
 \end{itemize}
 
 \begin{definition*}[广义矩估计]
-在上述符号下，定义广义矩估计量为 $\hat{\theta}_n = \operatorname*{\arg\min}_{{\theta \in \Theta}} \left( \frac1n\sum_{i=1}^n g(w_i;\theta) \right)^\top \widehat{W}_n \left( \frac{1}{n}\sum_{i=1}^n g(w_i;\theta) \right)$，
+在上述符号下，定义广义矩估计量为 $\widehat{\theta}_n = \operatorname*{\arg\min}_{{\theta \in \Theta}} \left( \frac1n\sum_{i=1}^n g(w_i;\theta) \right)^\top \widehat{W}_n \left( \frac{1}{n}\sum_{i=1}^n g(w_i;\theta) \right)$，
 
 其中 $\widehat{W}_n$ 是某个与 $\theta$ 无关的 $r \times r$ 半正定矩阵。
 \end{definition*}
@@ -288,10 +283,10 @@ $$g(w_i, \theta) = \frac{\partial m(x_i, \theta)}{\partial \theta} \bigl(y_i - m
 
 如果 $\sigma^2=\sigma^2(x_i)$ 是依赖于 $x_i$ 的，则可使用加权最小二乘（WLS），相应的矩条件为 \[ g(w_i, \theta) = \frac{\partial m(x_i, \theta)}{\partial \theta} \cdot \frac{y_i - m(x_i, \theta)}{\sigma(x_i)} \]在这两种方法中，参数的数量和方程的数量都是相同的，我们可以直接由 $\frac1n\sum_{i=1}^ng(w_i,\theta)=0$ 求解出 $\widehat\theta_n$ 。
 
+\end{example}
 
 当然，我们对过识别的情形更感兴趣，
 
-\end{example}
 
 \begin{example}[Poisson 回归]
 考虑 $\{ w_i=(y_i, x_i)\}_{i=1}^n$ ，其中 $y_i$ 为计数数据， $x_i$ 是协变量，且如下等离散 (equal-dispersion) 假设成立
@@ -313,7 +308,7 @@ $$g(w_i, \theta) = \frac{\partial m(x_i, \theta)}{\partial \theta} \bigl(y_i - m
 
 \subsection{GMM 的渐近正态性}
 
-我们仍然记总体矩为 $\alpha_g(\theta):=\mathbb{E}_\theta[g(w_i,\theta)]$ 、样本矩为 $a_{g,n}(\theta):=\frac1n\sum_{j=1}^ng(w_j,\theta)$ ；注意这两个都是 $\Theta\to \mathbb R^r$ 的函数。设
+我们仍然记总体矩为 $\alpha_g(\theta):=\mathbb{E}_\theta[g(w_i,\theta)]$ 、样本矩为 $a_{g,n}(\theta):=\frac1n\sum_{j=1}^ng(w_j,\theta)$ ；注意这两个都是 $\Theta\to \mathbb R^r$ 的函数。%设
 
 \begin{assumption}[一致收敛]\label{ass:ch6:uniform-convergence}
 
@@ -364,7 +359,7 @@ $$G_0:=\mathbb{E}\left[\frac{\partial g(w,\theta_0)}{\partial \theta}\right]\in\
 
 设条件~\ref{ass:ch6:identifiability}--\ref{ass:ch6:uniform-convergence} 成立，使得 $\widehat\theta_n\overset P\to\theta_0$，再加上条件~\ref{ass:ch6:smoothness}、\ref{ass:ch6:g-rank} 成立，那么 
 
-$$\sqrt{n}(\hat{\theta}_n - \theta_0) \overset{\rm d}\to \mathcal{N}_p\!\Big(0,\; (G_0^\top W_0 G_0)^{-1} G_0^\top W_0 \Lambda_0 W_0 G_0 (G_0^\top W_0 G_0)^{-1} \Big)$$
+$$\sqrt{n}(\widehat{\theta}_n - \theta_0) \overset{\rm d}\to \mathcal{N}_p\!\Big(0,\; (G_0^\top W_0 G_0)^{-1} G_0^\top W_0 \Lambda_0 W_0 G_0 (G_0^\top W_0 G_0)^{-1} \Big)$$
 
 其中 $\Lambda_0 := \mathrm{Var}[g(w_i;\theta_0)]$ 是 $r\times r$ 的协方差矩阵，设其正定对称。
 
@@ -375,29 +370,27 @@ $$\sqrt{n}(\hat{\theta}_n - \theta_0) \overset{\rm d}\to \mathcal{N}_p\!\Big(0,\
 
 \begin{equation}
 \label{eq:ch6:tag-1}
-\frac{1}{n}\sum_{i=1}^n \left(\frac{\partial g(w_i,\widehat{\theta}_n)}{\partial\theta} \right)^\top\widehat{W}_n \left( \frac{1}{n}\sum_{i=1}^n g(w_i,\hat{\theta}_n) \right) = 0
+\frac{1}{n}\sum_{i=1}^n \left(\frac{\partial g(w_i,\widehat{\theta}_n)}{\partial\theta} \right)^\top\widehat{W}_n \left( \frac{1}{n}\sum_{i=1}^n g(w_i,\widehat{\theta}_n) \right) = 0
 \end{equation}
 
-将 $a_{g,n}(\hat{\theta}_n)$ 在 $\theta_0$ 处一阶 Taylor 展开：
-\[a_{g,n}(\hat{\theta}_n) = a_{g,n}(\theta_0) + \frac{1}{n}\sum_{i=1}^n \frac{\partial g(w_i,\theta_n^*)}{\partial \theta} (\hat{\theta}_n - \theta_0)\]
-其中 $\theta_n^*$ 位于 $\hat{\theta}_n$ 与 $\theta_0$ 之间。代入式~\eqref{eq:ch6:tag-1} 得
+将 $a_{g,n}(\widehat{\theta}_n)$ 在 $\theta_0$ 处一阶 Taylor 展开：
+\[a_{g,n}(\widehat{\theta}_n) = a_{g,n}(\theta_0) + \frac{1}{n}\sum_{i=1}^n \frac{\partial g(w_i,\theta_n^*)}{\partial \theta} (\widehat{\theta}_n - \theta_0)\]
+其中 $\theta_n^*$ 位于 $\widehat{\theta}_n$ 与 $\theta_0$ 之间。代入式~\eqref{eq:ch6:tag-1} 得
 
 \begin{equation}
 \label{eq:ch6:tag-2}
-\frac{1}{n}\sum_{i=1}^n\left( \frac{\partial g(w_i,\hat{\theta}_n)}{\partial\theta}\right)^\top \widehat{W}_n \left( a_{g,n}(\theta_0) + \frac{1}{n}\sum_{i=1}^n \frac{\partial g(w_i,\theta_n^*)}{\partial \theta} (\hat{\theta}_n - \theta_0) \right) = 0
+\frac{1}{n}\sum_{i=1}^n\left( \frac{\partial g(w_i,\widehat{\theta}_n)}{\partial\theta}\right)^\top \widehat{W}_n \left( a_{g,n}(\theta_0) + \frac{1}{n}\sum_{i=1}^n \frac{\partial g(w_i,\theta_n^*)}{\partial \theta} (\widehat{\theta}_n - \theta_0) \right) = 0
 \end{equation}
 
-由相合性，$\hat{\theta}_n \overset{P}{\to} \theta_0$，故夹在它俩中间的 $\theta_n^*$ 也有 $\theta_n^* \overset{P}{\to} \theta_0$。条件~\ref{ass:ch6:g-rank} 表明
-\[\frac{1}{n}\sum_{i=1}^n \frac{\partial g(w_i,\hat{\theta}_n)}{\partial\theta} \overset{P}{\to} G_0,\quad \frac{1}{n}\sum_{i=1}^n \frac{\partial g(w_i,\theta_n^*)}{\partial\theta} \overset{P}{\to} G_0\]
+由相合性，$\widehat{\theta}_n \overset{P}{\to} \theta_0$，故夹在它俩中间的 $\theta_n^*$ 也有 $\theta_n^* \overset{P}{\to} \theta_0$。条件~\ref{ass:ch6:g-rank} 表明
+\[\frac{1}{n}\sum_{i=1}^n \frac{\partial g(w_i,\widehat{\theta}_n)}{\partial\theta} \overset{P}{\to} G_0,\quad \frac{1}{n}\sum_{i=1}^n \frac{\partial g(w_i,\theta_n^*)}{\partial\theta} \overset{P}{\to} G_0\]
 再加上条件~\ref{ass:ch6:weight-matrix}： $\widehat{W}_n \overset{P}{\to} W_0$。将这些收敛代入式~\eqref{eq:ch6:tag-2}，经过整理可以得到
 \[G_0^\top W_0G_0 (\widehat{\theta}_n - \theta_0) =-G_0^\top W_0a_{g,n}(\theta_0)(1+o_P(1))\]
-解出 $\hat{\theta}_n - \theta_0$：
-
+解出 $\widehat{\theta}_n - \theta_0$：
 \begin{equation}
 \label{eq:ch6:tag-3}
-\sqrt n(\hat{\theta}_n - \theta_0) = - (G_0^\top W_0 G_0)^{-1} G_0^\top W_0 \color{DarkRed}{\frac1{\sqrt n}\sum_{i=1}^ng(w_i,\theta_0) }+ o_P(1)
+\sqrt n(\widehat{\theta}_n - \theta_0) = - (G_0^\top W_0 G_0)^{-1} G_0^\top W_0 {\color{DarkRed}{\frac1{\sqrt n}\sum_{i=1}^ng(w_i,\theta_0) }}+ o_P(1)
 \end{equation}
-
 利用中心极限定理 $\sqrt{n} \bar{g}_n(\theta_0) \overset{\rm d}\to \mathcal{N}(0,\Lambda_0)$，由 Slutsky 定理即得所需的渐近正态分布。
 
 \end{proof}
@@ -418,7 +411,7 @@ $$\sqrt{n}(\hat{\theta}_n - \theta_0) \overset{\rm d}\to \mathcal{N}_p\!\Big(0,\
 \end{remark}
 \end{remark}
 
-记 $A_0:=G_0^\top W_0 G_0$、$B_0=G_0^\top W_0\Lambda_0 W_0G_0$，那么定理~\ref{thm:ch6:gmm-asymptotic-normality} 中的渐近方差可以写作 $\mathrm{Avar}(\widehat\theta_n)=\tfrac1n A_0^{-1}B_0A_0^{-1}$。我们可以用下式估计之： \[\widehat{\operatorname{Avar}}(\hat{\theta}_n) = \frac{1}{n} \widehat{A}_0^{-1} \widehat{B}_0 \widehat{A}_0^{-1}\]
+记 $A_0:=G_0^\top W_0 G_0$、$B_0=G_0^\top W_0\Lambda_0 W_0G_0$，那么定理~\ref{thm:ch6:gmm-asymptotic-normality} 中的渐近方差可以写作 $\mathrm{Avar}(\widehat\theta_n)=\tfrac1n A_0^{-1}B_0A_0^{-1}$。我们可以用下式估计之： \[\widehat{\operatorname{Avar}}(\widehat{\theta}_n) = \frac{1}{n} \widehat{A}_0^{-1} \widehat{B}_0 \widehat{A}_0^{-1}\]
 其中\[\begin{aligned}
 \widehat{A}_0 &= \widehat{G}^\top\widehat{W}_n \widehat{G},
 &\widehat{B}_0 &= \widehat{G}^\top \widehat{W}_n \widehat{\Lambda}\widehat{W}_n \widehat{G},\\
@@ -460,23 +453,26 @@ Hansen 提出：实际操作可以分两步
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  用一个初始权重矩阵，如 $\widehat W_n=I_r$ ，得到一个相合估计 $\tilde{\theta}_n$；
+  用一个初始权重矩阵，如 $\widehat W_n=I_r$ ，得到一个相合估计 $\widetilde{\theta}_n$；
 \item
-  构造 $\widehat{\Lambda} = \frac{1}{n}\sum_{i=1}^n g(w_i;\tilde{\theta}_n) g(w_i;\tilde{\theta}_n)^\top$，然后取最优权重 $\widehat{W}_n^* = \widehat{\Lambda}^{-1}$，再次最小化目标函数得到最终 $\hat{\theta}_n$。
+  构造 $\widehat{\Lambda} = \frac{1}{n}\sum_{i=1}^n g(w_i;\widetilde{\theta}_n) g(w_i;\widetilde{\theta}_n)^\top$，然后取最优权重 $\widehat{W}_n^* = \widehat{\Lambda}^{-1}$，再次最小化目标函数得到最终 $\widehat{\theta}_n$。
 \end{enumerate}
 
 最终估计量满足
 \[\sqrt{n}(\widehat{\theta}_n- \theta_0) \overset{\rm d}\to \mathcal{N}\bigl(0, (G_0^\top \Lambda_0^{-1} G_0)^{-1}\bigr)\quad \text{ 当 }n\to\infty\]
-既然可以做两步，自然也可以做多步：我们可以将解出的 $\hat{\theta}_n$ 重新代入计算新的权重 $\widehat W_n^*$ 并再次求解，直到参数收敛，这叫\textbf{\emph{迭代 GMM}} 。另一种更直接的做法是将权重矩阵直接视为 $\theta$ 的函数 $\widehat{\Lambda}(\theta)^{-1}$，并在目标函数中直接最小化 $\theta$，这称为\textbf{\emph{连续更新估计量 }} (Continuously Updating Estimator, CUE)。在大样本下，这两种方法与两步 GMM 是渐近等价的，但在小样本下，更推荐使用迭代 GMM 或者 CUE 方法。
+既然可以做两步，自然也可以做多步：我们可以将解出的 $\widehat{\theta}_n$ 重新代入计算新的权重 $\widehat W_n^*$ 并再次求解，直到参数收敛，这叫\textbf{\emph{迭代 GMM}} 。
+另一种更直接的做法是将权重矩阵直接视为 $\theta$ 的函数 $\widehat{\Lambda}(\theta)^{-1}$，并在目标函数中直接最小化 $\theta$，这称为\textbf{\emph{连续更新估计量 }} (Continuously Updating Estimator, CUE)。
+在大样本下，这两种方法与两步 GMM 是渐近等价的，但在小样本下，更推荐使用迭代 GMM 或者 CUE 方法。
 
 \subsection{过识别模型的假设检验}
 
 在 GMM 中， 矩条件的成立是十分重要的。当一个模型过识别（$r > p$）时，我们利用有效 GMM 估计，可以反过来检验 GMM 中矩条件是否成立，即
 \[
 H_0:\mathbb{E}[g(w_i,\theta_0)]=0
-\qquad\text{对}\qquad
+\qquad\Leftrightarrow\qquad
 H_1:\mathbb{E}[g(w_i,\theta_0)]\ne 0.
 \]
+
 设有一个有效 GMM 估计量 $\widehat \theta_n$ ，\textbf{\emph{Sargan-Hansen 检验 }}采用如下检验统计量：
 \[T_n := \left( \frac{1}{\sqrt{n}}\sum_{i=1}^n g(w_i,\widehat{\theta}_n) \right)^\top \widehat{\Lambda}^{-1} \left( \frac{1}{\sqrt{n}}\sum_{i=1}^n g(w_i,\widehat{\theta}_n) \right)\]
 \begin{theorem}[Sargan--Hansen 检验]
@@ -491,11 +487,11 @@ H_1:\mathbb{E}[g(w_i,\theta_0)]\ne 0.
 
 用前文式~\eqref{eq:ch6:tag-3}，
 \[
-\sqrt{n}(\hat{\theta}_n-\theta_0) = - (G_0^\top \Lambda_0^{-1} G_0)^{-1} G_0^\top \Lambda_0^{-1} \sqrt{n}\,a_{g,n}(\theta_0) + o_p(1).
+\sqrt{n}(\widehat{\theta}_n-\theta_0) = - (G_0^\top \Lambda_0^{-1} G_0)^{-1} G_0^\top \Lambda_0^{-1} \sqrt{n}\,a_{g,n}(\theta_0) + o_p(1).
 \]
 
-利用 Taylor 展开 \[ \sqrt{n}\bar a_{g,n}(\hat\theta_n)=\sqrt{n}\bar a_{g,n}(\theta_0)+G_0\sqrt{n}\big(\hat\theta_n-\theta_0\big)+o_p(1) \]并忽略高阶项，得到
-\[\begin{aligned} \sqrt{n}\, a_{g,n}(\hat\theta_n)&=\bigl(\underbrace{ I_r -G_0(G_0^\top\Lambda_0^{-1}G_0)^{-1}G_0^\top\Lambda_0^{-1}}_{=:M}\bigr)\sqrt{n} a_{g,n}(\theta_0)+o_p(1)\\ &=M\sqrt na_{g,n}(\theta_0)+o_P(1) \end{aligned}\]
+利用 Taylor 展开 \[ \sqrt{n}\bar a_{g,n}(\widehat\theta_n)=\sqrt{n}\bar a_{g,n}(\theta_0)+G_0\sqrt{n}\big(\widehat\theta_n-\theta_0\big)+o_p(1) \]并忽略高阶项，得到
+\[\begin{aligned} \sqrt{n}\, a_{g,n}(\widehat\theta_n)&=\bigl(\underbrace{ I_r -G_0(G_0^\top\Lambda_0^{-1}G_0)^{-1}G_0^\top\Lambda_0^{-1}}_{=:M}\bigr)\sqrt{n} a_{g,n}(\theta_0)+o_p(1)\\ &=M\sqrt na_{g,n}(\theta_0)+o_P(1) \end{aligned}\]
 由 CLT： $\sqrt{n} a_{g,n}(\theta_0)\overset{\rm d}\to Z \sim \mathcal{N}(0,\Lambda_0)$。令 $Z_n=\Lambda_0^{-1/2}\sqrt{n} a_{g,n}(\theta_0)\overset{\rm d}\to\mathcal{N}(0,I_r)$。那么\[\begin{aligned}
 T_n &= (\sqrt{n} a_{g,n}(\widehat\theta_n))^\top \widehat\Lambda^{-1} (\sqrt{n} a_{g,n}(\widehat\theta_n)) \\
 &= (\sqrt{n} a_{g,n}(\widehat\theta_n))^\top \Lambda_0^{-1} (\sqrt{n} a_{g,n}(\widehat\theta_n)) + o_P(1) \\
@@ -511,8 +507,8 @@ T_n &= (\sqrt{n} a_{g,n}(\widehat\theta_n))^\top \widehat\Lambda^{-1} (\sqrt{n} 
 \begin{itemize}
 \tightlist
 \item
-  \textbf{\emph{Wald 检验}} ：直接基于无约束估计量的距离，在 $H_0$ 下： \[W_n = c(\hat{\theta})^\top \bigl( \widehat{\operatorname{Var}}(c(\hat{\theta})) \bigr)^{-1} c(\hat{\theta}) \overset{\rm d}\to \chi^2_q\]\item
-  \textbf{\emph{距离检验}} （Distance discrepancy Test）：比较施加约束前的目标函数最小值与施加约束后目标函数最小值之差，在 $H_0$ 下： \[\widetilde{T}_n = \frac{1}{n}\left[ \left(\sum_{i=1}^n g(w_i;\tilde{\theta}_n)\right)^\top \widehat{W}_n^* \left(\sum_{i=1}^n g(w_i;\tilde{\theta}_n)\right) - \left(\sum_{i=1}^n g(w_i;\hat{\theta}_n)\right)^\top \widehat{W}_n^* \left(\sum_{i=1}^n g(w_i;\hat{\theta}_n)\right) \right] \overset{\rm d}\to \chi^2_q
+  \textbf{\emph{Wald 检验}}（\ref{ex:ch5:wald-test} 节） ：直接基于无约束估计量的距离，在 $H_0$ 下： \[W_n = c(\widehat{\theta})^\top \bigl( \widehat{\operatorname{Var}}(c(\widehat{\theta})) \bigr)^{-1} c(\widehat{\theta}) \overset{\rm d}\to \chi^2_q\]\item
+  \textbf{\emph{距离检验}} （Distance discrepancy Test）：比较施加约束前的目标函数最小值与施加约束后目标函数最小值之差，在 $H_0$ 下： \[\widetilde{T}_n = \frac{1}{n}\left[ \left(\sum_{i=1}^n g(w_i;\widetilde{\theta}_n)\right)^\top \widehat{W}_n^* \left(\sum_{i=1}^n g(w_i;\widetilde{\theta}_n)\right) - \left(\sum_{i=1}^n g(w_i;\widehat{\theta}_n)\right)^\top \widehat{W}_n^* \left(\sum_{i=1}^n g(w_i;\widehat{\theta}_n)\right) \right] \overset{\rm d}\to \chi^2_q
 \end{equation*} 其中 $\widetilde\theta_n=\operatorname*{\arg\min}\limits_{\theta\in\Theta,c(\theta)=0}\left(\sum_{i=1}^ng(w_i,\theta)\right)^\top\widehat W_n^*\left(\sum_{i=1}^ng(w_i,\theta)\right)$ 而 $\widehat W_n^*$ 是 GMM 最优加权矩阵。 为什么这里极限分布的自由度是 $q$ 呢？实际它来自 $r-(p-q)-(r-p) = q$ ：无约束模型用 $p$ 个参数去拟合 $r$ 个矩条件，多余的信息维度（自由度）是 $r-p$；而施加原假设 $H_0$ 的约束后，实际自由变化的参数变成了 $p-q$ 个，此时模型拟合 $r$ 个矩条件的自由度为 $r-(p-q)$。两者的目标函数差值，恰好抵消了 $r$，反映了因为这 $q$ 个约束带来的额外代价，因此渐近服从自由度为 $q$ 的 χ² 分布。
 \end{itemize}
 
@@ -523,10 +519,11 @@ T_n &= (\sqrt{n} a_{g,n}(\widehat\theta_n))^\top \widehat\Lambda^{-1} (\sqrt{n} 
 
 设模型的全部矩条件为 $g(w,\theta) \in \mathbb{R}^r$，且真实参数 $\theta_0$ 满足 $\mathbb{E}[g(w,\theta_0)] = 0$。将 $g$ 分块为
 \[g(w,\theta) = \begin{pmatrix} g_{(r-1)}(w,\theta) \\ g_r(w,\theta) \end{pmatrix},\]
-其中 $g_{(r-1)} \in \mathbb{R}^{r-1}$ 为前 $r-1$ 个矩条件，$g_r \in \mathbb{R}$ 为第 $r$ 个矩条件。在最优加权矩阵 $W_0 = \Lambda_0^{-1} = \bigl(\mathbb{E}[g g^\top ]\bigr)^{-1}$ 下，基于全部 $r$ 个矩条件的有效 GMM 估计量 $\hat{\theta}_{(r)}$，其渐近方差矩阵由定理~\ref{thm:ch6:gmm-optimal-weight} 给出：
+其中 $g_{(r-1)} \in \mathbb{R}^{r-1}$ 为前 $r-1$ 个矩条件，$g_r \in \mathbb{R}$ 为第 $r$ 个矩条件。在最优加权矩阵 $W_0 = \Lambda_0^{-1} = \bigl(\mathbb{E}[g g^\top ]\bigr)^{-1}$ 下，基于全部 $r$ 个矩条件的有效 GMM 估计量 $\widehat{\theta}_{(r)}$，其渐近方差矩阵由定理~\ref{thm:ch6:gmm-optimal-weight} 给出：
 \[V_r := \left(\mathbb{E}\!\left[\frac{\partial g}{\partial\theta}\right]^\top \bigl(\mathbb{E}[g g^\top]\bigr)^{-1} \mathbb{E}\!\left[\frac{\partial g}{\partial\theta}\right]\right)^{-1}\]
 而仅使用前 $r-1$ 个矩条件 $g_{(r-1)}$ 时，渐近方差矩阵为
 \[V_{r-1} :=\left( \mathbb{E}\!\left[\frac{\partial g_{(r-1)}}{\partial\theta}\right]^\top \bigl(\mathbb{E}[g_{(r-1)} g_{(r-1)}^\top]\bigr)^{-1} \mathbb{E}\!\left[\frac{\partial g_{(r-1)}}{\partial\theta}\right]\right)^{-1}\]
+
 下面通过分块矩阵运算来比较 $V_r^{-1}$ 与 $V_{r-1}^{-1}$ 的大小。在 $\theta=\theta_0$ 处记
 \[\mathbb{E}[g g^\top] = \begin{pmatrix} A & B \\ B^\top & C \end{pmatrix}\]
 其中 $A = \mathbb{E}[g_{(r-1)} g_{(r-1)}^\top] \in \mathbb{R}^{(r-1)\times(r-1)}$，$B = \mathbb{E}[g_{(r-1)} g_r] \in \mathbb{R}^{(r-1)\times 1}$，$C = \mathbb{E}[g_r^2] \in \mathbb{R}$。求逆得到，

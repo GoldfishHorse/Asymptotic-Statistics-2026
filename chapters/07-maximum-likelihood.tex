@@ -1,4 +1,6 @@
 % Generated from: Zhihu/专栏：概率与统计/渐近统计 (7)：极大似然估计_金鱼马_2026-05-08.md
+在统计渐近理论，或者叫大样本理论 (large-sample theory) 的领域，最主要的问题是考察估计或者检验的渐近效率，以及不同估计、检验之间的比较。其中最为常用的方法便是由 Fisher 提出、至今我们已经非常熟悉的极大似然估计 (maximum likelihood estimator, MLE)，其在参数估计中占据着无可替代的核心地位：从渐近统计的视角看，MLE 在大样本下拥有三个性质，即相合性（收敛到参数真值）、渐近正态性（参数估计量服从正态分布）和渐近有效性（方差达到 Cram\'er--Rao 下界），这就足以使得 MLE 受人青睐。由 MLE 导出的似然比统计量等也为假设检验提供了有力工具。
+
 \section{基本概念}
 
 \subsection{似然函数与最大似然估计}
@@ -18,7 +20,6 @@
 \[
 \sum_{j=1}^n\frac{\partial\log p_\theta(X_j)}{\partial \theta_i}=0,\quad i=1,2,\dots,k.
 \]
-
 称对数似然函数的导数（梯度）为\textbf{\emph{得分函数}} (Score function)。
 
 % 关于 MLE 的一些例子和讨论，可见
@@ -27,7 +28,7 @@
 
 % \href{https://www.zhihu.com/question/24124998}{如何通俗地理解概率论中的「极大似然估计法」?}
 
-我们这里主要讨论其渐近性质，即当样本量 $n\to\infty$ 的条件下，MLE $\widehat\theta$ 有多好？
+我们这里主要讨论 MLE 的渐近性质，即当样本量 $n\to\infty$ 的条件下，MLE $\widehat\theta$ 有多好？
 
 \subsection{Fisher 信息}
 
@@ -134,7 +135,7 @@ I(\theta)=\mathbb{E}_\theta\left[\left(\frac{\partial}{\partial\theta}\log p_\th
 \item
   下述积分与求导可交换：
 \end{enumerate}
-\[\frac{\mathrm d}{\mathrm d \theta}\int\hat g(x)p_\theta(x)\mathrm d\mu(x)=\int\hat g(x)\frac{\partial p_\theta(x)}{\partial\theta}\mathrm d\mu(x)\]
+\[\frac{\mathrm d}{\mathrm d \theta}\int\widehat g(x)p_\theta(x)\mathrm d\mu(x)=\int\widehat g(x)\frac{\partial p_\theta(x)}{\partial\theta}\mathrm d\mu(x)\]
 那么 $\widehat g(x)$ 的方差满足
 \[
 \mathrm{Var}_\theta[\widehat g(X)]\ge\frac{(g'(\theta))^2}{I(\theta)}.
@@ -145,12 +146,12 @@ I(\theta)=\mathbb{E}_\theta\left[\left(\frac{\partial}{\partial\theta}\log p_\th
 \begin{proof}
 
 记得分函数 $S(\theta; x) := \frac{\partial}{\partial\theta} \log p_\theta(x)$ ，条件 (4.) 保证其期望为 0、条件 (7.) 保证
-\[g'(\theta) = \frac{\mathrm d}{\mathrm d\theta} \int \hat{g}(x) p_\theta(x) \mathrm d\mu(x) = \int \hat{g}(x) \frac{\partial p_\theta(x)}{\partial\theta} \mathrm d\mu(x)= \mathbb{E}_\theta[\hat{g}(X) S(\theta; X)]\]
-即 $\mathrm{Cov}_\theta[\hat{g}(X), S(\theta; X)] = g'(\theta)$。由 Cauchy--Schwarz 不等式，
-\[(g'(\theta))^2 = \left(\mathrm{Cov}_\theta[\hat{g}, S(\theta;X)]\right)^2 \leq \mathrm{Var}_\theta[\hat{g}(X)]  \mathrm{Var}_\theta[S] = \mathrm{Var}_\theta[\hat{g}]  I(\theta)\]
+\[g'(\theta) = \frac{\mathrm d}{\mathrm d\theta} \int \widehat{g}(x) p_\theta(x) \mathrm d\mu(x) = \int \widehat{g}(x) \frac{\partial p_\theta(x)}{\partial\theta} \mathrm d\mu(x)= \mathbb{E}_\theta[\widehat{g}(X) S(\theta; X)]\]
+即 $\mathrm{Cov}_\theta[\widehat{g}(X), S(\theta; X)] = g'(\theta)$。由 Cauchy--Schwarz 不等式，
+\[(g'(\theta))^2 = \left(\mathrm{Cov}_\theta[\widehat{g}, S(\theta;X)]\right)^2 \leq \mathrm{Var}_\theta[\widehat{g}(X)]  \mathrm{Var}_\theta[S] = \mathrm{Var}_\theta[\widehat{g}]  I(\theta)\]
 移项即得结论。多维情形类似，有
 \[
-\mathrm{Var}_\theta[\hat{g}]
+\mathrm{Var}_\theta[\widehat{g}]
 \ge \nabla g(\theta)^\top I^{-1}(\theta)\nabla g(\theta).
 \]
 
@@ -165,7 +166,7 @@ I(\theta)=\mathbb{E}_\theta\left[\left(\frac{\partial}{\partial\theta}\log p_\th
 \item
   多维情形类似，只需将标量换成矩阵形式，增加要求 FI 矩阵 $I(\theta)$ 正定；结论写作
   \[
-  \mathrm{Var}_\theta[\hat g(X)]
+  \mathrm{Var}_\theta[\widehat g(X)]
   \ge g'(\theta)^\top I^{-1}(\theta)g'(\theta).
   \]
 % \item
@@ -206,9 +207,9 @@ Cramér‑Rao 界给出了一种理想方差的下限，我们后面会介绍：
 \int \frac{p_\theta(x) - p_{\theta'}(x)}{\theta - \theta'} \mathrm d\mu(x) = 0
 \end{equation}
 
-对固定的 $x$，由中值定理，存在 $\tilde{\theta}$ 介于 $\theta$ 与 $\theta'$ 之间，使得
+对固定的 $x$，由中值定理，存在 $\widetilde{\theta}$ 介于 $\theta$ 与 $\theta'$ 之间，使得
 \[
-\frac{p_\theta(x) - p_{\theta'}(x)}{\theta - \theta'} = \frac{\mathrm d p_{\tilde{\theta}}(x)}{\mathrm d\tilde{\theta}}.
+\frac{p_\theta(x) - p_{\theta'}(x)}{\theta - \theta'} = \frac{\mathrm d p_{\widetilde{\theta}}(x)}{\mathrm d\widetilde{\theta}}.
 \]
 
 利用 (3.) 可知 当 $|\theta - \theta'| < \epsilon_\theta$ 时，
@@ -222,16 +223,16 @@ Cramér‑Rao 界给出了一种理想方差的下限，我们后面会介绍：
 
 \begin{equation}
 \label{eq:ch7:tag-2}
-\frac{g(\theta) - g(\theta')}{\theta - \theta'} = \int \hat{g}(x) \frac{p_\theta(x) - p_{\theta'}(x)}{\theta - \theta'} \mathrm d\mu(x)
+\frac{g(\theta) - g(\theta')}{\theta - \theta'} = \int \widehat{g}(x) \frac{p_\theta(x) - p_{\theta'}(x)}{\theta - \theta'} \mathrm d\mu(x)
 \end{equation}
 
 同样地，当 $|\theta - \theta'| < \epsilon_\theta$ 时，
 \[
-\left|\hat{g}(x) \frac{p_\theta(x) - p_{\theta'}(x)}{\theta - \theta'}\right| \le |\hat{g}(x)| G(x, \theta) p_\theta(x).
+\left|\widehat{g}(x) \frac{p_\theta(x) - p_{\theta'}(x)}{\theta - \theta'}\right| \le |\widehat{g}(x)| G(x, \theta) p_\theta(x).
 \]
 
 右端的积分为 $\mathbb{E}_\theta[|\widehat{g}(X)| G(X, \theta)] \le \sqrt{\mathbb{E}_\theta[(\widehat{g}(X))^2] \mathbb{E}_\theta[G(X,\theta)^2]} < \infty$，故由控制收敛定理， 可在 式~\eqref{eq:ch7:tag-2}两边令 $\theta' \to \theta$，得到
-\[g'(\theta) = \int \hat{g}(x) \frac{\mathrm d p_\theta(x)}{\mathrm d\theta} \mathrm{d}\mu(x)\]
+\[g'(\theta) = \int \widehat{g}(x) \frac{\mathrm d p_\theta(x)}{\mathrm d\theta} \mathrm{d}\mu(x)\]
 \end{proof}
 
 这一引理简化了定理~\ref{thm:ch7:cramer-rao} 条件的验证，此后我们只需核验是否存在一个平方可积的控制函数 $G$。
@@ -253,7 +254,7 @@ C-R 界往往是很宽松的，例如，方差一致最小的无偏估计 (UMVUE
   \int\frac{1}{p_\theta(x)}\left(\frac{\partial^i p_\theta(x)}{\partial\theta^i}\right)^2 \mathrm d\mu(x) < \infty, \quad i=1,\dots,K.
   \]
 \item
-  5'：估计量 $\hat{g}(x)$ 是 $g(\theta)$ 的无偏估计，方差有限。对任意 $i=1,\dots,K$ 以及 $\theta\in\Theta$，允许在积分和求导交换： \[g^{(i)}(\theta) = \frac{\mathrm d^i}{\mathrm d\theta^i} g(\theta) = \int  \hat{g}(x) \frac{\partial^i p_\theta(x)}{\partial\theta^i} \mathrm d\mu(x)\]\end{itemize}
+  5'：估计量 $\widehat{g}(x)$ 是 $g(\theta)$ 的无偏估计，方差有限。对任意 $i=1,\dots,K$ 以及 $\theta\in\Theta$，允许在积分和求导交换： \[g^{(i)}(\theta) = \frac{\mathrm d^i}{\mathrm d\theta^i} g(\theta) = \int  \widehat{g}(x) \frac{\partial^i p_\theta(x)}{\partial\theta^i} \mathrm d\mu(x)\]\end{itemize}
 
 定义矩阵
 \[
@@ -274,15 +275,14 @@ V_{ij}(\theta):=\mathbb E_\theta\left[\frac1{p_\theta(x)^2}\frac{\partial^ip_\th
 S^{(i)}(x) := \frac{1}{p_\theta(x)} \frac{\partial^i p_\theta(x)}{\partial\theta^i}, \quad i=1,\dots,K.
 \]
 
-则条件 (3'.) 表明 $\mathbb{E}_\theta[S(X)]=0$ 、(4') 表明 $\mathrm{Var}_\theta[S(X)]=V(\theta)$ 、(5'.) 表明 $\mathrm{Cov}_\theta[\hat{g}(X), S^{(i)}(X)] = \tilde{g}^{(i)}(\theta)$。故
+则条件 (3'.) 表明 $\mathbb{E}_\theta[S(X)]=0$ 、(4') 表明 $\mathrm{Var}_\theta[S(X)]=V(\theta)$ 、(5'.) 表明 $\mathrm{Cov}_\theta[\widehat{g}(X), S^{(i)}(X)] = \widetilde{g}^{(i)}(\theta)$。故
 \[
-A:=\mathrm{Cov}_\theta\left[(\widehat g(X),S(X))^\top\right]=\begin{pmatrix} \mathrm{Var}_\theta[\hat{g}(X)] & \widetilde{g}(\theta)^\top \\ \widetilde{g}(\theta) & V(\theta) \end{pmatrix}\succeq 0.
+A:=\mathrm{Cov}_\theta\left[(\widehat g(X),S(X))^\top\right]=\begin{pmatrix} \mathrm{Var}_\theta[\widehat{g}(X)] & \widetilde{g}(\theta)^\top \\ \widetilde{g}(\theta) & V(\theta) \end{pmatrix}\succeq 0.
 \]
 从而 $\mathrm{det}(A)\ge 0$ ，再由
 \[
-\det(A) = \det(V(\theta)) \bigl( \mathrm{Var}_\theta[\hat{g}(X)] - \tilde{g}(\theta)^\top V^{-1}(\theta) \tilde{g}(\theta) \bigr),
+\det(A) = \det(V(\theta)) \bigl( \mathrm{Var}_\theta[\widehat{g}(X)] - \widetilde{g}(\theta)^\top V^{-1}(\theta) \widetilde{g}(\theta) \bigr),
 \]
-
 和 $\mathrm{det}(V(\theta))\ge 0$ 即得所需不等式。
 
 \end{proof}
@@ -294,11 +294,11 @@ A:=\mathrm{Cov}_\theta\left[(\widehat g(X),S(X))^\top\right]=\begin{pmatrix} \ma
 为了研究 MLE 的相合性，我们还需要度量两个分布之间的``距离''。其中以 \href{https://en.wikipedia.org/wiki/Kullback\%E2\%80\%93Leibler_divergence}{KL 散度} (Kullback--Leibler divergence) 最常用，它衡量了用分布 $P$ 去编码来自真实分布 $Q$ 时造成的额外开销，因而也称作``相对熵''。不过，由于不满足对称性和三角不等式，它并非一个真正的距离。
 
 \begin{definition*}[KL 散度]
-设 $P,Q$ 是同一样本空间 $(\mathscr X,\mathscr B_x)$ 上的概率测度，$P\ll Q$，那么定义二者的 KL 散度为 $D_{KL}(P\|Q):=\int_{\mathscr X}\log\frac{{\rm d}P(x)}{{\rm d}Q(x)}\mathrm{d}P(x)$，其中 $\tfrac{{\rm d}P(x)}{{\rm d}Q(x)}$ 是 Radon--Nikodym 导数。特别地，如果存在 $(\mathscr X,\mathscr B_x)$ 上的测度 $\mu$ 使得 $P\ll\mu$、$Q\ll\mu$，从而 $\mathrm{d}P(x)=p(x)\mathrm{d}\mu(x)$、$\mathrm{d}Q(x)=q(x)\mathrm{d}\mu(x)$，那么 $D_{KL}(P\|Q)=\int_{\mathscr X}p(x)\log\frac{p(x)}{q(x)}\mathrm{d}\mu(x)=\mathbb{E}_{X\sim P}\left[\log\frac{p(X)}{q(X)}\right]$。
+设 $P,Q$ 是同一样本空间 $(\mathscr X,\mathscr B_x)$ 上的概率测度，$P\ll Q$，那么定义二者的 KL 散度为 $D_{KL}(P\|Q):=\int_{\mathscr X}\log\frac{{\rm d}P(x)}{{\rm d}Q(x)}\mathrm{d}P(x)$，其中 $\tfrac{{\rm d}P(x)}{{\rm d}Q(x)}$ 是 Radon--Nikodym 导数。特别地，如果存在 $(\mathscr X,\mathscr B_x)$ 上的测度 $\mu$ 使得 $P\ll\mu$、$Q\ll\mu$，从而 $\mathrm{d}P(x)=p(x)\mathrm{d}\mu(x)$、$\mathrm{d}Q(x)=q(x)\mathrm{d}\mu(x)$，那么 
+$$D_{KL}(P\|Q)=\int_{\mathscr X}p(x)\log\frac{p(x)}{q(x)}\mathrm{d}\mu(x)=\mathbb{E}_{X\sim P}\left[\log\frac{p(X)}{q(X)}\right].$$
 \end{definition*}
 
 利用 $x\ln x\ge x-1,\;\forall x>0$ 取等当且仅当 $x=1$ ，我们有\[ D_{KL}(P\|Q)=\int_{\mathscr X}\log\left(\frac{p(x)}{q(x)}\right)\frac{p(x)}{q(x)}q(x){\rm d}\mu(x)\ge \int_{\mathscr X}\big(p(x)-q(x)\big)\mathrm{d}\mu(x)=0 \]
-
 等号成立当且仅当 $p(x)=q(x)$ a.e. $\mu$ 。说明，只有当两个分布相同的时候，KL 散度才为 0。
 
 \begin{definition*}[可识别性]
@@ -395,8 +395,7 @@ A:=\mathrm{Cov}_\theta\left[(\widehat g(X),S(X))^\top\right]=\begin{pmatrix} \ma
 
 \begin{corollary}[MLE 的相合性]\label{cor:ch7:mle-consistency}
 在定理~\ref{thm:ch7:score-root-consistency} 的条件下，设 $\lim_{n\to\infty}P_\theta\left(\text{似然方程 } \frac{\rm d}{{\rm d}\theta'} \ell_n(\theta') = 0\text{ 有唯一解 }\right)= 1$，
-
-并定义 $\widehat\theta_n$ 为该唯一解（在其他情况下，$\widehat\theta_n$ 可以任意选择），则 $\hat{\theta}_n \overset{P}{\longrightarrow} \theta$。
+并定义 $\widehat\theta_n$ 为该唯一解（在其他情况下，$\widehat\theta_n$ 可以任意选择），则 $\widehat{\theta}_n \overset{P}{\longrightarrow} \theta$。
 \end{corollary}
 
 \begin{proof}
@@ -406,8 +405,8 @@ A:=\mathrm{Cov}_\theta\left[(\widehat g(X),S(X))^\top\right]=\begin{pmatrix} \ma
 另一方面，定理中额外的条件意味着存在 $m_{\delta}^{\prime}$，使得当 $n > m_{\delta}^{\prime}$ 时，
 \[P_{\theta}(B):= P_{\theta}\big(\text{似然方程有唯一解}\big) \ge 1 - \frac{\delta}{2}\]
 因此，只要 $n\geq \max \{m_{\epsilon ,\delta},m_{\delta}^{\prime}\}$，就有
-\[P_{\theta}\big(|\hat{\theta}_{n} - \theta |< \epsilon\big) = P_{\theta}\big(\hat{\theta}_{n}\text{ 落在 } (\theta -\epsilon ,\theta +\epsilon) \text{ 内}\big) =P_{\theta}(A \cap B) \ge 1 - \delta\]
-这就证明了 $\hat{\theta}_{n}\xrightarrow{P_{\theta}}\theta$。
+\[P_{\theta}\big(|\widehat{\theta}_{n} - \theta |< \epsilon\big) = P_{\theta}\big(\widehat{\theta}_{n}\text{ 落在 } (\theta -\epsilon ,\theta +\epsilon) \text{ 内}\big) =P_{\theta}(A \cap B) \ge 1 - \delta\]
+这就证明了 $\widehat{\theta}_{n}\xrightarrow{P_{\theta}}\theta$。
 
 \end{proof}
 
@@ -449,12 +448,13 @@ p_\theta(x)=\frac{1}{\pi(1+(x-\theta)^2)}.
 \item
   首先选择一个初始的鲁棒估计 $\widehat\theta_0$ ，如样本中位数；
 \item
-  对 $\widehat\theta_0$ 进行一步 Newton-Raphson 更新： \[ \hat{\theta}_n := \hat{\theta}_0 - \left( \ell_n''(\hat{\theta}_0) \right)^{-1} \ell_n'(\hat{\theta}_0) \]这就是单步 MLE。
+  对 $\widehat\theta_0$ 进行一步 Newton-Raphson 更新： \[ \widehat{\theta}_n := \widehat{\theta}_0 - \left( \ell_n''(\widehat{\theta}_0) \right)^{-1} \ell_n'(\widehat{\theta}_0) \]
+  这就是单步 MLE。
 \end{enumerate}
 
-单步 MLE 完全不关心似然方程到底有几个根，自然不用在意多根问题。可以证明：单步 MLE 可以改进统计量的效率：虽然 $\widehat\theta_0$ 的渐近方差通常不是最优，但只要它是 $\sqrt n$ -相合的，那么 (在适当正则条件下) $\widehat\theta_n$ 就是渐近有效估计。参考 \cite{shao2003} 一书的 Theorem 4.19。
-
 \end{example}
+
+单步 MLE 完全不关心似然方程到底有几个根，自然不用在意多根问题。可以证明：单步 MLE 可以改进统计量的效率：虽然 $\widehat\theta_0$ 的渐近方差通常不是最优，但只要它是 $\sqrt n$ -相合的，那么 (在适当正则条件下) $\widehat\theta_n$ 就是渐近有效估计。参考 \cite{shao2003} 一书的 Theorem 4.19。
 
 \subsection{渐近正态性}
 
@@ -483,19 +483,19 @@ MLE 不仅是渐近正态的，也是渐近有效的，即其渐近方差可以�
   参数族可识别。
 \end{enumerate}
 
-则 \[\sqrt{n} \big(\hat{\theta}_n - \theta_0\big) \overset{\rm d}\longrightarrow \mathcal{N}\left(0, I^{-1}(\theta_0)\right)\]
+则 \[\sqrt{n} \big(\widehat{\theta}_n - \theta_0\big) \overset{\rm d}\longrightarrow \mathcal{N}\left(0, I^{-1}(\theta_0)\right)\]
 \end{theorem}
 
 \begin{proof}
 
-仍记 $\ell_n(\theta)$ 是对数似然函数，则 $\hat{\theta}_n$ 满足 $\ell_n'(\hat{\theta}_n) = 0$。在 $\theta_0$ 处作 Taylor 展开：
+仍记 $\ell_n(\theta)$ 是对数似然函数，则 $\widehat{\theta}_n$ 满足 $\ell_n'(\widehat{\theta}_n) = 0$。在 $\theta_0$ 处作 Taylor 展开：
 
 \begin{equation}
 \label{eq:ch7:tag-3}
-0 = \ell_n'(\theta_0) + \ell_n''(\theta_0)(\hat{\theta}_n - \theta_0) + \frac{1}{2} \ell_n'''(\tilde{\theta}_n) (\hat{\theta}_n - \theta_0)^2
+0 = \ell_n'(\theta_0) + \ell_n''(\theta_0)(\widehat{\theta}_n - \theta_0) + \frac{1}{2} \ell_n'''(\widetilde{\theta}_n) (\widehat{\theta}_n - \theta_0)^2
 \end{equation}
 
-其中 $\tilde{\theta}_n$ 位于 $\hat{\theta}_n$ 与 $\theta_0$ 之间。
+其中 $\widetilde{\theta}_n$ 位于 $\widehat{\theta}_n$ 与 $\theta_0$ 之间。
 
 首先，由弱大数律，
 
@@ -503,21 +503,20 @@ MLE 不仅是渐近正态的，也是渐近有效的，即其渐近方差可以�
 \label{eq:ch7:tag-4}
 \frac1n\ell_n''(\theta_0) = \frac{1}{n} \sum_{j=1}^n \frac{\partial^2}{\partial \theta^2} \log p_{\theta_0}(X_j) \overset{P}{\longrightarrow} \mathbb{E}_{\theta_0}\left[ \frac{\partial^2}{\partial \theta^2} \log p_{\theta_0}(X) \right] = -I(\theta_0)
 \end{equation}
-
 这里期望等于 $-I(\theta_0)$ 用到了条件 (4.)。其次，由条件 (3.)，
-\[\frac1n|\ell_n'''(\tilde{\theta}_n)| \le \frac{1}{n} \sum_{j=1}^n M(X_j) \overset{P}{\longrightarrow} \mathbb{E}_{\theta_0}[M(X)] < \infty\]
-故 $\tfrac1n\ell_n'''(\tilde{\theta}_n) = O_P(1)$。又因 $\hat{\theta}_n - \theta_0 = o_P(1)$，所以
+\[\frac1n|\ell_n'''(\widetilde{\theta}_n)| \le \frac{1}{n} \sum_{j=1}^n M(X_j) \overset{P}{\longrightarrow} \mathbb{E}_{\theta_0}[M(X)] < \infty\]
+故 $\tfrac1n\ell_n'''(\widetilde{\theta}_n) = O_P(1)$。又因 $\widehat{\theta}_n - \theta_0 = o_P(1)$，所以
 
 \begin{equation}
 \label{eq:ch7:tag-5}
-\frac1n(\hat{\theta}_n - \theta_0)^2 \ell_n'''(\tilde{\theta}_n) = (\hat{\theta}_n - \theta_0)o_P(1)
+\frac1n(\widehat{\theta}_n - \theta_0)^2 \ell_n'''(\widetilde{\theta}_n) = (\widehat{\theta}_n - \theta_0)o_P(1)
 \end{equation}
 
 我们将式~\eqref{eq:ch7:tag-4}、\eqref{eq:ch7:tag-5} 代入式~\eqref{eq:ch7:tag-3}：\[
 0=\frac1n\ell'_n(\theta_0)+\big(-I(\theta)+o_P(1)\big)\big(\widehat\theta_n-\theta_0\big)\]
 最后，由经典中心极限定理，\[
 \frac1{\sqrt n}\ell_n'(\theta_0) = \frac{1}{\sqrt{n}} \sum_{j=1}^n \frac{\partial}{\partial\theta} \log p_{\theta_0}(X_j) \overset{\rm d}\longrightarrow \mathcal{N}\big(0, I(\theta_0)\big)\]
-由 Slutsky 定理直接得出\[ \begin{aligned} \sqrt{n}(\hat{\theta}_n-\theta_0) & =I^{-1}(\theta_{0})\frac1{\sqrt{n}}\ell_{n}^{\prime}(\theta_{0})+o_{P}(1)\\ &\overset{\rm d}\to\mathcal N(0,I^{-1}(\theta_{0})) \end{aligned} \]
+由 Slutsky 定理（推论~\ref{cor:ch1:slutsky}）直接得出\[ \begin{aligned} \sqrt{n}(\widehat{\theta}_n-\theta_0) & =I^{-1}(\theta_{0})\frac1{\sqrt{n}}\ell_{n}^{\prime}(\theta_{0})+o_{P}(1)\\ &\overset{\rm d}\to\mathcal N(0,I^{-1}(\theta_{0})) \end{aligned} \]
 
 \end{proof}
 
@@ -536,7 +535,7 @@ MLE 不仅是渐近正态的，也是渐近有效的，即其渐近方差可以�
 
 \begin{theorem*}
 
-设 $X_1,X_2,\dots,X_n \sim P_{\theta_0}$ i.i.d.，$\hat{\theta}_n$ 是基于 $n$ 个 i.i.d. 样本的 MLE。假设：
+设 $X_1,X_2,\dots,X_n \sim P_{\theta_0}$ i.i.d.，$\widehat{\theta}_n$ 是基于 $n$ 个 i.i.d. 样本的 MLE。假设：
 
 \begin{itemize}
 \tightlist
@@ -559,7 +558,7 @@ MLE 不仅是渐近正态的，也是渐近有效的，即其渐近方差可以�
 \end{itemize}
 
 则
-\[\sqrt{n}(\hat{\theta}_n - \theta_0) \overset{\rm d}\longrightarrow \mathcal{N}\left(0, I^{-1}(\theta_0)\right)\]
+\[\sqrt{n}(\widehat{\theta}_n - \theta_0) \overset{\rm d}\longrightarrow \mathcal{N}\left(0, I^{-1}(\theta_0)\right)\]
 
 % 最后，关于 MLE 的渐近性质，读者亦可参考笔者基于陈希孺教材整理的笔记，
 
@@ -572,16 +571,16 @@ MLE 不仅是渐近正态的，也是渐近有效的，即其渐近方差可以�
 这个结论来自 \cite{bijma2017} 一书的 Lemma 5.14 和 Theorem 5.9。
 \section{基于似然的假设检验}
 
-\subsection{Wald 检验}
+\subsection{Wald 检验}\label{sec:ch7:wald-test}
 
 基于 MLE 渐近正态性，可以直接构造参数 $\theta$ 的置信域。设 $\Theta\subset\mathbb R^k$ ， $I(\theta)$ 连续，则有
-\[\sqrt{n}I^{1/2}(\hat{\theta}_n)(\hat{\theta}_n - \theta) \overset{\rm d}\longrightarrow \mathcal{N}_k(0, \mathbf I_k)\]
+\[\sqrt{n}I^{1/2}(\widehat{\theta}_n)(\widehat{\theta}_n - \theta) \overset{\rm d}\longrightarrow \mathcal{N}_k(0, \mathbf I_k)\]
 从而我们有渐近 $1-\alpha$ 置信域
-\[I_\alpha(B_\alpha) = \left\{ \theta : \sqrt{n} I^{-1/2}(\hat{\theta}_n)(\hat{\theta}_n - \theta) \in B_\alpha \right\},\]
+\[I_\alpha(B_\alpha) = \left\{ \theta : \sqrt{n} I^{-1/2}(\widehat{\theta}_n)(\widehat{\theta}_n - \theta) \in B_\alpha \right\},\]
 其中集合 $B_\alpha \subset \mathbb{R}^k$ 满足 $\mathbb{P}(\mathcal{N}_k(0, \mathbf I_k) \in B_\alpha) = 1-\alpha$。
 
 进一步，对于假设检验 $H_0: \theta = \theta_0$，\textbf{\emph{Wald 检验}} 统计量为
-\[W_n := n (\hat{\theta}_n - \theta_0)^\top I(\theta_0) (\hat{\theta}_n - \theta_0) \overset{\rm d}\longrightarrow \chi^2_k\]
+\[W_n := n (\widehat{\theta}_n - \theta_0)^\top I(\theta_0) (\widehat{\theta}_n - \theta_0) \overset{\rm d}\longrightarrow \chi^2_k\]
 拒绝域为 $W_n > \chi^2_k(1-\alpha)$。这个方法非常简单直接，并且不需要一个主观选择的 $B_\alpha$ 。
 
 \subsection{似然比检验}
@@ -592,8 +591,8 @@ H_0:\theta\in\Theta_0
 \qquad\text{对}\qquad
 H_1:\theta\in\Theta\setminus\Theta_0.
 \]
-令 $\hat{\theta}_n$ 为整个参数空间 $\Theta\subset\mathbb R^k$ 上的``全局 MLE''，$\tilde{\theta}_n$ 为 $\Theta_0$ 约束下的``受限 MLE''。定义\textbf{\emph{似然比}} (Likelihood Ratio, LR) 检验统计量为
-\[\mathrm{LR}_n :=-2\log\frac{\max_{\theta\in\Theta_0 }\prod_{j=1}^np_{\theta}(X_j)}{\max_{\theta\in\Theta}\prod_{j=1}^np_{\theta}(X_j)}= -2 \log \frac{L_n(\tilde{\theta}_n)}{L_n(\hat{\theta}_n)} = 2 \big( \ell_n(\hat{\theta}_n) - \ell_n(\tilde{\theta}_n) \big)\]
+令 $\widehat{\theta}_n$ 为整个参数空间 $\Theta\subset\mathbb R^k$ 上的``全局 MLE''，$\widetilde{\theta}_n$ 为 $\Theta_0$ 约束下的``受限 MLE''。定义\textbf{\emph{似然比}} (Likelihood Ratio, LR) 检验统计量为
+\[\mathrm{LR}_n :=-2\log\frac{\max_{\theta\in\Theta_0 }\prod_{j=1}^np_{\theta}(X_j)}{\max_{\theta\in\Theta}\prod_{j=1}^np_{\theta}(X_j)}= -2 \log \frac{L_n(\widetilde{\theta}_n)}{L_n(\widehat{\theta}_n)} = 2 \big( \ell_n(\widehat{\theta}_n) - \ell_n(\widetilde{\theta}_n) \big)\]
 其中 $X_1,\dots,X_n\sim P_\theta$ 是 i.i.d. 样本， $L_n(\theta)$ 和 $\ell_n(\theta)$ 分别是基于这些样本的似然函数和对数似然函数。直观上，若 $H_0$ 成立，则加上约束不应使似然下降太多；若 $\mathrm{LR}_n$ 过大，则倾向于拒绝 $H_0$。似然比、Wald 与 Lagrange 乘子检验的几何关系如图~\ref{fig:ch7:likelihood-tests-geometry} 所示。
 
 \begin{figure}[htbp]
@@ -627,7 +626,7 @@ H_1:\theta\in\Theta\setminus\Theta_0.
 
 \end{proof}
 
-当 $H_0$ 成立时，由于 $\widehat\theta_n-\tilde\theta_n=O_P(n^{-1/2})$ ，因此引理~\ref{lem:ch7:likelihood-ratio-expansion} 的推导也完全成立，我们有 $\mathrm{LR}_n=n(\widehat\theta_n-\widetilde\theta_n)^\top I(\theta_0)(\widehat\theta_n-\widetilde\theta_n)+o_P(1)$ 。这说明 $\mathrm{LR}_n$ 可以（渐近地）看作是对 $\widehat\theta_n$ 和 $\widetilde\theta_n$ 的、用 FI 加权的距离度量。
+当 $H_0$ 成立时，由于 $\widehat\theta_n-\widetilde\theta_n=O_P(n^{-1/2})$ ，因此引理~\ref{lem:ch7:likelihood-ratio-expansion} 的推导也完全成立，我们有 $\mathrm{LR}_n=n(\widehat\theta_n-\widetilde\theta_n)^\top I(\theta_0)(\widehat\theta_n-\widetilde\theta_n)+o_P(1)$ 。这说明 $\mathrm{LR}_n$ 可以（渐近地）看作是对 $\widehat\theta_n$ 和 $\widetilde\theta_n$ 的、用 FI 加权的距离度量。
 
 为研究似然比的渐近分布，我们需要结构化的 $\Theta_0$。假定 $\Theta_0$ 可通过 $r$ 维参数 $a$ 光滑地嵌入原参数空间，这是在说：存在 $g: \mathbb{R}^r \to \mathbb{R}^k$ 使得 $\Theta_0 = \{ g(a) : a \in A \}$，其中 $g$ 二阶连续可微、 $A\subset\mathbb R^r$ ，且真实参数 $\theta_0 = g(a_0)$ ， $a_0$ 为 $A$ 的内点。 $g$ 的可微性保证了 $\Theta_0$ 的局部线性性，这在后面 Wilks 定理的证明中是十分重要的。
 
@@ -646,7 +645,7 @@ H_1:\theta\in\Theta\setminus\Theta_0.
 
 \begin{equation}
 \label{eq:ch7:tag-6}
-2 \big( \ell_n(\hat{\theta}_n) - \ell_n(\theta_0) \big) = \frac{1}{n} \ell'_n(\theta_0)^\top I^{-1}(\theta_0) \ell'_n(\theta_0)  + o_P(1)
+2 \big( \ell_n(\widehat{\theta}_n) - \ell_n(\theta_0) \big) = \frac{1}{n} \ell'_n(\theta_0)^\top I^{-1}(\theta_0) \ell'_n(\theta_0)  + o_P(1)
 \end{equation}
 
 对于受限 MLE $\widetilde{\theta}_n = g(\widehat a_n)$，以 $a$ 为参数，类似可得
@@ -655,13 +654,12 @@ H_1:\theta\in\Theta\setminus\Theta_0.
 \label{eq:ch7:tag-7}
 2 \big( \ell_n(g(\widehat a_n)) - \ell_n(g(\phi_0)) \big) = \frac{1}{n} \left( \frac{\mathrm{d} \ell_n(g(a_0))}{\mathrm{d} a} \right)^\top \widetilde{I\ }^{-1}\!(a_0) \left( \frac{\mathrm{d} \ell_n(g(a_0))}{\mathrm{d}a} \right) + o_P(1)
 \end{equation}
-
-其中 $\widetilde{I\ }\!(a_0) := \mathbb{E}_{\theta_0}\left[ \frac{\partial \log p_{g(a)}(X)}{\partial a} \frac{\partial \log p_{g(a)}(X)}{\partial a}^\top \right]$ 是参数 $a_0$ 的 $r\times r$Fisher 信息矩阵。由求导的链式法则，
+其中 $\widetilde{I\ }\!(a_0) := \mathbb{E}_{\theta_0}\left[ \frac{\partial \log p_{g(a)}(X)}{\partial a} \frac{\partial \log p_{g(a)}(X)}{\partial a}^\top \right]$ 是参数 $a_0$ 的 $r\times r$ Fisher 信息矩阵。由求导的链式法则，
 \[\begin{aligned}\frac{\mathrm{d}\ell_n(g(a_0))}{\mathrm{d} a} &= g'(a_0)^\top \ell'_n(\theta_0)\\ \widetilde{I\ }\!(a_0) &= g'(a_0)^\top  I(\theta_0)g'(a_0)\end{aligned}\]
-这里 $g'(a_0)$ 为 $k \times r$Jacobian 矩阵。
+这里 $g'(a_0)$ 为 $k \times r$ Jacobian 矩阵。
 
 我们将式~\eqref{eq:ch7:tag-6}、式~\eqref{eq:ch7:tag-7} 两式作差，得到
-\[\begin{aligned} \mathrm{LR}_n &= 2 (\ell_n(\hat{\theta}_n) - \ell_n(\tilde{\theta}_n)) \\ &= \frac{1}{n} \ell'(\theta_0)^\top \big( I^{-1}(\theta_0) - g'(a_0)(g'(a_0) I(\theta_0) g'(a_0)^\top)^{-1} g'(a_0) ^\top \big) \ell'(\theta_0)+ o_P(1) \end{aligned}\]
+\[\begin{aligned} \mathrm{LR}_n &= 2 (\ell_n(\widehat{\theta}_n) - \ell_n(\widetilde{\theta}_n)) \\ &= \frac{1}{n} \ell'(\theta_0)^\top \big( I^{-1}(\theta_0) - g'(a_0)(g'(a_0) I(\theta_0) g'(a_0)^\top)^{-1} g'(a_0) ^\top \big) \ell'(\theta_0)+ o_P(1) \end{aligned}\]
 令 $Z_n := \frac{1}{\sqrt{n}} I^{-1/2}(\theta_0) \ell'_n(\theta_0)$，由 CLT 有 $Z_n \overset{\rm d}\longrightarrow Z \sim \mathcal{N}_k(0,\mathbf I_k)$。于是
 \[\mathrm{LR}_n = Z_n^\top \, M \, Z_n + o_P(1) \overset{\rm d}\longrightarrow Z^\top M Z\]
 其中 \[ M := \mathbf I_k - I(\theta_0)^{1/2} g'(a_0) (g'(a_0)^\top I(\theta_0) g'(a_0))^{-1} g'(a_0)^\top I^{1/2}(\theta_0) \]直接验证易知 $M$ 是对称的幂等矩阵（$M^2 = M$），且迹为
@@ -689,12 +687,12 @@ H_1:\theta\in\Theta\setminus\Theta_0.
   一个例子是存在讨厌参数 (Nuisance Parameter) 的假设检验问题。设参数分为 $\theta = (\beta, \gamma)$，其中 $\beta$ 是我们感兴趣的参数，$\gamma$ 是讨厌参数。我们关心检验
   \[
   H_0:\beta=\beta_0
-  \qquad\text{对}\qquad
+  \qquad\Leftrightarrow\qquad
   H_1:\beta\ne\beta_0.
   \]
-  设全参数空间的 MLE 为 $\hat\theta_n = (\hat\beta_n, \hat\gamma_n)$，而受限于 $H_0$ 的 MLE 为 $\tilde\gamma_n = \operatorname*{\arg\sup}\limits_{(\beta_0,\gamma)\in\Theta} \ell_n(\beta_0,\gamma)$ ，后者也被称作是 $\beta_0$ 的轮廓似然 (Profile Likelihood
+  设全参数空间的 MLE 为 $\widehat\theta_n = (\widehat\beta_n, \widehat\gamma_n)$，而受限于 $H_0$ 的 MLE 为 $\widetilde\gamma_n = \operatorname*{\arg\sup}\limits_{(\beta_0,\gamma)\in\Theta} \ell_n(\beta_0,\gamma)$ ，后者也被称作是 $\beta_0$ 的轮廓似然 (Profile Likelihood
   % 例如可见 \url{https://www.zhihu.com/question/310585422}
-  )。在正则条件满足时，有似然比统计量\[ \mathrm{LR}_n(\beta_0) = 2\bigl( \ell_n(\hat\beta_n, \hat\gamma_n) - \ell_n(\beta_0, \tilde\gamma_n) \bigr) \]设 $\Theta = \Theta_\beta \oplus \Theta_\gamma$ （ $\beta,\gamma$ 的参数空间正交），且 $\dim\Theta=k$ 、 $\dim\Theta_\gamma = r$。那么根据定理~\ref{thm:ch7:wilks}，在 $H_0$ 下\[ LR_n(\beta_0) \overset{\rm d}\longrightarrow \chi^2_{k-r} \]从而，我们有近似的接受域 $\{\beta:\mathrm{LR}_n(\beta)\le \chi^2_{k-r}(1-\alpha)\}$ 。
+  )。在正则条件满足时，有似然比统计量\[ \mathrm{LR}_n(\beta_0) = 2\bigl( \ell_n(\widehat\beta_n, \widehat\gamma_n) - \ell_n(\beta_0, \widetilde\gamma_n) \bigr) \]设 $\Theta = \Theta_\beta \oplus \Theta_\gamma$ （ $\beta,\gamma$ 的参数空间正交），且 $\dim\Theta=k$ 、 $\dim\Theta_\gamma = r$。那么根据定理~\ref{thm:ch7:wilks}，在 $H_0$ 下\[ LR_n(\beta_0) \overset{\rm d}\longrightarrow \chi^2_{k-r} \]从而，我们有近似的接受域 $\{\beta:\mathrm{LR}_n(\beta)\le \chi^2_{k-r}(1-\alpha)\}$ 。
 \end{itemize}
 \end{remark}
 
@@ -723,7 +721,7 @@ H_0: \theta = \theta_0\quad \iff\quad H_1:\theta\ne \theta_0,
 其中 $b$ 或 $1 + \frac{b}{n}$ 被称为 \textbf{\emph{Bartlett 因子}} (Bartlett factor)。这样一来， $\tfrac{\mathrm{LR}_n}{1+b/n}$ 就十分符合我们的要求：它的期望与目标极限分布 $\chi^2_{k-r}$ 之间仅相差 $o(n^{-1})$ 。
 
 当然， $b$ 本身取决于 $\theta_0$ ，也是未知的；若能得到 $b$ 的一个相合估计 $\widehat{b}_n \stackrel{P}\to b$，则可以定义 Bartlett 校正的似然比统计量 
-$$\mathrm{LR}_{n, bc} := \frac{\mathrm{LR}_n}{1 + \hat{b}_n / n}$$
+$$\mathrm{LR}_{n, bc} := \frac{\mathrm{LR}_n}{1 + \widehat{b}_n / n}$$
 由 Slutsky 定理，其仍满足 $\mathrm{LR}_{n, bc}\overset{\rm d}\to \chi^2_{k-r}$ 。
 
 Bartlett 校正 $\mathrm{LR}_{n, bc}$ 真的能比 $\mathrm{LR}_{n}$ 取得更好的近似吗？这里更进一步地探讨一下：首先 Wilks 定理告诉我们，在原假设下， 
@@ -741,7 +739,6 @@ P(\mathrm{LR}_n(\theta_0) \le x) = P(\chi^2_k \le x) - \beta x g_k(x) n^{-1} + O
 P\left( \frac{\mathrm{LR}_n}{1 + \beta n^{-1}} \le x \right) = P( \chi^2_{k} \le x ) + O(n^{-2})\]
 且当 $\widehat\beta_n$ 是 $\beta$ 的 $\sqrt n$ -相合估计时，
 \[
-P\left( \frac{\mathrm{LR}_n}{1 + \hat{\beta} n^{-1}} \le x \right) = P( \chi^2_{k} \le x ) + O(n^{-3/2}).
+P\left( \frac{\mathrm{LR}_n}{1 + \widehat{\beta} n^{-1}} \le x \right) = P( \chi^2_{k} \le x ) + O(n^{-3/2}).
 \]
-
 这从理论上表明，Bartlett 校正确实可以将似然比统计量分布逼近精度提高。

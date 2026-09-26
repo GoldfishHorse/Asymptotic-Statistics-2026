@@ -1,4 +1,14 @@
 % Generated from: Zhihu/专栏：概率与统计/泛函中心极限定理：从 Brown 运动到 α‑稳定过程_金鱼马_2026-04-09.md
+经典的 Lindeberg--L\'evy 中心极限定理告诉我们：对独立同分布 (i.i.d.) 的随机变量 $X_1,X_2,\dots$，若 $\mathbb E[X_i]=\mu$，$0<\operatorname{Var}[X_i]=\sigma^2<\infty$，则其部分和有极限分布
+\[
+\frac{S_n-n\mu}{\sigma\sqrt n}\overset{\rm d}\longrightarrow\mathcal N(0,1),
+\qquad S_n=X_1+\cdots+X_n.
+\]
+
+这个结论只关心 $S_n$ 的极限分布，而忽略了它随时间演化形成的全局轨迹。为此，我们考虑：能否将随机游走视为一个随机函数，并研究其在函数空间中的极限行为。此时，对应于传统中心极限定理，我们得到的结论可称作“泛函中心极限定理 (FCLT)”。
+
+本篇主要参考 Embrechts、Kl\"uppelberg 与 Mikosch~\cite[第 2.4 节及附录 A2]{embrechts1997}。关于度量空间上概率测度弱收敛、Donsker 定理和 Skorokhod 拓扑的内容，也可参考林正炎、陆传荣、苏中根~\cite[第 5 章]{linluzhang2023}。
+
 \section{基本概念和准备}
 
 \subsection{两种随机函数的构造}
@@ -360,7 +370,7 @@ Donsker 定理对 $\mathcal D[0,1]$ 配备 Skorokhod 度量 $d_0$ 时成立（�
 %   吸引域条件等价于 $X_1$ 的分布函数 $F(x)$ 满足：存在缓变函数 $L_1(x)$，使得
 %   \[
 %   1-F(x) \sim c_+ x^{-\alpha} L_1(x),\qquad
-%   F(-x) \sim c_- x^{-\alpha} L_1(x),qquad x\to\infty,
+%   F(-x) \sim c_- x^{-\alpha} L_1(x),\qquad x\to\infty,
 %   \]
 %   其中 $c_+,c_-$ 非负，且 $c_+ + c_- > 0$。相关细节已经在
 % \item

@@ -1,4 +1,6 @@
 % Generated from: Zhihu/专栏：概率与统计/渐近统计 (10)：U-统计量 (下)_金鱼马_2026-06-06.md
+% 本篇延续上一部分，定理和公式编号也随之顺延。前一部分主要讨论了 U-统计量的概念、应用、方差公式，最后简单介绍了相合性。本篇主要解决渐近统计中更加感兴趣的话题：U-统计量的渐近正态性。
+
 \section{U-统计量的渐近正态性}
 
 我们从推论~\ref{cor:ch10:u-statistic-variance-order} 中看到的是：U-统计量方差的收敛速度与它是否退化有关，
@@ -161,17 +163,17 @@ P(\sqrt n|U_n-\widetilde U_n|>\epsilon)\le\frac{n\mathbb E[(U_n-\widetilde U_n)^
 其中 $z_{1-\alpha/2}$ 是标准正态分布的上 $1-\alpha/2$ 分位数。然而问题在于， $\xi_1 = \mathrm{Var}[h_1(X)]$ 依赖于未知的总体分布 ，除非特殊情况，我们是不知道 $\xi_1$ 的真实值的，必须想办法从样本中估计 $\xi_1$。
 
 对每个观测 $X_i$，考虑所有包含 $i$ 的 $m$ 元组，并计算这些核函数值的平均：
-\[\hat{h}_{1,i} = \binom{n-1}{m-1}^{-1} \sum_{\substack{A\subseteq\{1,\dots,n\}\\ |A|=m,\; i\in A}} h(X_A)\]
+\[\widehat{h}_{1,i} = \binom{n-1}{m-1}^{-1} \sum_{\substack{A\subseteq\{1,\dots,n\}\\ |A|=m,\; i\in A}} h(X_A)\]
 这个量称为\emph{留一平均}（leave‑one‑in average），因为它固定了 $X_i$，而对其他 $m-1$ 个位置在所有可能的组合上平均。由 U‑统计量的无偏性，
-\[\mathbb{E}\bigl[\hat{h}_{1,i}\bigr] = h_1(X_i).\]
-表明 $\hat{h}_{1,i}$ 是 $h_1(X_i)$ 的一个无偏估计。在此基础上，可构造 $\xi_1 = \mathrm{Var}[h_1(X)]$ 的估计：
-\[\hat{\xi}_1 = \frac{1}{n-1}\sum_{i=1}^n \bigl(\hat{h}_{1,i} - U_n\bigr)^2\]
-可以证明 $\hat{\xi}_1$ 是 $\xi_1$ 的相合估计：$\hat{\xi}_1 \overset P\to \xi_1$，于是可将
-\[U_n \pm z_{1-\alpha/2}\frac{m\sqrt{\hat{\xi}_1}}{\sqrt{n}}\]
+\[\mathbb{E}\bigl[\widehat{h}_{1,i}\bigr] = h_1(X_i).\]
+表明 $\widehat{h}_{1,i}$ 是 $h_1(X_i)$ 的一个无偏估计。在此基础上，可构造 $\xi_1 = \mathrm{Var}[h_1(X)]$ 的估计：
+\[\widehat{\xi}_1 = \frac{1}{n-1}\sum_{i=1}^n \bigl(\widehat{h}_{1,i} - U_n\bigr)^2\]
+可以证明 $\widehat{\xi}_1$ 是 $\xi_1$ 的相合估计：$\widehat{\xi}_1 \overset P\to \xi_1$，于是可将
+\[U_n \pm z_{1-\alpha/2}\frac{m\sqrt{\widehat{\xi}_1}}{\sqrt{n}}\]
 作为渐近 $1-\alpha$ 置信区间。
 
 类似地，对于检验 $H_0:\theta = \theta_0$，若原假设下统计量非退化，则可构造检验统计量
-\[Z_n = \frac{\sqrt{n}\,(U_n - \theta_0)}{m\sqrt{\hat{\xi}_1}} \overset{\rm d}\to\mathcal{N}(0,1)\]
+\[Z_n = \frac{\sqrt{n}\,(U_n - \theta_0)}{m\sqrt{\widehat{\xi}_1}} \overset{\rm d}\to\mathcal{N}(0,1)\]
 在显著性水平 $\alpha$ 下，当 $|Z_n| > z_{1-\alpha/2}$ 时拒绝 $H_0$。
 
 不过，U-统计量可能是退化的（如例~\ref{ex:ch10:mmd} 和例~\ref{ex:ch10:hsic}），导致上述正态近似无效，甚至 $\sqrt{n}$ 的缩放也是错误的；要特别声明，U-统计量的退化不是仅仅理论上的病态，在实际中，退化是很常见的。接下来我们讲解退化 U-统计量的渐近理论。
@@ -381,7 +383,7 @@ n(U_n-\theta)\overset{\rm d}\to \text{ 某个渐近分布 },\quad \text{ 当 }n\
 \]
 
 要证明这一点，还需考虑截断技巧。从式~\eqref{eq:ch10b:tag-5} 出发，对任意固定的正整数 $K$ ，定义式~\eqref{eq:ch10b:tag-5}的有限和，
-\[\tilde{h}_{2,K}(x,y) := \sum_{k=1}^{K} \lambda_k \phi_k(x) \phi_k(y)\]
+\[\widetilde{h}_{2,K}(x,y) := \sum_{k=1}^{K} \lambda_k \phi_k(x) \phi_k(y)\]
 其中 $\lambda_k$ 和 $\phi_k$ 来自上一节的 Hilbert-Schmidt 定理。由式~\eqref{eq:ch10b:tag-7}，有
 
 \begin{itemize}
@@ -398,7 +400,7 @@ n(U_n-\theta)\overset{\rm d}\to \text{ 某个渐近分布 },\quad \text{ 当 }n\
 
 \begin{equation}
 \label{eq:ch10b:tag-8}
-\begin{aligned} T_{n,K} &:= \frac{1}{n} \sum_{i\neq j} \tilde{h}_{2,K}(X_i,X_j) \\ &= \sum_{k=1}^{K} \lambda_k \left( \frac{1}{n} \sum_{i\neq j} \phi_k(X_i)\phi_k(X_j) \right)\\ &=\sum_{k=1}^{K} \lambda_k \left( \frac{1}{n} \left( \sum_{i=1}^{n} \phi_k(X_i) \right)^2 - \frac{1}{n} \sum_{i=1}^{n} \phi_k^2(X_i)\right)\\ &= \sum_{k=1}^{K} \lambda_k \bigl( W_{kn}^2 - Z_{kn} \bigr) \end{aligned}
+\begin{aligned} T_{n,K} &:= \frac{1}{n} \sum_{i\neq j} \widetilde{h}_{2,K}(X_i,X_j) \\ &= \sum_{k=1}^{K} \lambda_k \left( \frac{1}{n} \sum_{i\neq j} \phi_k(X_i)\phi_k(X_j) \right)\\ &=\sum_{k=1}^{K} \lambda_k \left( \frac{1}{n} \left( \sum_{i=1}^{n} \phi_k(X_i) \right)^2 - \frac{1}{n} \sum_{i=1}^{n} \phi_k^2(X_i)\right)\\ &= \sum_{k=1}^{K} \lambda_k \bigl( W_{kn}^2 - Z_{kn} \bigr) \end{aligned}
 \end{equation}
 
 其中 
@@ -807,7 +809,7 @@ $T_n$ 的展开式中，第三项是完全确定的常数项；第二项（交�
 
 上述技术可以应用于参数族的拟合优度检验
 \[H_0: f = f_\theta\]
-其中 $f_\theta$ 是一个已知参数族中的密度，$\theta$ 需用样本估计之，例如可用 MLE ，估计量记为 $\hat{\theta}_n$。用 $f_{\widehat\theta_n}$ 代替 ISE 式中的 $f(x)$ 即可。
+其中 $f_\theta$ 是一个已知参数族中的密度，$\theta$ 需用样本估计之，例如可用 MLE ，估计量记为 $\widehat{\theta}_n$。用 $f_{\widehat\theta_n}$ 代替 ISE 式中的 $f(x)$ 即可。
 
 \subsection{不完全 U‑统计量}
 

@@ -1,4 +1,21 @@
 % Generated from: Zhihu/专栏：概率与统计/稳定分布：方差无穷时的中心极限定理_金鱼马_2026-04-11.md
+向读者提出一个问题：“中心极限定理”一定总是“收敛到正态分布”吗？
+
+经典 Lindeberg--L\'evy 中心极限定理告诉我们，若 $\{X_i\}_{i=1}^\infty$ i.i.d.，且具有有限的均值 $\mu=\mathbb E[X_1]$ 和方差 $\sigma^2=\operatorname{Var}[X_1]<\infty$，则其部分和 $S_n:=\sum_{i=1}^nX_i$ 满足
+\[
+\sqrt n\left(\frac{S_n}{n}-\mu\right)
+\overset{\rm d}\longrightarrow\mathcal N(0,\sigma^2).
+\]
+那么，除了正态分布外，其它的分布是否也可以作为极限分布呢？
+
+答案当然是肯定的，因为有一个最简单的例子：Cauchy 分布。它具有可加性，例如，设有一列标准 Cauchy 分布 $\{X_n\}$，则其均值 $\bar X$ 总服从标准 Cauchy 分布，因而 $\bar X$ 本身的极限分布也一定是标准 Cauchy 分布。
+
+这就让我们不禁去想：当经典中心极限定理“有均值 $\mu$ 和方差 $\sigma^2<\infty$”的条件被放宽，经过适当归一化和中心化的和 $S_n$ 可能收敛到哪些极限分布？
+
+本篇将表明，所谓“中心极限定理收敛到正态分布”只是一个特例；更具体地说，正态分布只是 $\alpha$-稳定分布中 $\alpha=2$ 的特殊情形。面对方差甚至均值都不存在的情形，我们仍能建立更广义的中心极限定理。
+
+本篇主要参考 Embrechts、Kl\"uppelberg 与 Mikosch~\cite[第 2.2 节]{embrechts1997}。由于这方面理论比较复杂，我们不会涉及繁琐的证明过程，相关证明大多来自 Gnedenko 与 Kolmogorov~\cite{gnedenko1954} 以及 Ibragimov 与 Linnik~\cite{ibragimov1971}。
+
 \section{极限分布}
 回顾一下定义~\ref{def:ch1:limit-distribution} 对``极限分布" 的定义，简单起见我们只考虑一维的情况，
 \begin{definition*}[极限分布]

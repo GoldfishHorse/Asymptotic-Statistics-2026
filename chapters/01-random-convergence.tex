@@ -1,4 +1,25 @@
 % Generated from: Zhihu/专栏：概率与统计/渐近统计 (1) ：随机收敛_金鱼马_2026-04-29.md
+为什么要学渐近统计？在很多时候，在固定样本，或者说非渐近 (non-asymptotic) 下，找到一个统计量的具体分布，或者进行精确的分析，往往是非常困难的。有可能是因为统计量的分布非常复杂、难以解析求解，也可能是我们的统计模型与真实分布之间存在偏差。
+
+这时，让样本量 $n\to\infty$ 可以使问题得到简化，通常能得到对统计量分布的非常好的近似，并得到一个非常简洁的渐近分布（如正态分布）。渐近近似有很多用途：我们可将之用于渐近推断，如寻找近似的置信域和检验；也可用于从理论上研究统计推断方法的优劣，如有效性 (efficiency)。
+
+我们首先介绍随机变量的收敛。
+
+\begin{definition*}[随机变量、随机向量与分布函数]
+对于给定的概率空间 $(\Omega,\mathscr F,P)$，（实值）随机变量定义为
+$(\Omega,\mathscr F,P)\to(\mathbb R,\mathscr B_{\mathbb R})$ 的 Borel 可测映射；
+$k$ 维随机向量是
+\[
+X=(X_1,X_2,\dots,X_k):
+(\Omega,\mathscr F,P)\to(\mathbb R^k,\mathscr B_{\mathbb R^k})
+\]
+的 Borel 可测映射。随机向量 $X$ 的分布函数 (CDF) 定义为
+\[
+F_X(x):=P(X\le x)
+=P(X_1\le x_1,X_2\le x_2,\dots,X_k\le x_k).
+\]
+\end{definition*}
+
 \section{收敛模式}
 
 常见的随机变量的收敛有以下三种：

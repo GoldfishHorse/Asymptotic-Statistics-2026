@@ -467,10 +467,12 @@ $$\sum_{k=1}^\infty(k+1)^{\gamma'/2-1}(\alpha(k))^{\frac{\gamma-\gamma'}{\gamma}
 \begin{proof}
 
 为清晰起见，我们分成六步。
+\begin{enumerate}[label=\textbf{第\chinese*步}:, leftmargin=4em]
+ 
 
-\emph{第一步}：首先，由定理~\ref{thm:ch4:long-run-variance}，我们知道自协方差 $\gamma(k)$ 满足绝对收敛 $\sum_{k=-\infty}^\infty |\gamma(k)| < \infty$，从而 $\sigma^2$ 是良定义的。
+\item 首先，由定理~\ref{thm:ch4:long-run-variance}，我们知道自协方差 $\gamma(k)$ 满足绝对收敛 $\sum_{k=-\infty}^\infty |\gamma(k)| < \infty$，从而 $\sigma^2$ 是良定义的。
 
-\emph{第二步}：应用 \textbf{\emph{Bernstein Blocking Method }}：将序列 $X_1,\dots,X_n$ 分割为长度为 $p$ 的大块和长度为 $q$ 的小块，按``大块-小块-大块-小块-\ldots{}''交替排列，并让其长度满足：
+\item 应用 \textbf{\emph{Bernstein Blocking Method }}：将序列 $X_1,\dots,X_n$ 分割为长度为 $p$ 的大块和长度为 $q$ 的小块，按``大块-小块-大块-小块-\ldots{}''交替排列，并让其长度满足：
 
 \begin{itemize}
 \tightlist
@@ -491,7 +493,7 @@ S_n={}&\underbrace{(X_1+ \cdots+ X_p)}_{Y_1} + \underbrace{(X_{p+1}+ \dots +X_{p
 &+\underbrace{(X_{rp+(r-1)q+1}+ \dots +X_{r(p+q)})}_{Z_r} + \text{余项 } R_r.
 \end{aligned}
 \]
-第三步：考虑对每个大块应用 Bradley 引理（引理~\ref{lem:ch4:bradley}），从而得到一系列独立的副本 $Y^*_i$ ，且 $Y_i$ 与 $Y^*_i$ 足够接近。我们按照如下方式构造副本 $Y_i^*$：
+\item 考虑对每个大块应用 Bradley 引理（引理~\ref{lem:ch4:bradley}），从而得到一系列独立的副本 $Y^*_i$ ，且 $Y_i$ 与 $Y^*_i$ 足够接近。我们按照如下方式构造副本 $Y_i^*$：
 
 \begin{itemize}
 \tightlist
@@ -509,14 +511,17 @@ S_n={}&\underbrace{(X_1+ \cdots+ X_p)}_{Y_1} + \underbrace{(X_{p+1}+ \dots +X_{p
   从而 Bradley 引理的条件成立；上面最后一个不等式用到了 $p\sim\frac n{\log n}$ 的阶大于 $\frac{\sqrt n}r\sim\frac{\sqrt n}{\log n}$ 的阶。
 \end{itemize}
 
-由此得到了 i.i.d. 的 $Y_1^*,\dots,Y_r^*$ ，且\[ P\left( |Y_i - Y^*_i| > \frac{\epsilon \sigma \sqrt{n}}{r} \right) \leq 11 \left( \frac{\|Y_i + c\|_\gamma}{\xi} \right)^{\frac{\gamma}{2\gamma+1}} \alpha(q)^{\frac{2\gamma}{2\gamma+1}} \] 对 $i$ 求和，记\[ \Delta_n := \frac{\sum_{i=1}^r Y_i}{\sigma \sqrt{n}} - \frac{\sum_{i=1}^r Y^*_i}{\sigma \sqrt{n}} = \frac{1}{\sigma\sqrt{n}} \sum_{i=1}^r (Y_i - Y^*_i) \]
+由此得到了 i.i.d. 的 $Y_1^*,\dots,Y_r^*$ ，且\[ P\left( |Y_i - Y^*_i| > \frac{\epsilon \sigma \sqrt{n}}{r} \right) \leq 11 \left( \frac{\|Y_i + c\|_\gamma}{\xi} \right)^{\frac{\gamma}{2\gamma+1}} \alpha(q)^{\frac{2\gamma}{2\gamma+1}} \] 
+
+\item 对 $i$ 求和，记\[ \Delta_n := \frac{\sum_{i=1}^r Y_i}{\sigma \sqrt{n}} - \frac{\sum_{i=1}^r Y^*_i}{\sigma \sqrt{n}} = \frac{1}{\sigma\sqrt{n}} \sum_{i=1}^r (Y_i - Y^*_i) \]
 
 则
-\[P(|\Delta_n| > \epsilon) \leq \sum_{i=1}^r P\left( |Y_i - Y^*_i| > \frac{\epsilon \sigma \sqrt{n}}{r} \right) \leq 11 r \left( \frac{\|Y_1 + c\|_\gamma}{\xi} \right)^{\frac{\gamma}{2\gamma+1}} \alpha(q)^{\frac{2\gamma}{2\gamma+1}}.\]记上式右侧为 $m_n$，由 $\|Y_i+c\|_\gamma/\xi=O(pr/\sqrt n)=O(\sqrt n)$，可知 $m_n$ 的阶数为
+\[P(|\Delta_n| > \epsilon) \leq \sum_{i=1}^r P\left( |Y_i - Y^*_i| > \frac{\epsilon \sigma \sqrt{n}}{r} \right) \leq 11 r \left( \frac{\|Y_1 + c\|_\gamma}{\xi} \right)^{\frac{\gamma}{2\gamma+1}} \alpha(q)^{\frac{2\gamma}{2\gamma+1}}.\]
+记上式右侧为 $m_n$，由 $\|Y_i+c\|_\gamma/\xi=O(pr/\sqrt n)=O(\sqrt n)$，可知 $m_n$ 的阶数为
 \[\begin{aligned}m_n &= O\left( r \cdot n^{\frac{\gamma}{4\gamma+2}} \cdot \alpha([n^{1/4}])^{\frac{2\gamma}{2\gamma+1}} \right)\\ &= O\left( \log n\cdot n^{\frac{\gamma}{4\gamma+2}} \cdot n^{-\frac{\beta \gamma}{2(2\gamma+1)}} \right)\\ &=O\left(\log n\cdot n^{-\frac{(\beta-1)\gamma}{4\gamma+2}}\right)\\ &\to 0 \end{aligned}\]
 即 $\Delta_n\overset{P}\to 0$ 。
 
-第五步：我们表明上一步中构造的 i.i.d. 副本 $Y_1^*,\dots,Y_n^*$ 满足中心极限定理。首先，显然 \[ \mathbb{E}\big[{Y^*_i}^2\big]=\mathbb{E}[Y_i^2]=\mathbb{E}[S_p^2]\sim \sigma^2p \]由推论~\ref{cor:ch4:moment-bound}，存在 $2<\gamma'<\gamma$ 使得 $\mathbb{E}[|Y_i|^{\gamma'}]\le Cp^{\gamma'/2}$，$i=1,\dots,r$。从而
+\item 我们表明上一步中构造的 i.i.d. 副本 $Y_1^*,\dots,Y_n^*$ 满足中心极限定理。首先，显然 \[ \mathbb{E}\big[{Y^*_i}^2\big]=\mathbb{E}[Y_i^2]=\mathbb{E}[S_p^2]\sim \sigma^2p \]由推论~\ref{cor:ch4:moment-bound}，存在 $2<\gamma'<\gamma$ 使得 $\mathbb{E}[|Y_i|^{\gamma'}]\le Cp^{\gamma'/2}$，$i=1,\dots,r$。从而
 \[
 \begin{aligned}
 \sum_{i=1}^r
@@ -528,12 +533,13 @@ S_n={}&\underbrace{(X_1+ \cdots+ X_p)}_{Y_1} + \underbrace{(X_{p+1}+ \dots +X_{p
 \]
 Lyapunov 条件得以满足，独立和 $\sum_{j=1}^r Y_j^*$ 的中心极限定理成立：
 \[\frac{Y_1^*+\cdots+Y_n^*}{\sigma\sqrt n}=\underbrace{\left(\frac{rp}{n}\right)^{1/2}}_{\to 1}\frac{Y_1^*+\cdots+Y_n^*}{\sigma\sqrt{rp}}\overset{\rm d}\to \mathcal N(0,1)\]
-从而，根据 Slutsky 定理， \[ \frac{Y_1+\cdots+Y_n}{\sigma\sqrt n}=\frac{Y_1^*+\cdots+Y_n^*}{\sigma\sqrt n}+\underbrace{\Delta_n}_{o_P(1)}\overset{\rm d}\to\mathcal N(0,1) \]第六步：与四、五步完全相同地，对小块也有中心极限定理成立： \[ \frac{Z_1+\cdots+Z_n}{\sigma\sqrt{rq}}\overset{\rm d}\to \mathcal N(0,1) \]那么 \[ \frac{Z_1+\cdots+Z_n}{\sigma\sqrt{n}}=\underbrace{\left(\frac{rq}{n}\right)^{1/2}}_{\to 0}\frac{Z_1+\cdots+Z_n}{\sigma\sqrt{rq}}\to 0 \]所以根据 Slutsky 定理，小块的部分是可忽略的。
+从而，根据 Slutsky 定理， \[ \frac{Y_1+\cdots+Y_n}{\sigma\sqrt n}=\frac{Y_1^*+\cdots+Y_n^*}{\sigma\sqrt n}+\underbrace{\Delta_n}_{o_P(1)}\overset{\rm d}\to\mathcal N(0,1) \]
+\item 与四、五步完全相同地，对小块也有中心极限定理成立： \[ \frac{Z_1+\cdots+Z_n}{\sigma\sqrt{rq}}\overset{\rm d}\to \mathcal N(0,1) \]那么 \[ \frac{Z_1+\cdots+Z_n}{\sigma\sqrt{n}}=\underbrace{\left(\frac{rq}{n}\right)^{1/2}}_{\to 0}\frac{Z_1+\cdots+Z_n}{\sigma\sqrt{rq}}\to 0 \]所以根据 Slutsky 定理，小块的部分是可忽略的。
 
 至于尾部余项 $R_r$，由于其长度不超过 $p+q$，由 Chebyshev 不等式，
 \[P\left( \frac{|R_r|}{\sigma \sqrt{n}} > \epsilon \right) \leq \frac{\mathrm{Var}(R_r)}{\epsilon^2 \sigma^2 n} = O\left( \frac{\sigma^2(p+q)}{\epsilon^2\sigma^2n} \right) = O\left( \frac{1}{\log n} \right) \to 0\]
 自然也是可忽略的。至此，我们完成了证明。
-
+\end{enumerate}
 \end{proof}
 
 最后，我们整理一下上述证明思路：
@@ -663,7 +669,7 @@ Herglotz 定理保证了 $F(\lambda)$ 的唯一存在性。若 $F(\lambda)$ 和 
 \end{itemize}
 \end{remark}
 
-由定理~\ref{thm:ch4:periodogram-limit} 可见，如果我们用周期图 $\frac{I_n(\omega)}{2\pi}$ 来估计谱密度函数 $f(\omega)$，其方差不会随着样本量增加而消失，所以周期图 $\frac{I_n(\omega)}{2\pi}$ \emph{不是}谱密度的相合估计。这是我们不愿看到的：对参数 $\theta$，一个好的估计量 $\hat{\theta}_n$ 至少应当是相合的，即当 $n \to \infty$ 时，$\hat{\theta}_n$ 应依概率收敛到 $\theta$。
+由定理~\ref{thm:ch4:periodogram-limit} 可见，如果我们用周期图 $\frac{I_n(\omega)}{2\pi}$ 来估计谱密度函数 $f(\omega)$，其方差不会随着样本量增加而消失，所以周期图 $\frac{I_n(\omega)}{2\pi}$ \emph{不是}谱密度的相合估计。这是我们不愿看到的：对参数 $\theta$，一个好的估计量 $\widehat{\theta}_n$ 至少应当是相合的，即当 $n \to \infty$ 时，$\widehat{\theta}_n$ 应依概率收敛到 $\theta$。
 
 其原因在于：在经典的统计学中，样本量 $n$ 的增加通常意味着我们在同一个参数上获得了更多的独立观测，因此估计量的方差会以 $O(1/n)$ 下降；但在频域里，样本量 $n$ 的增加只是意味着我们在 $[-\pi, \pi]$ 上能分辨出更更多的点，而并没有在某一个特定的频率上增加重复观测。
 

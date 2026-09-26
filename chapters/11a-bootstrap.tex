@@ -1,4 +1,18 @@
 % Generated from: Zhihu/专栏：概率与统计/渐近统计 (11)：Bootstrap（上）_金鱼马_2026-07-18.md
+Bootstrap 是一种经典的估计方法，这个名字源于习语“to pull oneself up by one's bootstraps（拎着自己的鞋带把自己提起来）”，意指一种“自举”行为。在统计学中，这种技术通过重抽样 (resampling)，从而可以让样本自己提供更贴近统计量分布的近似。
+
+Bootstrap 于 1979 年由 Bradley Efron 提出~\cite{efron1979}。时至今日，Bootstrap 技术已经得到了非常丰富的研究、发展和应用。就渐近理论方面，奠基性的工作来自 Paul Hall，本章参考了他的经典教材~\cite{hall1992}。其它可参考的资料包括：
+\begin{itemize}
+\item Efron 与 Tibshirani~\cite{efrontibshirani1993}；
+\item Davison 与 Hinkley~\cite{davisonhinkley1997}；
+\item van der Vaart~\cite[第 23 章]{vandervaart1998}；
+\item Shao 与 Tu~\cite{shaotu1996}；
+\item Lahiri~\cite{lahiri2003}；
+\item Kosorok~\cite{kosorok2008}。
+\end{itemize}
+
+% 本篇讲解 Bootstrap 的渐近理论基础，下一篇则主要介绍 Bootstrap 置信区间等应用。
+
 \section{引入}
 
 在之前的文章中，我们介绍了各种拥有渐近正态性质的统计量

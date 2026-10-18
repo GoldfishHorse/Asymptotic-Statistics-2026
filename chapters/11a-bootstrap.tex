@@ -76,7 +76,7 @@ p_1(x;\mathbb P_n)-p_1(x;P)=O_P(n^{-1/2}),
   \end{itemize}
 \end{itemize}
 
-这里补充定义：若一个关于样本 $X_1,\dots,X_n$ 和真实参数 $\theta$ 的函数 $G_n(X_1,\dots,X_n;\theta)$ 的分布不依赖于 $\theta$ ，则称其为枢轴量 (pivotal)；若其当 $n\to\infty$ 时的渐近分布不依赖于 $\theta$ ，则称作渐近枢轴量。这里允许枢轴量作为 $\theta$ 的函数，但当说``某某统计量是 (渐近) 枢轴量''时，意味着这个统计量不含未知参数，且其 (渐近) 分布已知。
+这里补充定义：若一个关于样本 $X_1,\dots,X_n$ 和真实参数 $\theta$ 的函数 $G_n(X_1,\dots,X_n;\theta)$ 的分布不依赖于 $\theta$ ，则称其为枢轴量 (pivotal)；若其当 $n\to\infty$ 时的渐近分布不依赖于 $\theta$ ，则称作渐近枢轴量。这里允许枢轴量作为 $\theta$ 的函数，但当说``某某统计量是 (渐近) 枢轴量''时，意味着这个统计量的 (渐近) 分布已知。
 
 \section{非参数 Bootstrap}
 
@@ -227,6 +227,8 @@ Bootstrap 是一个很直观很好用的办法，但是理论的建立并不容�
 \end{itemize}
 \end{remark}
 
+在后文 Bootstrap 的情境中， $\mathscr G_n=\sigma(X_1,\dots,X_n)$ ，我们记`` $\overset{\rm d^*}\to$ ''为条件于样本下的弱收敛（依概率成立），`` $\overset{P^*}\to$ ''和`` $o_{P^*}(1)$ ''代表条件于样本下的依概率收敛 (依概率成立)。
+
 \subsection{均值的例子------一阶正确性}
 
 这里以最简单的例子，均值为例，看下 Bootstrap 具体是如何起作用的。
@@ -240,8 +242,6 @@ Bootstrap 是一个很直观很好用的办法，但是理论的建立并不容�
 由大数律， $S^2_n\overset{P}\to \sigma^2$ ，所以 Bootstrap 方差至少是正确收敛于真实方差的。
 
 对 Bootstrap 样本均值，我们可以用上一节的条件 Lindeberg-Feller CLT 证明，``在原始样本下， $\sqrt{n}(\bar{X}_n^*-\bar{X}_n)$ 的条件分布收敛于正态分布 $\mathcal N(0,\sigma^2)$''，从而，Bootstrap 样本均值是一阶正确的。
-
-下面记`` $\overset{\rm d^*}\to$ ''代表条件于样本下的弱收敛 (依概率成立)；`` $\overset{P^*}\to$ ''和`` $o_{P^*}(1)$ ''均代表条件于样本下的依概率收敛 (依概率成立)。
 
 \begin{theorem}[Bootstrap 中心极限定理]
 \label{thm:ch11:bootstrap-mean-clt}
@@ -307,7 +307,7 @@ Bootstrap 是一个很直观很好用的办法，但是理论的建立并不容�
 \subsection{均值的例子------二阶准确性}
 
 论证了一阶展开之后，我们来继续研究 Bootstrap 的高阶修正效果。先假设 $\sigma^2>0$ 已知，定义
-\[Z_n:=\frac{\sqrt{n}(\bar{X}_n-\mu)}{\sigma},\quad Z_n^*:=\frac{\sqrt n(\bar X_n^*-\bar X_n)}{\sigma}\]
+\[Z_n:=\frac{\sqrt{n}(\bar{X}_n-\mu)}{\sigma},\quad Z_n^*:=\frac{\sqrt n(\bar X_n^*-\bar X_n)}{S_n}\]
 若 $\mathbb{E}[|X|^4]<\infty$，并且 $X$ 的特征函数满足 Cramér 条件，则对 $Z_n$ 用 Edgeworth 展开：
 \[P(Z_n\leq x) = \Phi(x) -\frac{\gamma_1}{6\sqrt{n}}(x^2-1)\varphi(x) +O(n^{-1})\]
 其中 $\gamma_1:=\frac{\mathbb{E}[(X-\mu)^3]}{\sigma^3}$ 代表总体偏度；这一形式已在第~\ref{ch:characteristic-functions}~章推导，它表明正态近似的第一个修正项与总体偏度成正比。
@@ -461,7 +461,7 @@ Y_j:=\frac{X_j-\mu}{\sigma},\qquad V_n:=\frac1{\sqrt n}\sum_{j=1}^n(Y_j^2-1).
   最后一步来自
   \[
   \mathbb E[Z^2e^{itZ}]
-  =-\phi''_Z(t)=(e^{-t^2/2})''=(1-t^2)e^{-t^2/2}.
+  =-\phi''_Z(t)=-(e^{-t^2/2})''=(1-t^2)e^{-t^2/2}.
   \]
 \item
   综上， $\phi_{T_n}(t)$ 的渐近展开为
@@ -483,8 +483,8 @@ P(T_n\leq x) = \Phi(x) +\frac{\gamma_1}{6\sqrt{n}}(1+2x^2)\varphi(x) +O(n^{-1})
 
 \begin{theorem}[Bootstrap 的二阶准确性]\label{thm:ch11:second-order-accuracy}
 
-设 $\mathbb E[X^6]<\infty$ 且 Cramér 条件 $\limsup\limits_{|t|\to\infty}|\phi_X(t)|<1$ 成立，那么
-\[P^*(Z_n^*\le x)=P^*\left(\frac{\sqrt n(\bar X_n^*-\bar X_n)}{\sigma}\le x\right)=\Phi(x)+\frac{\widehat\gamma_{1,n}}{6\sqrt n}(1-x^2)\varphi(x)+O(n^{-1})\]
+设 $\mathbb E[X^6]<\infty$ 且 Cramér 条件成立，那么
+\[P^*(Z_n^*\le x)=P^*\left(\frac{\sqrt n(\bar X_n^*-\bar X_n)}{S_n}\le x\right)=\Phi(x)+\frac{\widehat\gamma_{1,n}}{6\sqrt n}(1-x^2)\varphi(x)+O_P(n^{-1})\]
 并且
 
 \[
@@ -492,7 +492,7 @@ P(T_n\leq x) = \Phi(x) +\frac{\gamma_1}{6\sqrt{n}}(1+2x^2)\varphi(x) +O(n^{-1})
 \]
 若以趋近于 1 的概率有 $S^2_n>0$ 、 ${S_n^*}^2>0$ ，那么
 \[
-P^*(T_n^*\le x)=P^*\left(\frac{\sqrt n(\bar X^*_n-\bar X_n)}{S^*_n}\le x\right)=\Phi(x)+\frac{\widehat\gamma_{1,n}}{6\sqrt n}(1+2x^2)\varphi(x)+O(n^{-1}).
+P^*(T_n^*\le x)=P^*\left(\frac{\sqrt n(\bar X^*_n-\bar X_n)}{S^*_n}\le x\right)=\Phi(x)+\frac{\widehat\gamma_{1,n}}{6\sqrt n}(1+2x^2)\varphi(x)+O_P(n^{-1}).
 \]
 
 并且
@@ -506,7 +506,7 @@ P^*(T_n^*\le x)=P^*\left(\frac{\sqrt n(\bar X^*_n-\bar X_n)}{S^*_n}\le x\right)=
 
 当 $X$ 有更高的矩条件，我们能够将 Edgeworth 展开到更高阶项，从而得到更精确的近似。例如，当 $\mathbb E[X^8]<\infty$ 时，有
 \[\begin{aligned} P(Z_n\le x) &= \Phi(x) + \frac{\gamma_1}{6\sqrt{n}}(1-x^2)\varphi(x) - \frac{3\gamma_2(x^3-3x)+\gamma_1^2(x^5-10x^3+15x)}{72n}\,\varphi(x) + O\!\left(n^{-3/2}\right)\\  P(T_n\le x)&= \Phi(x) + \frac{\gamma_1(1+2x^2)}{6\sqrt{n}}\varphi(x) + \frac{3\gamma_2(x^3-3x)-2\gamma_1^2(x^5+2x^3-3x)-9(x^3+3x)}{36n}\,\varphi(x) + O\!\left(n^{-3/2}\right) \end{aligned}\]
-（例如，见 \cite{hall1992}, pp.~71--73。）
+（例如，见 \cite[pp.~71--73]{hall1992}。Bootstrap 条件 Edgeworth 展开的严格推导，亦可见此书 Theorem~5.1。）
 
 但是，受限于 $\widehat\gamma_{1,n}-\gamma_1=O_P(n^{-1/2})$ 的误差，即使展开到高阶项，仍然是第一项占主导，我们也只能得到 $O(n^{-1})$ 。
 
@@ -566,7 +566,7 @@ d_{\text{K}}(P,Q)=\sup_{x\in\mathbb R}|P(X\le x)-Q(X\le x)|.
 \item
   若对任意 $\epsilon_n\downarrow 0$ 以及总质量为 0 的 $D,D_1,D_2,\dots\in\mathscr D$使得 $d_{\text{K}}(D_n,D)\to 0$ ，存在线性泛函 $\theta'_P:\mathscr D\to \mathbb R$ 满足\[ \lim_{n\to\infty}\left\|\frac{\theta(P+\epsilon _nD_n)-\theta(P)}{\epsilon_n}-\theta'_P(D)\right\|=0 \]那么称 $\theta$ 在 $P$处（对 Kolmogorov 距离 $d_{\text{K}}$ ）是 \textbf{\emph{Hadamard 可微}} 的。
 \item
-  上述定义里要求``所有方向都一致收敛''，这个要求有时候会太强；因此，也可以把方向限制在某个 $\mathscr D_0\subset \mathscr D$ 中： 若对任意 $\epsilon_n\downarrow 0$ 以及总质量为 0 的 $D_1,D_2,\dots\in D_0$使得 $d_{\text{K}}(D_n,D)\to 0$ ，存在线性泛函 $\theta'_P:\mathscr D_0\to \mathbb R$ 满足\[ \lim_{n\to\infty}\left\|\frac{\theta(P+\epsilon _nD_n)-\theta(P)}{\epsilon_n}-\theta'_P(D)\right\|=0 \]那么称 $\theta$ 在 $P$处切于 $\mathscr D_0$ 是 Hadamard 可微的。
+  上述定义里要求``所有方向都一致收敛''，这个要求有时候会太强；因此，也可以把方向限制在某个 $\mathscr D_0\subset \mathscr D$ 中： 若对任意 $\epsilon_n\downarrow 0$ 以及总质量为 0 的 $D_1,D_2,\dots\in\mathscr D_0$使得 $d_{\text{K}}(D_n,D)\to 0$ ，存在线性泛函 $\theta'_P:\mathscr D_0\to \mathbb R$ 满足\[ \lim_{n\to\infty}\left\|\frac{\theta(P+\epsilon _nD_n)-\theta(P)}{\epsilon_n}-\theta'_P(D)\right\|=0 \]那么称 $\theta$ 在 $P$处切于 $\mathscr D_0$ 是 Hadamard 可微的。
 \end{itemize}
 
 （上述定义亦可见 \cite{wasserman2006} 一书的 2.3，或者 \cite{shaotu1996} 的 2.2.1。）
@@ -599,19 +599,12 @@ Hadamard 可微性告诉我们，对任意 $D\in\mathscr D_0$ 和序列 $\{D_n\}
 \begin{corollary}\label{cor:ch11:functional-delta-normality}
 对 $P$ 处 Hadamard 可微的泛函 $\theta$，设其影响函数满足 $0<\tau^2:=\mathbb E_P[\mathrm{IF}_P(X)^2]<\infty$，则
 \[\sqrt n(\theta(\mathbb P_n)-\theta(P))\overset{\rm d}\to \mathcal N(0,\tau^2)\]
-此外，若记 $\widehat{\tau}^2=\frac1n\sum_{j=1}^n\big(\widehat{\mathrm{IF}}_n(X_j)\big)^2$，那么
-\[
-\sqrt n\frac{\theta(\mathbb P_n)-\theta(P)}{\widehat\tau}
-\overset{\rm d}\longrightarrow\mathcal N(0,1).
-\]
 \end{corollary}
 
 \begin{proof}
 
 根据泛函 Delta 方法，
 \[\begin{aligned} \sqrt n(\theta(\mathbb P_n)-\theta(P))&=\theta'_P(\sqrt n(\mathbb P_n-P))+o_P(1)\\ &=\frac1{\sqrt n}\sum_{j=1}^n\underbrace{\theta'_P(\delta_{X_j}-P)}_{\mathrm{IF}_P(X_j)}+o_P(1)\\  &=\frac1{\sqrt n}\sum_{j=1}^n\mathrm{IF}_P(X_j)+o_P(1)\\ &\overset{\rm d}\to\mathcal N(0,\mathrm{Var}_P[\mathrm{IF}_P(X)])\\ &=\mathcal N(0,\tau^2) \end{aligned}\]
-由大数律， $\widehat{\tau}^2\overset{P}\to \tau$ ，因此 Slutsky 定理给出 $\sqrt n\frac{\theta(\mathbb {P}_n)-\theta(P)}{\widehat\tau}\overset{\rm d}\to \mathcal N(0,1)$ 。
-
 \end{proof}
 
 \begin{remark}
